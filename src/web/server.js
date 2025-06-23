@@ -16,21 +16,53 @@ module.exports = async (client) => {
     // 정적 파일 제공
     app.use(express.static(path.join(__dirname, 'public')));
     
-    // 세션 설정
-    app.use(session({
-        secret: config.sessionSecret,
-        resave: false,
-        saveUninitialized: false,
-        store: MongoStore.create({
-            mongoUrl: config.mongoUri,
-            touchAfter: 24 * 3600 // 24시간
-        }),
+    // 세션 설정 - 간단한 메모리 세션으로 먼저 테스트
+    const sessionConfig = {
+        secret: config.sessionSecret || 'aimdot-dev-secret-key-2024',
+        resave: true, // 세션 저장 강제
+        saveUninitialized: true, // 초기화되지 않은 세션도 저장
+        name: 'aimdot.sid', // 세션 쿠키 이름
         cookie: {
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7일
-            secure: process.env.NODE_ENV === 'production',
-            httpOnly: true
+            maxAge: 24 * 60 * 60 * 1000, // 24시간
+            secure: false, // 개발 환경에서는 false
+            httpOnly: true,
+            sameSite: 'lax', // CSRF 보호
+            path: '/' // 명시적으로 경로 설정
         }
-    }));
+    };
+    
+    // 일단 메모리 세션으로 테스트 (MongoDB 스토어 임시 비활성화)
+    /*
+    try {
+        const mongoose = require('mongoose');
+        if (mongoose.connection.readyState === 1) {
+            sessionConfig.store = MongoStore.create({
+                mongoUrl: config.mongoUri,
+                touchAfter: 24 * 3600, // 24시간
+                crypto: {
+                    secret: config.sessionSecret || 'aimdot-dev-secret-key-2024'
+                }
+            });
+            logger.server('MongoDB 세션 스토어 사용');
+        } else {
+            logger.warn('MongoDB 연결 없음 - 메모리 세션 스토어 사용', 'server');
+        }
+    } catch (error) {
+        logger.warn('세션 스토어 생성 실패 - 메모리 세션 사용', 'server');
+    }
+    */
+    
+    logger.server('메모리 세션 스토어 사용 (디버깅용)');
+    
+    app.use(session(sessionConfig));
+    
+    // 세션 디버깅 미들웨어
+    app.use((req, res, next) => {
+        if (req.path.startsWith('/auth')) {
+            logger.debug(`세션 ID: ${req.sessionID}, 세션 데이터: ${JSON.stringify(req.session)}`, 'auth');
+        }
+        next();
+    });
     
     // 봇 클라이언트를 요청 객체에 추가
     app.use((req, res, next) => {
@@ -38,10 +70,19 @@ module.exports = async (client) => {
         next();
     });
     
+    // 라우트 등록 전 세션 확인
+    app.use((req, res, next) => {
+        if (!req.session) {
+            logger.error('세션 미들웨어가 작동하지 않습니다', 'server');
+        }
+        next();
+    });
+    
     // 라우트 등록
     app.use('/auth', require('./routes/auth'));
     app.use('/api', require('./routes/api'));
-    app.use('/dashboard', require('./routes/dashboard'));
+    app.use('/dashboard/api', require('./routes/dashboard')); // 경로 수정
+    app.use('/test', require('./routes/test')); // 테스트 라우트 추가
     
     // 메인 페이지
     app.get('/', (req, res) => {
@@ -70,5 +111,14 @@ module.exports = async (client) => {
     // 서버 시작
     app.listen(config.port, () => {
         logger.server(`🌐 웹 서버가 포트 ${config.port}에서 실행 중입니다.`);
+        logger.server(`📍 로컬: http://localhost:${config.port}`);
+        
+        // 환경 변수 확인
+        if (!config.clientSecret) {
+            logger.warn('CLIENT_SECRET이 설정되지 않았습니다. OAuth가 작동하지 않습니다.', 'server');
+        }
+        if (!config.mongoUri || config.mongoUri.includes('localhost')) {
+            logger.warn('MongoDB가 로컬에서 실행 중입니다. 프로덕션에서는 원격 DB를 사용하세요.', 'server');
+        }
     });
 };
