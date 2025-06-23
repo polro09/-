@@ -20,9 +20,9 @@ module.exports = async (client) => {
             if ('data' in command && 'execute' in command) {
                 client.commands.set(command.data.name, command);
                 commands.push(command.data.toJSON());
-                logger.info(`명령어 로드: ${command.data.name}`);
+                logger.command(`명령어 로드: ${command.data.name}`);
             } else {
-                logger.warn(`잘못된 명령어 형식: ${file}`);
+                logger.warn(`잘못된 명령어 형식: ${file}`, 'command');
             }
         }
     }
@@ -31,15 +31,15 @@ module.exports = async (client) => {
     const rest = new REST({ version: '10' }).setToken(config.token);
     
     try {
-        logger.info('슬래시 명령어 등록 시작...');
+        logger.startup('슬래시 명령어 등록 시작...');
         
         await rest.put(
             Routes.applicationCommands(config.clientId),
             { body: commands }
         );
         
-        logger.info(`${commands.length}개의 슬래시 명령어 등록 완료`);
+        logger.success(`${commands.length}개의 슬래시 명령어 등록 완료`, 'command');
     } catch (error) {
-        logger.error('슬래시 명령어 등록 오류:', error);
+        logger.error(`슬래시 명령어 등록 오류: ${error.message}`, 'command');
     }
 };

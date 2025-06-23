@@ -6,9 +6,37 @@ module.exports = {
     name: Events.ClientReady,
     once: true,
     async execute(client) {
-        logger.info(`봇이 준비되었습니다! ${client.user.tag}로 로그인됨`);
-        logger.info(`${client.guilds.cache.size}개의 서버에서 활동 중`);
-        logger.info(`${client.users.cache.size}명의 사용자와 함께`);
+        logger.bot(`✅ 봇이 준비되었습니다! ${client.user.tag}로 로그인됨`);
+        logger.bot(`📊 ${client.guilds.cache.size}개의 서버에서 활동 중`);
+        logger.bot(`👥 ${client.users.cache.size}명의 사용자와 함께`);
+        
+        // 봇 상태 업데이트 (MongoDB 연결된 경우에만)
+        try {
+            const BotStatus = require('../models/BotStatus');
+            const botStatus = await BotStatus.findOneAndUpdate(
+                { botId: client.user.id },
+                {
+                    botId: client.user.id,
+                    botName: client.user.tag,
+                    status: 'online',
+                    'runtime.startedAt': new Date(),
+                    'statistics.guilds': client.guilds.cache.size,
+                    'statistics.users': client.users.cache.size,
+                    'statistics.channels': client.channels.cache.size,
+                    lastUpdate: new Date()
+                },
+                { upsert: true, new: true }
+            );
+            
+            // 재시작 횟수 증가
+            if (botStatus) {
+                botStatus.runtime.restarts = (botStatus.runtime.restarts || 0) + 1;
+                await botStatus.save();
+                logger.database('봇 상태 업데이트 완료');
+            }
+        } catch (error) {
+            logger.database('봇 상태 업데이트 실패 (DB 연결 필요)', 'warn');
+        }
         
         // 봇 상태 설정
         const activities = [
@@ -41,10 +69,10 @@ module.exports = {
                 });
                 
                 if (expiredComponents.deletedCount > 0) {
-                    logger.info(`${expiredComponents.deletedCount}개의 만료된 컴포넌트 삭제됨`);
+                    logger.handler(`${expiredComponents.deletedCount}개의 만료된 컴포넌트 삭제됨`);
                 }
             } catch (error) {
-                logger.error('만료된 컴포넌트 정리 중 오류:', error);
+                logger.error(`만료된 컴포넌트 정리 중 오류: ${error.message}`, 'handler');
             }
         }, 24 * 60 * 60 * 1000); // 24시간
     }

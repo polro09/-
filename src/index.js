@@ -3,8 +3,6 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { config } = require('./config/config');
 const { connectDatabase } = require('./config/database');
 const logger = require('./utils/logger');
-const express = require('express');
-const path = require('path');
 
 // 봇 클라이언트 생성
 const client = new Client({
@@ -28,8 +26,20 @@ client.menus = new Collection();
 async function initializeBot() {
     try {
         // 데이터베이스 연결
-        await connectDatabase();
-        logger.info('데이터베이스 연결 성공');
+        const dbConnected = await connectDatabase();
+        
+        if (dbConnected) {
+            logger.database('데이터베이스 연결 성공', 'info');
+            
+            // 권한 시스템 초기화
+            try {
+                const Permission = require('./models/Permission');
+                await Permission.initializeDefaults();
+                logger.startup('권한 시스템 초기화 완료', 'info');
+            } catch (error) {
+                logger.warn('권한 시스템 초기화 실패', 'startup');
+            }
+        }
 
         // 핸들러 로드
         await require('./handlers/eventHandler')(client);
@@ -37,16 +47,21 @@ async function initializeBot() {
         await require('./handlers/buttonHandler')(client);
         await require('./handlers/menuHandler')(client);
         
-        logger.info('모든 핸들러 로드 완료');
+        logger.handler('모든 핸들러 로드 완료', 'info');
 
         // 웹 서버 시작
-        await require('./web/server')(client);
+        if (dbConnected) {
+            await require('./web/server')(client);
+        } else {
+            logger.server('데이터베이스 없이는 웹 대시보드를 사용할 수 없습니다.', 'warn');
+        }
         
         // 봇 로그인
         await client.login(config.token);
         
     } catch (error) {
-        logger.error('봇 초기화 중 오류 발생:', error);
+        logger.error(`봇 초기화 중 오류 발생: ${error.message}`, 'startup');
+        console.error(error);
         process.exit(1);
     }
 }
@@ -56,10 +71,12 @@ initializeBot();
 
 // 프로세스 에러 핸들링
 process.on('unhandledRejection', error => {
-    logger.error('처리되지 않은 프로미스 거부:', error);
+    logger.error(`처리되지 않은 프로미스 거부: ${error.message}`, 'error');
+    console.error(error);
 });
 
 process.on('uncaughtException', error => {
-    logger.error('처리되지 않은 예외:', error);
+    logger.error(`처리되지 않은 예외: ${error.message}`, 'error');
+    console.error(error);
     process.exit(1);
 });

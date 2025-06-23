@@ -19,7 +19,7 @@ const config = {
     
     // 봇 설정
     defaultPrefix: '!',
-    developers: ['YOUR_DISCORD_ID'], // 개발자 Discord ID
+    developers: ['257097077782216704'], // 개발자 Discord ID
     
     // 임베드 기본 설정
     embed: {

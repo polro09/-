@@ -41,10 +41,19 @@ module.exports = async (client) => {
     // 라우트 등록
     app.use('/auth', require('./routes/auth'));
     app.use('/api', require('./routes/api'));
+    app.use('/dashboard', require('./routes/dashboard'));
     
     // 메인 페이지
     app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname, 'public', 'loading.html'));
+    });
+    
+    // 대시보드 페이지
+    app.get('/dashboard', (req, res) => {
+        if (!req.session.user) {
+            return res.redirect('/auth/discord');
+        }
+        res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
     });
     
     // 404 처리
@@ -54,135 +63,12 @@ module.exports = async (client) => {
     
     // 에러 처리
     app.use((err, req, res, next) => {
-        logger.error('웹 서버 오류:', err);
+        logger.error(`웹 서버 오류: ${err.message}`, 'server');
         res.status(500).json({ error: '서버 오류가 발생했습니다.' });
     });
     
     // 서버 시작
     app.listen(config.port, () => {
-        logger.info(`웹 서버가 포트 ${config.port}에서 실행 중입니다.`);
+        logger.server(`🌐 웹 서버가 포트 ${config.port}에서 실행 중입니다.`);
     });
 };
-
-// src/web/routes/auth.js
-const express = require('express');
-const router = express.Router();
-const axios = require('axios');
-const { config } = require('../../config/config');
-const User = require('../../models/User');
-const logger = require('../../utils/logger');
-
-// OAuth URL 생성
-router.get('/discord', (req, res) => {
-    const state = Math.random().toString(36).substring(7);
-    req.session.state = state;
-    
-    const params = new URLSearchParams({
-        client_id: config.clientId,
-        redirect_uri: config.redirectUri,
-        response_type: 'code',
-        scope: 'identify email guilds',
-        state: state
-    });
-    
-    res.redirect(`https://discord.com/api/oauth2/authorize?${params}`);
-});
-
-// OAuth 콜백
-router.get('/callback', async (req, res) => {
-    const { code, state } = req.query;
-    
-    // State 검증
-    if (!state || state !== req.session.state) {
-        return res.status(400).send('잘못된 요청입니다.');
-    }
-    
-    delete req.session.state;
-    
-    try {
-        // 액세스 토큰 획득
-        const tokenResponse = await axios.post('https://discord.com/api/oauth2/token', 
-            new URLSearchParams({
-                client_id: config.clientId,
-                client_secret: config.clientSecret,
-                code: code,
-                grant_type: 'authorization_code',
-                redirect_uri: config.redirectUri
-            }), 
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }
-        );
-        
-        const { access_token, refresh_token, expires_in } = tokenResponse.data;
-        
-        // 사용자 정보 가져오기
-        const userResponse = await axios.get('https://discord.com/api/users/@me', {
-            headers: {
-                Authorization: `Bearer ${access_token}`
-            }
-        });
-        
-        const userData = userResponse.data;
-        
-        // 사용자 길드 정보 가져오기
-        const guildsResponse = await axios.get('https://discord.com/api/users/@me/guilds', {
-            headers: {
-                Authorization: `Bearer ${access_token}`
-            }
-        });
-        
-        const guilds = guildsResponse.data;
-        
-        // 데이터베이스에 사용자 정보 저장 또는 업데이트
-        const user = await User.findOneAndUpdate(
-            { discordId: userData.id },
-            {
-                username: userData.username,
-                discriminator: userData.discriminator,
-                avatar: userData.avatar,
-                email: userData.email,
-                accessToken: access_token,
-                refreshToken: refresh_token,
-                tokenExpiry: new Date(Date.now() + expires_in * 1000),
-                guilds: guilds.map(guild => ({
-                    id: guild.id,
-                    name: guild.name,
-                    icon: guild.icon,
-                    owner: guild.owner,
-                    permissions: guild.permissions
-                }))
-            },
-            { upsert: true, new: true }
-        );
-        
-        await user.updateLogin();
-        
-        // 세션에 사용자 정보 저장
-        req.session.user = {
-            id: user.discordId,
-            username: user.username,
-            avatar: user.avatar,
-            guilds: user.guilds
-        };
-        
-        logger.info(`사용자 로그인: ${user.username}#${user.discriminator}`);
-        
-        // 대시보드로 리다이렉트
-        res.redirect('/dashboard');
-        
-    } catch (error) {
-        logger.error('OAuth 콜백 오류:', error);
-        res.status(500).send('로그인 중 오류가 발생했습니다.');
-    }
-});
-
-// 로그아웃
-router.get('/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/');
-});
-
-module.exports = router;
