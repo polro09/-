@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aimdot.dev - Discord Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background-color: #000000;
+            color: #DBDEE1;
+            overflow-x: hidden;
+        }
+
+        /* 네비게이션 바 */
+        .navbar {
+            background-color: #0a0a0a;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .nav-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .nav-logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .nav-logo h1 {
+            font-size: 12px;
+            font-weight: 300;
+            color: #F2F3F5;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Discord 로그인 버튼 */
+        .nav-auth {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-add {
+            background-color: #5865F2;
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-add:hover {
+            background-color: #4752C4;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        .btn-login {
+            background-color: #5865F2;
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-login:hover {
+            background-color: #4752C4;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+        }
+
+        .hero-logo {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            font-weight: 800;
+            color: #F2F3F5;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #5865F2 0%, #7289DA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #B5BAC1;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        /* 기능 섹션 */
+        .features {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: #F2F3F5;
+            margin-bottom: 60px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: #0a0a0a;
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s;
+            border: 1px solid #1a1a1a;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #5865F2;
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.2);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #5865F2;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #FFFFFF;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #F2F3F5;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #B5BAC1;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #0a0a0a;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .footer p {
+            color: #949BA4;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <img src="https://i.imgur.com/Sd8qK9c.gif" alt="Aimdot.dev">
+            <h1>Aimdot.dev</h1>
+        </div>
+        <div class="nav-auth">
+            <a href="#" class="btn-add">
+                <i class="fab fa-discord"></i>
+                <span>Discord에 추가</span>
+            </a>
+            <button class="btn-login" id="discord-login">
+                <i class="fab fa-discord"></i>
+                <span>Discord로 로그인</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <img src="https://i.imgur.com/Sd8qK9c.gif" alt="Aimdot.dev Logo" class="hero-logo">
+        <h2>Aimdot.dev Bot</h2>
+        <p>Discord 서버를 위한 강력하고 유연한 다목적 봇</p>
+    </section>
+
+    <!-- 기능 섹션 -->
+    <section class="features" id="features">
+        <h2 class="section-title">주요 기능</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3>쉬운 설정</h3>
+                <p>직관적인 명령어와 대시보드를 통해 몇 분 만에 봇을 설정하고 커스터마이징할 수 있습니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>강력한 모더레이션</h3>
+                <p>자동 모더레이션, 경고 시스템, 로깅 등 서버를 안전하게 유지하는 데 필요한 모든 도구를 제공합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Aimdot.dev. All rights reserved. | Made with ❤️ by Aimdot Team</p>
+    </footer>
+
+    <script>
+        // Discord OAuth2 로그인
+        document.getElementById('discord-login').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/oauth-url');
+                const data = await response.json();
+                
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    console.error('OAuth URL을 가져올 수 없습니다.');
+                }
+            } catch (error) {
+                console.error('로그인 오류:', error);
+            }
+        });
+    </script>
+</body>
+</html>
