@@ -46,6 +46,13 @@ const userSchema = new mongoose.Schema({
         beta: { type: Boolean, default: false }
     },
     
+    // 대시보드 권한
+    dashboardRole: {
+        type: String,
+        enum: ['guest', 'member', 'subadmin', 'admin', 'owner'],
+        default: 'guest'
+    },
+    
     // 관리 중인 서버 목록
     guilds: [{
         id: String,

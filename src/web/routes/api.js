@@ -27,13 +27,18 @@ router.get('/oauth-url', (req, res) => {
 
 // 사용자 정보
 router.get('/user', requireAuth, (req, res) => {
-    res.json(req.session.user);
+    // 민감한 정보 제외하고 필요한 정보만 반환
+    const { id, username, avatar, email, dashboardRole, guildCount } = req.session.user;
+    res.json({ id, username, avatar, email, dashboardRole, guildCount });
 });
 
 // 사용자가 관리할 수 있는 서버 목록
 router.get('/guilds', requireAuth, async (req, res) => {
     try {
-        const managableGuilds = req.session.user.guilds.filter(guild => {
+        // 세션에 저장된 길드 정보 사용
+        const userGuilds = req.session.user.guilds || [];
+        
+        const managableGuilds = userGuilds.filter(guild => {
             // 관리자 권한이 있는 서버만 필터링
             const permissions = BigInt(guild.permissions);
             return (permissions & BigInt(0x8)) === BigInt(0x8); // ADMINISTRATOR
@@ -43,11 +48,16 @@ router.get('/guilds', requireAuth, async (req, res) => {
         const botGuilds = req.client.guilds.cache.map(g => g.id);
         
         const guildsWithBot = managableGuilds.map(guild => ({
-            ...guild,
+            id: guild.id,
+            name: guild.name,
+            icon: guild.icon,
             botJoined: botGuilds.includes(guild.id)
         }));
         
-        res.json(guildsWithBot);
+        res.json({
+            guilds: guildsWithBot,
+            totalCount: req.session.user.guildCount || userGuilds.length
+        });
     } catch (error) {
         logger.error('길드 목록 가져오기 오류:', error);
         res.status(500).json({ error: '서버 목록을 가져올 수 없습니다.' });

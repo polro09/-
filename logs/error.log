@@ -1,3 +1,8 @@
 {"category":"{\"cookie\":{\"originalMaxAge\":86400000,\"expires\":\"2025-06-24T17:25:42.114Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"}}","level":"error","message":"세션에 state가 없습니다. 전체 세션:","timestamp":"2025-06-23T17:25:45.977Z"}
 {"category":"auth","level":"error","message":"세션 쿠키 확인: \"aimdot.sid=s%3AR_JmkPVsj8VgrxhFlMgYC8bzLxvzlVIs.o9khYiZwywuW2TwFhiMWpauq%2Fa5AwShn8eRPkSKFQFQ\"","timestamp":"2025-06-23T17:25:45.977Z"}
 {"category":null,"level":"error","message":"State 불일치 또는 세션 만료","timestamp":"2025-06-23T17:25:45.977Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot find module './routes/test'\nRequire stack:\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\server.js\n- D:\\Discord bot\\Aimdot.dev\\src\\index.js","timestamp":"2025-06-23T17:27:34.949Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot find module './routes/test'\nRequire stack:\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\server.js\n- D:\\Discord bot\\Aimdot.dev\\src\\index.js","timestamp":"2025-06-23T17:29:52.618Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Router.use() requires a middleware function but got a Object","timestamp":"2025-06-23T17:30:10.765Z"}
+{"category":"auth","level":"error","message":"세션에 state가 없습니다. 전체 세션: {\"cookie\":{\"originalMaxAge\":86400000,\"expires\":\"2025-06-24T17:31:09.048Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"}}","timestamp":"2025-06-23T17:31:13.142Z"}
+{"category":"auth","level":"error","message":"세션 쿠키 확인: \"aimdot.sid=s%3ABJ0w2R0NN_8zAHpf2-5h0aMYcfFVDQps.caf3ymPSWEnveeFNV3%2BbcUHANZK7DuG5pVjleO%2FSspI\"","timestamp":"2025-06-23T17:31:13.143Z"}

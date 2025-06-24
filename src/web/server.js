@@ -27,8 +27,10 @@ module.exports = async (client) => {
             secure: false, // 개발 환경에서는 false
             httpOnly: true,
             sameSite: 'lax', // CSRF 보호
-            path: '/' // 명시적으로 경로 설정
-        }
+            path: '/', // 명시적으로 경로 설정
+            domain: undefined // 도메인 설정 제거 (로컬호스트 호환성)
+        },
+        proxy: process.env.NODE_ENV === 'production' // 프로덕션에서 프록시 사용
     };
     
     // 일단 메모리 세션으로 테스트 (MongoDB 스토어 임시 비활성화)
@@ -58,8 +60,13 @@ module.exports = async (client) => {
     
     // 세션 디버깅 미들웨어
     app.use((req, res, next) => {
+        // OAuth 관련 경로에서만 간단한 디버깅
         if (req.path.startsWith('/auth')) {
-            logger.debug(`세션 ID: ${req.sessionID}, 세션 데이터: ${JSON.stringify(req.session)}`, 'auth');
+            logger.debug(`[${req.method}] ${req.path} - 세션 ID: ${req.sessionID}`, 'session');
+            // 상세 세션 데이터는 필요할 때만 표시
+            if (process.env.DEBUG_SESSION === 'true') {
+                logger.debug(`세션 데이터: ${JSON.stringify(req.session)}`, 'session');
+            }
         }
         next();
     });

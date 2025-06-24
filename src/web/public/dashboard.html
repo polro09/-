@@ -14,7 +14,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-            background-color: #0a0a0a;
+            background-color: #000000;
             color: #DBDEE1;
             min-height: 100vh;
         }
@@ -133,7 +133,7 @@
 
         /* 헤더 */
         .header {
-            background-color: #0a0a0a;
+            background-color: #000000;
             padding: 16px 24px;
             border-bottom: 1px solid #1a1a1a;
             display: flex;
@@ -151,6 +151,24 @@
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+
+        .main-link {
+            padding: 8px 16px;
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .main-link:hover {
+            background-color: #2a2a2a;
         }
 
         .user-info {
@@ -214,7 +232,7 @@
         }
 
         .stat-card {
-            background-color: #0a0a0a;
+            background-color: #000000;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             padding: 20px;
@@ -253,7 +271,7 @@
 
         /* 봇 제어 패널 */
         .control-panel {
-            background-color: #0a0a0a;
+            background-color: #000000;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             padding: 24px;
@@ -291,6 +309,24 @@
 
         .status-dot.offline {
             background-color: #747F8D;
+        }
+
+        .control-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #B5BAC1;
+        }
+
+        .control-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-info-item i {
+            color: #5865F2;
         }
 
         .control-buttons {
@@ -345,7 +381,7 @@
 
         /* 로그 뷰어 */
         .log-viewer {
-            background-color: #0a0a0a;
+            background-color: #000000;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             padding: 24px;
@@ -421,9 +457,20 @@
         .log-level.warn { color: #FAA61A; }
         .log-level.error { color: #ED4245; }
 
+        .log-message {
+            color: #DBDEE1;
+        }
+
         /* 서버 목록 */
         .servers-section {
             margin-top: 30px;
+        }
+
+        .servers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .servers-grid {
@@ -433,7 +480,7 @@
         }
 
         .server-card {
-            background-color: #0a0a0a;
+            background-color: #000000;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             padding: 20px;
@@ -463,12 +510,47 @@
             justify-content: center;
             font-size: 20px;
             color: #FFFFFF;
+            overflow: hidden;
+        }
+
+        .server-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .server-info {
+            flex: 1;
         }
 
         .server-name {
             font-size: 16px;
             font-weight: 600;
             color: #F2F3F5;
+            margin-bottom: 4px;
+        }
+
+        .server-id {
+            font-size: 12px;
+            color: #949BA4;
+            font-family: monospace;
+        }
+
+        .server-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .server-status.joined {
+            background-color: #3BA55C;
+            color: #FFFFFF;
+        }
+
+        .server-status.not-joined {
+            background-color: #747F8D;
+            color: #FFFFFF;
         }
 
         .server-stats {
@@ -490,7 +572,7 @@
         }
 
         .user-table {
-            background-color: #0a0a0a;
+            background-color: #000000;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             overflow: hidden;
@@ -564,7 +646,7 @@
         }
 
         .modal-content {
-            background-color: #0a0a0a;
+            background-color: #000000;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             padding: 24px;
@@ -624,7 +706,7 @@
             bottom: 20px;
             right: 20px;
             padding: 16px 20px;
-            background-color: #0a0a0a;
+            background-color: #000000;
             border: 1px solid #1a1a1a;
             border-radius: 8px;
             display: flex;
@@ -700,13 +782,17 @@
     <!-- 사이드바 -->
     <aside class="sidebar">
         <div class="sidebar-logo">
-            <img src="https://i.imgur.com/Sd8qK9c.gif" alt="Aimdot.dev">
+            <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
             <h2>Aimdot.dev</h2>
         </div>
 
         <nav>
             <div class="nav-section">
                 <div class="nav-title">메인</div>
+                <a href="/" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>메인 페이지</span>
+                </a>
                 <a href="#dashboard" class="nav-item active" data-page="dashboard">
                     <i class="fas fa-chart-line"></i>
                     <span>대시보드</span>
@@ -753,6 +839,10 @@
         <header class="header">
             <h1 class="page-title" id="page-title">대시보드</h1>
             <div class="header-right">
+                <a href="/" class="main-link">
+                    <i class="fas fa-home"></i>
+                    <span>메인으로</span>
+                </a>
                 <div class="user-info">
                     <img src="" alt="Avatar" class="user-avatar" id="user-avatar">
                     <div class="user-details">
@@ -812,6 +902,20 @@
                             <span id="bot-status">오프라인</span>
                         </div>
                     </div>
+                    <div class="control-info">
+                        <div class="control-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>작동 시간: <span id="bot-uptime">0시간 0분</span></span>
+                        </div>
+                        <div class="control-info-item">
+                            <i class="fas fa-microchip"></i>
+                            <span>메모리: <span id="bot-memory">0 MB</span></span>
+                        </div>
+                        <div class="control-info-item">
+                            <i class="fas fa-wifi"></i>
+                            <span>핑: <span id="bot-ping">0 ms</span></span>
+                        </div>
+                    </div>
                     <div class="control-buttons">
                         <button class="control-btn start" id="btn-start" disabled>
                             <i class="fas fa-play"></i>
@@ -841,6 +945,16 @@
                     </div>
                     <div class="log-container" id="log-container">
                         <!-- 로그 엔트리들이 여기에 표시됩니다 -->
+                    </div>
+                </div>
+
+                <!-- 서버 목록 -->
+                <div class="servers-section">
+                    <div class="servers-header">
+                        <h2 class="control-title">내 서버</h2>
+                    </div>
+                    <div class="servers-grid" id="servers-grid">
+                        <!-- 서버 카드들이 여기에 표시됩니다 -->
                     </div>
                 </div>
             </div>
@@ -887,6 +1001,7 @@
         let currentUser = null;
         let botStatus = null;
         let permissions = null;
+        let updateInterval = null;
 
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', async () => {
@@ -897,7 +1012,7 @@
             document.getElementById('loading').classList.add('hidden');
             
             // 5초마다 통계 업데이트
-            setInterval(updateStatistics, 5000);
+            updateInterval = setInterval(updateStatistics, 5000);
             
             // 10초마다 로그 업데이트
             setInterval(updateLogs, 10000);
@@ -907,6 +1022,14 @@
         async function loadDashboard() {
             try {
                 const response = await fetch('/dashboard/api/');
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '/auth/discord';
+                        return;
+                    }
+                    throw new Error('대시보드 로드 실패');
+                }
+                
                 const data = await response.json();
                 
                 currentUser = data.user;
@@ -919,6 +1042,9 @@
                 if (currentUser.avatar) {
                     document.getElementById('user-avatar').src = 
                         `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`;
+                } else {
+                    document.getElementById('user-avatar').src = 
+                        'https://cdn.discordapp.com/embed/avatars/0.png';
                 }
                 
                 // 권한에 따라 메뉴 표시
@@ -934,6 +1060,9 @@
                 
                 // 로그 로드
                 await updateLogs();
+                
+                // 서버 목록 로드
+                await loadServers();
                 
             } catch (error) {
                 console.error('대시보드 로드 오류:', error);
@@ -951,6 +1080,22 @@
                 document.getElementById('stat-users').textContent = stats.users || 0;
                 document.getElementById('stat-channels').textContent = stats.channels || 0;
                 document.getElementById('stat-commands').textContent = stats.commands || 0;
+                
+                // 봇 정보 업데이트
+                if (stats.uptime) {
+                    const hours = Math.floor(stats.uptime / 3600000);
+                    const minutes = Math.floor((stats.uptime % 3600000) / 60000);
+                    document.getElementById('bot-uptime').textContent = `${hours}시간 ${minutes}분`;
+                }
+                
+                if (stats.memory) {
+                    const memoryMB = Math.round(stats.memory.heapUsed / 1024 / 1024);
+                    document.getElementById('bot-memory').textContent = `${memoryMB} MB`;
+                }
+                
+                if (stats.ping !== undefined) {
+                    document.getElementById('bot-ping').textContent = `${stats.ping} ms`;
+                }
                 
             } catch (error) {
                 console.error('통계 업데이트 오류:', error);
@@ -994,16 +1139,30 @@
                 const logContainer = document.getElementById('log-container');
                 logContainer.innerHTML = '';
                 
+                if (!data.logs || data.logs.length === 0) {
+                    logContainer.innerHTML = '<div style="text-align: center; color: #949BA4; padding: 20px;">로그가 없습니다.</div>';
+                    return;
+                }
+                
                 data.logs.forEach(log => {
                     const logEntry = document.createElement('div');
                     logEntry.className = 'log-entry';
                     
                     const time = new Date(log.timestamp).toLocaleTimeString('ko-KR');
                     
+                    // 중요 정보 마스킹
+                    let message = log.message;
+                    // ID 패턴 마스킹 (숫자 18자리)
+                    message = message.replace(/\b\d{17,19}\b/g, '[ID]');
+                    // 토큰 패턴 마스킹
+                    message = message.replace(/[A-Za-z0-9_-]{20,}/g, '[TOKEN]');
+                    // 이메일 마스킹
+                    message = message.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[EMAIL]');
+                    
                     logEntry.innerHTML = `
                         <span class="log-time">[${time}]</span>
                         <span class="log-level ${log.level}">[${log.level.toUpperCase()}]</span>
-                        <span>${log.message}</span>
+                        <span class="log-message">${message}</span>
                     `;
                     
                     logContainer.appendChild(logEntry);
@@ -1017,14 +1176,84 @@
             }
         }
 
+        // 서버 목록 로드
+        async function loadServers() {
+            try {
+                const response = await fetch('/api/guilds');
+                const data = await response.json();
+                
+                const serversGrid = document.getElementById('servers-grid');
+                serversGrid.innerHTML = '';
+                
+                if (!data.guilds || data.guilds.length === 0) {
+                    serversGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #949BA4; padding: 40px;">관리 가능한 서버가 없습니다.</div>';
+                    return;
+                }
+                
+                data.guilds.forEach(guild => {
+                    const serverCard = document.createElement('div');
+                    serverCard.className = 'server-card';
+                    
+                    const iconUrl = guild.icon 
+                        ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
+                        : null;
+                    
+                    serverCard.innerHTML = `
+                        <div class="server-header">
+                            <div class="server-icon">
+                                ${iconUrl ? `<img src="${iconUrl}" alt="${guild.name}">` : `<i class="fas fa-server"></i>`}
+                            </div>
+                            <div class="server-info">
+                                <div class="server-name">${guild.name}</div>
+                                <div class="server-id">${guild.id}</div>
+                            </div>
+                            <div class="server-status ${guild.botJoined ? 'joined' : 'not-joined'}">
+                                ${guild.botJoined ? '봇 참가 중' : '봇 미참가'}
+                            </div>
+                        </div>
+                        <div class="server-stats">
+                            <div class="server-stat">
+                                <i class="fas fa-crown"></i>
+                                <span>${guild.owner ? '소유자' : '관리자'}</span>
+                            </div>
+                            ${guild.botJoined ? `
+                                <div class="server-stat">
+                                    <i class="fas fa-cog"></i>
+                                    <span>설정 가능</span>
+                                </div>
+                            ` : `
+                                <div class="server-stat">
+                                    <i class="fas fa-plus"></i>
+                                    <span>봇 초대 필요</span>
+                                </div>
+                            `}
+                        </div>
+                    `;
+                    
+                    if (guild.botJoined) {
+                        serverCard.addEventListener('click', () => {
+                            window.location.href = `/dashboard/server/${guild.id}`;
+                        });
+                    }
+                    
+                    serversGrid.appendChild(serverCard);
+                });
+                
+            } catch (error) {
+                console.error('서버 목록 로드 오류:', error);
+                showToast('서버 목록을 로드할 수 없습니다.', 'error');
+            }
+        }
+
         // 이벤트 리스너 설정
         function setupEventListeners() {
             // 네비게이션
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', (e) => {
+                    if (item.href && !item.href.includes('#')) return;
                     e.preventDefault();
                     const page = item.dataset.page;
-                    navigateToPage(page);
+                    if (page) navigateToPage(page);
                 });
             });
             
@@ -1033,10 +1262,18 @@
                 showConfirmModal('봇 재시작', '봇을 재시작하시겠습니까?', async () => {
                     try {
                         const response = await fetch('/dashboard/api/control/restart', {
-                            method: 'POST'
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
                         });
+                        
+                        if (!response.ok) {
+                            throw new Error('재시작 요청 실패');
+                        }
+                        
                         const result = await response.json();
-                        showToast(result.message, 'success');
+                        showToast(result.message || '봇을 재시작합니다...', 'success');
                     } catch (error) {
                         showToast('봇 재시작 실패', 'error');
                     }
@@ -1047,10 +1284,18 @@
                 showConfirmModal('봇 종료', '봇을 종료하시겠습니까?', async () => {
                     try {
                         const response = await fetch('/dashboard/api/control/stop', {
-                            method: 'POST'
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
                         });
+                        
+                        if (!response.ok) {
+                            throw new Error('종료 요청 실패');
+                        }
+                        
                         const result = await response.json();
-                        showToast(result.message, 'success');
+                        showToast(result.message || '봇을 종료합니다...', 'success');
                     } catch (error) {
                         showToast('봇 종료 실패', 'error');
                     }
@@ -1086,7 +1331,10 @@
             }
             
             // 선택된 네비게이션 아이템 활성화
-            document.querySelector(`[data-page="${page}"]`).classList.add('active');
+            const navItem = document.querySelector(`[data-page="${page}"]`);
+            if (navItem) {
+                navItem.classList.add('active');
+            }
             
             // 페이지 제목 변경
             const titles = {
@@ -1110,10 +1358,19 @@
         async function loadPermissionsPage() {
             try {
                 const response = await fetch('/dashboard/api/permissions');
+                if (!response.ok) {
+                    throw new Error('권한 정보 로드 실패');
+                }
+                
                 const data = await response.json();
                 
                 const tableBody = document.getElementById('users-table-body');
                 tableBody.innerHTML = '';
+                
+                if (!data.users || data.users.length === 0) {
+                    tableBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #949BA4;">사용자가 없습니다.</div>';
+                    return;
+                }
                 
                 data.users.forEach(user => {
                     const row = document.createElement('div');
@@ -1169,6 +1426,10 @@
                         },
                         body: JSON.stringify({ role: newRole })
                     });
+                    
+                    if (!response.ok) {
+                        throw new Error('권한 변경 실패');
+                    }
                     
                     const result = await response.json();
                     
@@ -1236,6 +1497,13 @@
                 toast.classList.remove('show');
             }, 3000);
         }
+
+        // 페이지 언로드 시 정리
+        window.addEventListener('beforeunload', () => {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+        });
     </script>
 </body>
 </html>
