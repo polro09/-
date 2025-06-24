@@ -376,7 +376,7 @@
         }
 
         /* 기능 섹션 */
-        .features {
+        .features, .party {
             padding: 80px 20px;
             max-width: 1200px;
             margin: 0 auto;
@@ -390,13 +390,13 @@
             margin-bottom: 60px;
         }
 
-        .feature-grid {
+        .feature-grid, .party-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 30px;
         }
 
-        .feature-card {
+        .feature-card, .party-card {
             background-color: #000000;
             border-radius: 12px;
             padding: 30px;
@@ -404,13 +404,13 @@
             border: 1px solid #1a1a1a;
         }
 
-        .feature-card:hover {
+        .feature-card:hover, .party-card:hover {
             transform: translateY(-5px);
             border-color: #5865F2;
             box-shadow: 0 10px 30px rgba(88, 101, 242, 0.2);
         }
 
-        .feature-icon {
+        .feature-icon, .party-icon {
             width: 60px;
             height: 60px;
             background-color: #5865F2;
@@ -423,14 +423,14 @@
             color: #FFFFFF;
         }
 
-        .feature-card h3 {
+        .feature-card h3, .party-card h3 {
             font-size: 24px;
             font-weight: 700;
             color: #F2F3F5;
             margin-bottom: 15px;
         }
 
-        .feature-card p {
+        .feature-card p, .party-card p {
             color: #B5BAC1;
             line-height: 1.6;
         }
@@ -643,7 +643,7 @@
                 display: block;
             }
 
-            .feature-grid {
+            .feature-grid, .party-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -758,16 +758,27 @@
                     <i class="fas fa-tachometer-alt"></i>
                     <span>대시보드</span>
                 </a>
+                    <a href="/party.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>파티</span>
+                </a>
             </div>
             <div class="nav-section">
-<div class="nav-title">메인</div>
-<a href="#home" class="nav-item active" data-page="home">
-    <i class="fas fa-info-circle"></i>
-    <span>정보</span>
-</a>
+                <div class="nav-title">메인</div>
+                <a href="#home" class="nav-item active" data-page="home">
+                    <i class="fas fa-info-circle"></i>
+                    <span>정보</span>
+                </a>
                 <a href="#features" class="nav-item" data-page="features">
                     <i class="fas fa-star"></i>
                     <span>기능</span>
+                </a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-title">게임</div>
+                <a href="#party" class="nav-item" data-page="party">
+                    <i class="fas fa-users"></i>
+                    <span>파티</span>
                 </a>
             </div>
         </nav>
@@ -820,6 +831,41 @@
                         </div>
                         <h3>음악 재생</h3>
                         <p>고품질 음악 스트리밍과 재생 목록 관리 기능으로 서버에 생동감을 더합니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 파티 섹션 -->
+            <section class="party" id="party" style="display: none;">
+                <h2 class="section-title">파티 시스템</h2>
+                <div class="party-grid">
+                    <div class="party-card">
+                        <div class="party-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3>파티 생성</h3>
+                        <p>간단한 명령어로 파티를 생성하고 팀원을 모집할 수 있습니다.</p>
+                    </div>
+                    <div class="party-card">
+                        <div class="party-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <h3>매칭 시스템</h3>
+                        <p>실력과 선호도를 기반으로 최적의 팀원을 자동으로 매칭해드립니다.</p>
+                    </div>
+                    <div class="party-card">
+                        <div class="party-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>전적 추적</h3>
+                        <p>게임 전적과 통계를 자동으로 기록하고 분석합니다.</p>
+                    </div>
+                    <div class="party-card">
+                        <div class="party-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <h3>랭킹 시스템</h3>
+                        <p>서버 내 랭킹과 리더보드로 경쟁을 즐기세요.</p>
                     </div>
                 </div>
             </section>
@@ -1034,9 +1080,15 @@
                 // 클릭된 item에 active 클래스 추가
                 item.classList.add('active');
                 
-                // 페이지로 스크롤
+                // 모든 섹션 숨기기
+                document.querySelectorAll('#home, #features, #party').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // 선택된 섹션 표시
                 const section = document.getElementById(page);
                 if (section) {
+                    section.style.display = 'block';
                     section.scrollIntoView({ behavior: 'smooth' });
                 }
                 
@@ -1103,12 +1155,12 @@
 
         // 스크롤 시 active 상태 업데이트
         window.addEventListener('scroll', () => {
-            const sections = ['home', 'features'];
+            const sections = ['home', 'features', 'party'];
             const scrollPosition = window.scrollY + 100;
             
             sections.forEach(sectionId => {
                 const section = document.getElementById(sectionId);
-                if (section) {
+                if (section && section.style.display !== 'none') {
                     const sectionTop = section.offsetTop;
                     const sectionHeight = section.offsetHeight;
                     

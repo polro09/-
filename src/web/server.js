@@ -81,12 +81,11 @@ module.exports = async (client) => {
         next();
     });
     
-            // 라우트 등록
-        app.use('/auth', require('./routes/auth'));
-        app.use('/api', require('./routes/api'));
-        app.use('/api/party', require('./routes/party')); // 파티 API 라우트
-        app.use('/dashboard/api', require('./routes/dashboard'));
-        app.use('/test', require('./routes/test')); // 테스트 라우트
+    // 라우트 등록
+    app.use('/auth', require('./routes/auth'));
+    app.use('/api', require('./routes/api'));
+    app.use('/dashboard/api', require('./routes/dashboard'));
+    app.use('/test', require('./routes/test')); // 테스트 라우트
     
     // 메인 페이지 (최초 방문 체크)
     app.get('/', (req, res) => {
@@ -105,6 +104,16 @@ module.exports = async (client) => {
     app.get('/main', (req, res) => {
         req.session.hasVisited = true;
         res.sendFile(path.join(__dirname, 'public', 'main.html'));
+    });
+    
+    // 파티 페이지
+    app.get('/party.html', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'party.html'));
+    });
+    
+    // 파티 상세 페이지
+    app.get('/party-detail.html', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'party-detail.html'));
     });
     
     // 대시보드 페이지

@@ -4,6 +4,8 @@ const router = express.Router();
 const { config } = require('../../config/config');
 const Guild = require('../../models/Guild');
 const User = require('../../models/User');
+const Party = require('../../models/Party');
+const PartyMember = require('../../models/PartyMember');
 const logger = require('../../utils/logger');
 
 // 인증 미들웨어

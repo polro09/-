@@ -72,6 +72,21 @@ const userSchema = new mongoose.Schema({
         lastGameAt: { type: Date, default: null }
     },
     
+    // 파티 통계
+    partyStats: {
+        totalParties: { type: Number, default: 0 },
+        partiesCreated: { type: Number, default: 0 },
+        partiesJoined: { type: Number, default: 0 },
+        favoriteGame: { type: String, default: null },
+        preferredRole: { type: String, default: null },
+        rating: {
+            communication: { type: Number, default: 5, min: 1, max: 5 },
+            teamwork: { type: Number, default: 5, min: 1, max: 5 },
+            skill: { type: Number, default: 5, min: 1, max: 5 },
+            totalRatings: { type: Number, default: 0 }
+        }
+    },
+    
     // 관리 중인 서버 목록
     guilds: [{
         id: String,
