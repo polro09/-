@@ -50,12 +50,12 @@
             to { transform: rotate(360deg); }
         }
 
-        /* 사이드바 */
-        .sidebar {
+        /* 좌측 사이드바 - 사용자 프로필 전용 */
+        .sidebar-left {
             position: fixed;
             left: 0;
             top: 0;
-            width: 250px;
+            width: 280px;
             height: 100%;
             background-color: #000000;
             border-right: 1px solid #1a1a1a;
@@ -85,29 +85,27 @@
             font-weight: 600;
             color: #F2F3F5;
         }
-        
 
         /* 사용자 프로필 섹션 */
         .user-profile-section {
             background-color: #0f0f0f;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            padding: 20px;
             border: 1px solid #1a1a1a;
         }
 
         .user-profile-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .user-profile-avatar {
-            width: 48px;
-            height: 48px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
-            border: 2px solid #5865F2;
+            border: 3px solid #5865F2;
         }
 
         .user-profile-info {
@@ -115,7 +113,7 @@
         }
 
         .user-profile-name {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             color: #F2F3F5;
             margin-bottom: 4px;
@@ -125,7 +123,7 @@
         }
 
         .edit-nickname-btn {
-            font-size: 12px;
+            font-size: 14px;
             color: #5865F2;
             cursor: pointer;
             transition: color 0.2s;
@@ -136,7 +134,7 @@
         }
 
         .user-profile-role {
-            font-size: 12px;
+            font-size: 13px;
             color: #949BA4;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -145,17 +143,18 @@
         .user-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            font-size: 12px;
+            gap: 12px;
+            font-size: 13px;
             color: #B5BAC1;
             border-top: 1px solid #1a1a1a;
-            padding-top: 12px;
-            margin-bottom: 12px;
+            padding-top: 16px;
+            margin-bottom: 16px;
         }
 
         .user-stat-item {
             display: flex;
             justify-content: space-between;
+            padding: 4px 0;
         }
 
         .user-stat-label {
@@ -170,16 +169,16 @@
         .profile-actions {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         .profile-btn {
-            padding: 8px 12px;
+            padding: 10px 16px;
             background-color: #1a1a1a;
             color: #F2F3F5;
             border: none;
-            border-radius: 4px;
-            font-size: 13px;
+            border-radius: 6px;
+            font-size: 14px;
             cursor: pointer;
             text-decoration: none;
             transition: all 0.2s;
@@ -202,48 +201,30 @@
             background-color: #C53030;
         }
 
-        /* 닉네임 편집 모달 */
-        .nickname-modal {
-            display: none;
+        /* 우측 사이드바 - 메뉴 */
+        .sidebar-right {
             position: fixed;
+            right: 0;
             top: 0;
-            left: 0;
-            width: 100%;
+            width: 250px;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .nickname-modal-content {
             background-color: #000000;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 24px;
-            max-width: 400px;
-            width: 90%;
+            border-left: 1px solid #1a1a1a;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 100;
         }
 
-        .nickname-input {
-            width: 100%;
-            padding: 10px;
-            background-color: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 4px;
+        .menu-header {
+            font-size: 16px;
+            font-weight: 600;
             color: #F2F3F5;
-            font-size: 14px;
-            margin: 16px 0;
-        }
-
-        .nickname-input:focus {
-            outline: none;
-            border-color: #5865F2;
-        }
-
-        /* 네비게이션 섹션 조정 */
-        nav {
-            flex: 1;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .nav-section {
@@ -289,7 +270,8 @@
 
         /* 메인 컨텐츠 */
         .main-content {
-            margin-left: 250px;
+            margin-left: 280px;
+            margin-right: 250px;
             min-height: 100vh;
         }
 
@@ -298,12 +280,25 @@
             background-color: #000000;
             padding: 16px 24px;
             border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .page-title {
             font-size: 24px;
             font-weight: 700;
             color: #F2F3F5;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background-color: #5865F2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
         }
 
         /* 컨텐츠 영역 */
@@ -719,6 +714,45 @@
             border-color: #5865F2;
         }
 
+        /* 닉네임 편집 모달 */
+        .nickname-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nickname-modal-content {
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .nickname-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            color: #F2F3F5;
+            font-size: 14px;
+            margin: 16px 0;
+        }
+
+        .nickname-input:focus {
+            outline: none;
+            border-color: #5865F2;
+        }
+
         /* 모달 */
         .modal {
             display: none;
@@ -792,7 +826,7 @@
         .toast {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            right: 270px; /* 우측 사이드바 고려 */
             padding: 16px 20px;
             background-color: #000000;
             border: 1px solid #1a1a1a;
@@ -800,13 +834,15 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            transform: translateX(400px);
-            transition: transform 0.3s;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
             z-index: 1001;
         }
 
         .toast.show {
-            transform: translateX(0);
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .toast.success {
@@ -835,18 +871,47 @@
         }
 
         /* 반응형 */
+        @media (max-width: 1200px) {
+            .sidebar-left {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .sidebar {
+            .sidebar-left {
                 transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 101;
+            }
+
+            .sidebar-left.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-right {
+                transform: translateX(100%);
                 transition: transform 0.3s;
             }
 
-            .sidebar.open {
+            .sidebar-right.open {
                 transform: translateX(0);
             }
 
             .main-content {
                 margin-left: 0;
+                margin-right: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .header {
+                padding-left: 60px;
             }
 
             .stats-grid {
@@ -858,6 +923,10 @@
                 grid-template-columns: 1fr;
                 gap: 10px;
             }
+
+            .toast {
+                right: 20px;
+            }
         }
     </style>
 </head>
@@ -867,8 +936,8 @@
         <div class="spinner"></div>
     </div>
 
-    <!-- 사이드바 -->
-    <aside class="sidebar">
+    <!-- 좌측 사이드바 - 사용자 프로필 -->
+    <aside class="sidebar-left" id="sidebar-left">
         <div class="sidebar-logo">
             <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
             <h2>Aimdot.dev</h2>
@@ -925,27 +994,31 @@
                 </a>
             </div>
         </div>
+    </aside>
+
+    <!-- 우측 사이드바 - 메뉴 -->
+    <aside class="sidebar-right" id="sidebar-right">
+        <div class="menu-header">
+            <i class="fas fa-bars"></i>
+            <span>메뉴</span>
+        </div>
 
         <nav>
             <div class="nav-section">
-                <div class="nav-title">메인</div>
-                <a href="/" class="nav-item">
-                    <i class="fas fa-home"></i>
-                    <span>홈</span>
-                </a>
-                <a href="#servers" class="nav-item" data-page="servers">
-                    <i class="fas fa-server"></i>
-                    <span>서버 관리</span>
-                </a>
-            </div>
+    <div class="nav-title">메인</div>
+    <a href="#servers" class="nav-item" data-page="servers">
+        <i class="fas fa-server"></i>
+        <span>서버 관리</span>
+    </a>
+</div>
 
-            <div class="nav-section">
-                <div class="nav-title">메뉴</div>
-                <a href="#dashboard" class="nav-item active" data-page="dashboard">
-                    <i class="fas fa-chart-line"></i>
-                    <span>대시보드</span>
-                </a>
-            </div>
+<div class="nav-section">
+    <div class="nav-title">메뉴</div>
+    <a href="/" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>홈</span>
+    </a>
+</div>
 
             <div class="nav-section">
                 <div class="nav-title">봇 관리</div>
@@ -981,7 +1054,13 @@
     <main class="main-content">
         <!-- 헤더 -->
         <header class="header">
+            <button class="mobile-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
             <h1 class="page-title" id="page-title">대시보드</h1>
+            <button class="mobile-toggle" onclick="toggleMenu()">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
         </header>
 
         <!-- 컨텐츠 영역 -->
@@ -1192,7 +1271,7 @@
                     document.getElementById('user-profile-avatar').src = defaultAvatar;
                 }
                 
-                // 게임 전적 표시 (나중에 실제 데이터로 교체)
+                // 게임 전적 표시
                 const stats = currentUser.gameStats || {
                     wins: 0,
                     losses: 0,
@@ -1409,6 +1488,18 @@
             }
         }
 
+        // 사이드바 토글 (좌측)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar-left');
+            sidebar.classList.toggle('open');
+        }
+
+        // 메뉴 토글 (우측)
+        function toggleMenu() {
+            const menu = document.getElementById('sidebar-right');
+            menu.classList.toggle('open');
+        }
+
         // 이벤트 리스너 설정
         function setupEventListeners() {
             // 네비게이션
@@ -1520,6 +1611,11 @@
             // 서버 관리 페이지인 경우 서버 목록 로드
             if (page === 'servers') {
                 loadServers();
+            }
+
+            // 모바일에서 메뉴 닫기
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar-right').classList.remove('open');
             }
         }
 
@@ -1669,70 +1765,130 @@
         }
 
         // 프로필 전체 보기
-        function viewFullProfile() {
-            // TODO: 프로필 페이지로 이동 또는 모달 표시
-            showToast('프로필 기능은 준비 중입니다.', 'info');
-        }
+       function viewFullProfile() {
+           // TODO: 프로필 페이지로 이동 또는 모달 표시
+           showToast('프로필 기능은 준비 중입니다.', 'info');
+       }
 
-        // 확인 모달 표시
-        function showConfirmModal(title, message, onConfirm) {
-            const modal = document.getElementById('confirm-modal');
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-body').textContent = message;
-            
-            modal.style.display = 'flex';
-            
-            const confirmBtn = document.getElementById('modal-confirm');
-            const cancelBtn = document.getElementById('modal-cancel');
-            
-            const handleConfirm = () => {
-                modal.style.display = 'none';
-                onConfirm();
-                cleanup();
-            };
-            
-            const handleCancel = () => {
-                modal.style.display = 'none';
-                cleanup();
-            };
-            
-            const cleanup = () => {
-                confirmBtn.removeEventListener('click', handleConfirm);
-                cancelBtn.removeEventListener('click', handleCancel);
-            };
-            
-            confirmBtn.addEventListener('click', handleConfirm);
-            cancelBtn.addEventListener('click', handleCancel);
-        }
+       // 확인 모달 표시
+       function showConfirmModal(title, message, onConfirm) {
+           const modal = document.getElementById('confirm-modal');
+           document.getElementById('modal-title').textContent = title;
+           document.getElementById('modal-body').textContent = message;
+           
+           modal.style.display = 'flex';
+           
+           const confirmBtn = document.getElementById('modal-confirm');
+           const cancelBtn = document.getElementById('modal-cancel');
+           
+           const handleConfirm = () => {
+               modal.style.display = 'none';
+               onConfirm();
+               cleanup();
+           };
+           
+           const handleCancel = () => {
+               modal.style.display = 'none';
+               cleanup();
+           };
+           
+           const cleanup = () => {
+               confirmBtn.removeEventListener('click', handleConfirm);
+               cancelBtn.removeEventListener('click', handleCancel);
+           };
+           
+           confirmBtn.addEventListener('click', handleConfirm);
+           cancelBtn.addEventListener('click', handleCancel);
+       }
 
-        // 토스트 알림 표시
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
-            const toastIcon = toast.querySelector('.toast-icon');
-            
-            toast.className = `toast ${type}`;
-            toastMessage.textContent = message;
-            
-            if (type === 'success') {
-                toastIcon.className = 'toast-icon fas fa-check-circle';
-            } else {
-                toastIcon.className = 'toast-icon fas fa-exclamation-circle';
-            }
-            
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
+       // 토스트 알림 표시
+       function showToast(message, type = 'success') {
+           const toast = document.getElementById('toast');
+           const toastMessage = document.getElementById('toast-message');
+           const toastIcon = toast.querySelector('.toast-icon');
+           
+           toast.className = `toast ${type}`;
+           toastMessage.textContent = message;
+           
+           if (type === 'success') {
+               toastIcon.className = 'toast-icon fas fa-check-circle';
+           } else if (type === 'error') {
+               toastIcon.className = 'toast-icon fas fa-exclamation-circle';
+           } else {
+               toastIcon.className = 'toast-icon fas fa-info-circle';
+           }
+           
+           toast.classList.add('show');
+           
+           setTimeout(() => {
+               toast.classList.remove('show');
+           }, 3000);
+       }
 
-        // 페이지 언로드 시 정리
-        window.addEventListener('beforeunload', () => {
-            if (updateInterval) {
-                clearInterval(updateInterval);
-            }
-        });
-    </script>
+       // 페이지 언로드 시 정리
+       window.addEventListener('beforeunload', () => {
+           if (updateInterval) {
+               clearInterval(updateInterval);
+           }
+       });
+
+       // 윈도우 리사이즈 이벤트
+       window.addEventListener('resize', () => {
+           if (window.innerWidth > 768) {
+               // 데스크톱 모드에서는 사이드바 열기 클래스 제거
+               document.getElementById('sidebar-left').classList.remove('open');
+               document.getElementById('sidebar-right').classList.remove('open');
+           }
+       });
+
+       // ESC 키로 모달과 사이드바 닫기
+       document.addEventListener('keydown', (e) => {
+           if (e.key === 'Escape') {
+               // 모달 닫기
+               const modals = document.querySelectorAll('.modal, .nickname-modal');
+               modals.forEach(modal => {
+                   if (modal.style.display === 'flex') {
+                       modal.style.display = 'none';
+                   }
+               });
+               
+               // 모바일에서 사이드바 닫기
+               if (window.innerWidth <= 768) {
+                   document.getElementById('sidebar-left').classList.remove('open');
+                   document.getElementById('sidebar-right').classList.remove('open');
+               }
+           }
+       });
+
+       // 외부 클릭으로 사이드바 닫기 (모바일)
+       document.addEventListener('click', (e) => {
+           if (window.innerWidth <= 768) {
+               const leftSidebar = document.getElementById('sidebar-left');
+               const rightSidebar = document.getElementById('sidebar-right');
+               const toggleButtons = document.querySelectorAll('.mobile-toggle');
+               
+               // 좌측 사이드바 외부 클릭 체크
+               if (leftSidebar.classList.contains('open') && 
+                   !leftSidebar.contains(e.target) && 
+                   !Array.from(toggleButtons).some(btn => btn.contains(e.target))) {
+                   leftSidebar.classList.remove('open');
+               }
+               
+               // 우측 사이드바 외부 클릭 체크
+               if (rightSidebar.classList.contains('open') && 
+                   !rightSidebar.contains(e.target) && 
+                   !Array.from(toggleButtons).some(btn => btn.contains(e.target))) {
+                   rightSidebar.classList.remove('open');
+               }
+           }
+       });
+
+       // 엔터 키로 닉네임 저장
+       document.getElementById('nickname-input').addEventListener('keypress', (e) => {
+           if (e.key === 'Enter') {
+               saveNickname();
+           }
+       });
+   </script>
 </body>
 </html>

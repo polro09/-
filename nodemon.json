@@ -1,0 +1,30 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    "node_modules/**/node_modules",
+    "logs/*",
+    "*.log",
+    ".env"
+  ],
+  "verbose": true,
+  "execMap": {
+    "js": "node"
+  },
+  "watch": [
+    "src/**/*",
+    ".env"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,json,html,css",
+  "delay": "1000",
+  "events": {
+    "restart": "osascript -e 'display notification \"서버가 재시작되었습니다\" with title \"Aimdot Bot\"'",
+    "crash": "osascript -e 'display notification \"서버가 충돌했습니다!\" with title \"Aimdot Bot\" sound name \"Sosumi\"'"
+  },
+  "colours": true,
+  "runOnChangeOnly": false,
+  "signal": "SIGTERM"
+}

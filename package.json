@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js --ignore 'src/web/public/*'",
+    "dev": "nodemon src/index.js",
     "dev:debug": "NODE_ENV=development DEBUG_SESSION=true nodemon src/index.js",
     "prod": "NODE_ENV=production node src/index.js",
     "pm2": "pm2 start src/index.js --name aimdot-bot",
@@ -40,8 +40,8 @@
     "node": ">=16.11.0"
   },
   "nodemonConfig": {
-    "ignore": ["src/web/public/*", "logs/*", "*.log"],
-    "ext": "js,json",
+    "ignore": ["logs/*", "*.log"],
+    "ext": "js,json,html",
     "env": {
       "NODE_ENV": "development"
     },
