@@ -16,7 +16,7 @@ module.exports = async (client) => {
     // 정적 파일 제공
     app.use(express.static(path.join(__dirname, 'public')));
     
-    // 세션 설정 - 간단한 메모리 세션으로 먼저 테스트
+    // 세션 설정
     const sessionConfig = {
         secret: config.sessionSecret || 'aimdot-dev-secret-key-2024',
         resave: true, // 세션 저장 강제
@@ -33,8 +33,7 @@ module.exports = async (client) => {
         proxy: process.env.NODE_ENV === 'production' // 프로덕션에서 프록시 사용
     };
     
-    // 일단 메모리 세션으로 테스트 (MongoDB 스토어 임시 비활성화)
-    /*
+    // MongoDB 세션 스토어 설정 (사용 가능한 경우)
     try {
         const mongoose = require('mongoose');
         if (mongoose.connection.readyState === 1) {
@@ -52,9 +51,6 @@ module.exports = async (client) => {
     } catch (error) {
         logger.warn('세션 스토어 생성 실패 - 메모리 세션 사용', 'server');
     }
-    */
-    
-    logger.server('메모리 세션 스토어 사용 (디버깅용)');
     
     app.use(session(sessionConfig));
     
@@ -88,12 +84,26 @@ module.exports = async (client) => {
     // 라우트 등록
     app.use('/auth', require('./routes/auth'));
     app.use('/api', require('./routes/api'));
-    app.use('/dashboard/api', require('./routes/dashboard')); // 경로 수정
-    app.use('/test', require('./routes/test')); // 테스트 라우트 추가
+    app.use('/dashboard/api', require('./routes/dashboard'));
+    app.use('/test', require('./routes/test')); // 테스트 라우트
     
-    // 메인 페이지
+    // 메인 페이지 (최초 방문 체크)
     app.get('/', (req, res) => {
-        res.sendFile(path.join(__dirname, 'public', 'loading.html'));
+        // 최초 방문 여부 확인
+        if (!req.session.hasVisited) {
+            req.session.hasVisited = true;
+            // 최초 방문 시 로딩 페이지 표시
+            res.sendFile(path.join(__dirname, 'public', 'loading.html'));
+        } else {
+            // 이미 방문한 경우 바로 메인 페이지로
+            res.sendFile(path.join(__dirname, 'public', 'main.html'));
+        }
+    });
+    
+    // 메인 페이지 직접 접근 (로딩 없이)
+    app.get('/main', (req, res) => {
+        req.session.hasVisited = true;
+        res.sendFile(path.join(__dirname, 'public', 'main.html'));
     });
     
     // 대시보드 페이지

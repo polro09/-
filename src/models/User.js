@@ -53,6 +53,25 @@ const userSchema = new mongoose.Schema({
         default: 'guest'
     },
     
+    // 닉네임 (대시보드용)
+    nickname: {
+        type: String,
+        default: null,
+        maxLength: 20
+    },
+    
+    // 게임 전적 (파티 시스템용)
+    gameStats: {
+        wins: { type: Number, default: 0 },
+        losses: { type: Number, default: 0 },
+        totalKills: { type: Number, default: 0 },
+        totalDeaths: { type: Number, default: 0 },
+        avgKills: { type: Number, default: 0 },
+        rankedGames: { type: Number, default: 0 },
+        practiceGames: { type: Number, default: 0 },
+        lastGameAt: { type: Date, default: null }
+    },
+    
     // 관리 중인 서버 목록
     guilds: [{
         id: String,

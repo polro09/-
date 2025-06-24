@@ -6,3 +6,7 @@
 {"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Router.use() requires a middleware function but got a Object","timestamp":"2025-06-23T17:30:10.765Z"}
 {"category":"auth","level":"error","message":"세션에 state가 없습니다. 전체 세션: {\"cookie\":{\"originalMaxAge\":86400000,\"expires\":\"2025-06-24T17:31:09.048Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"}}","timestamp":"2025-06-23T17:31:13.142Z"}
 {"category":"auth","level":"error","message":"세션 쿠키 확인: \"aimdot.sid=s%3ABJ0w2R0NN_8zAHpf2-5h0aMYcfFVDQps.caf3ymPSWEnveeFNV3%2BbcUHANZK7DuG5pVjleO%2FSspI\"","timestamp":"2025-06-23T17:31:13.143Z"}
+{"category":"error","level":"error","message":"처리되지 않은 프로미스 거부: category.toUpperCase is not a function","timestamp":"2025-06-24T03:58:36.843Z"}
+{"category":"error","level":"error","message":"처리되지 않은 프로미스 거부: category.toUpperCase is not a function","timestamp":"2025-06-24T04:17:23.486Z"}
+{"category":"error","level":"error","message":"처리되지 않은 프로미스 거부: category.toUpperCase is not a function","timestamp":"2025-06-24T04:17:42.756Z"}
+{"category":"error","level":"error","message":"처리되지 않은 프로미스 거부: category.toUpperCase is not a function","timestamp":"2025-06-24T04:20:02.928Z"}

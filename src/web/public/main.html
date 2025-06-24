@@ -16,45 +16,111 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
             background-color: #000000;
             color: #DBDEE1;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* 네비게이션 바 */
-        .navbar {
+        /* 사이드바 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
             background-color: #000000;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+            border-right: 1px solid #1a1a1a;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 100;
         }
 
-        .nav-logo {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .nav-logo img {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-        }
-
-        .nav-logo h1 {
-            font-size: 12px;
-            font-weight: 300;
-            color: #F2F3F5;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        /* Discord 로그인 버튼 */
-        .nav-auth {
+        .sidebar-logo {
             display: flex;
             align-items: center;
             gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .sidebar-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F2F3F5;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #949BA4;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            color: #B5BAC1;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+        }
+
+        .nav-item.active {
+            background-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 메인 컨텐츠 */
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        /* 헤더 */
+        .header {
+            background-color: #000000;
+            padding: 16px 24px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #F2F3F5;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
         .btn-add {
@@ -74,26 +140,6 @@
         .btn-add:hover {
             background-color: #4752C4;
             box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
-        }
-
-        /* 대시보드 버튼 - 연두색 */
-        .btn-dashboard {
-            background-color: #57F287;
-            color: #000000;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .btn-dashboard:hover {
-            background-color: #3BA55C;
-            box-shadow: 0 4px 12px rgba(87, 242, 135, 0.3);
         }
 
         .btn-login {
@@ -120,6 +166,11 @@
         .btn-login:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+        }
+
+        /* 컨텐츠 영역 */
+        .content {
+            padding: 24px;
         }
 
         /* 히어로 섹션 */
@@ -228,65 +279,215 @@
             color: #949BA4;
             font-size: 14px;
         }
+
+        /* 모바일 메뉴 토글 버튼 */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            background-color: #5865F2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- 네비게이션 바 -->
-    <nav class="navbar">
-        <div class="nav-logo">
+    <!-- 모바일 메뉴 토글 -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- 사이드바 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
             <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
-            <h1>Aimdot.dev</h1>
+            <h2>Aimdot.dev</h2>
         </div>
-        <div class="nav-auth">
-            <a href="/dashboard" class="btn-dashboard">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>대시보드</span>
-            </a>
-            <a href="#" class="btn-add">
-                <i class="fab fa-discord"></i>
-                <span>Discord에 추가</span>
-            </a>
-            <button class="btn-login" id="discord-login">
-                <i class="fab fa-discord"></i>
-                <span>Discord로 로그인</span>
-            </button>
-        </div>
-    </nav>
 
-    <!-- 히어로 섹션 -->
-    <section class="hero">
-        <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev Logo" class="hero-logo">
-        <h2>Aimdot.dev Bot</h2>
-        <p>Discord 서버를 위한 강력하고 유연한 다목적 봇</p>
-    </section>
-
-    <!-- 기능 섹션 -->
-    <section class="features" id="features">
-        <h2 class="section-title">주요 기능</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-cogs"></i>
-                </div>
-                <h3>쉬운 설정</h3>
-                <p>직관적인 명령어와 대시보드를 통해 몇 분 만에 봇을 설정하고 커스터마이징할 수 있습니다.</p>
+        <nav>
+            <div class="nav-section">
+                <div class="nav-title">메인</div>
+                <a href="#home" class="nav-item active" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>홈</span>
+                </a>
+                <a href="#features" class="nav-item" data-page="features">
+                    <i class="fas fa-star"></i>
+                    <span>기능</span>
+                </a>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3>강력한 모더레이션</h3>
-                <p>자동 모더레이션, 경고 시스템, 로깅 등 서버를 안전하게 유지하는 데 필요한 모든 도구를 제공합니다.</p>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 Aimdot.dev. All rights reserved. | Made with ❤️ by Aimdot Team</p>
-    </footer>
+            <div class="nav-section" id="menu-section" style="display: none;">
+                <div class="nav-title">메뉴</div>
+                <a href="/dashboard" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>대시보드</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main-content">
+        <!-- 헤더 -->
+        <header class="header">
+            <h1 class="page-title">Aimdot.dev Bot</h1>
+            <div class="header-right">
+                <a href="#" class="btn-add" id="header-add-bot">
+                    <i class="fab fa-discord"></i>
+                    <span>Discord에 추가</span>
+                </a>
+                <button class="btn-login" id="discord-login">
+                    <i class="fab fa-discord"></i>
+                    <span>Discord로 로그인</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 컨텐츠 영역 -->
+        <div class="content">
+            <!-- 히어로 섹션 -->
+            <section class="hero" id="home">
+                <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev Logo" class="hero-logo">
+                <h2>Aimdot.dev Bot</h2>
+                <p>Discord 서버를 위한 강력하고 유연한 다목적 봇</p>
+            </section>
+
+            <!-- 기능 섹션 -->
+            <section class="features" id="features">
+                <h2 class="section-title">주요 기능</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3>쉬운 설정</h3>
+                        <p>직관적인 명령어와 대시보드를 통해 몇 분 만에 봇을 설정하고 커스터마이징할 수 있습니다.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>강력한 모더레이션</h3>
+                        <p>자동 모더레이션, 경고 시스템, 로깅 등 서버를 안전하게 유지하는 데 필요한 모든 도구를 제공합니다.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3>레벨링 시스템</h3>
+                        <p>사용자 활동을 추적하고 보상하는 고급 레벨링 시스템으로 서버 참여를 높입니다.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h3>음악 재생</h3>
+                        <p>고품질 음악 스트리밍과 재생 목록 관리 기능으로 서버에 생동감을 더합니다.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Aimdot.dev. All rights reserved. | Made with ❤️ by Aimdot Team</p>
+        </footer>
+    </main>
 
     <script>
+        // 사이드바 토글
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // 사용자 권한 확인
+        async function checkUserPermissions() {
+            try {
+                const response = await fetch('/api/user');
+                if (response.ok) {
+                    const user = await response.json();
+                    // member 이상 권한이면 메뉴 섹션 표시
+                    const permissionLevels = {
+                        'guest': 0,
+                        'member': 1,
+                        'subadmin': 2,
+                        'admin': 3,
+                        'owner': 4
+                    };
+                    
+                    if (user.dashboardRole && permissionLevels[user.dashboardRole] >= 1) {
+                        document.getElementById('menu-section').style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                // 로그인하지 않은 경우 무시
+                console.log('사용자 정보를 가져올 수 없습니다.');
+            }
+        }
+
+        // 페이지 로드 시 권한 확인
+        document.addEventListener('DOMContentLoaded', () => {
+            checkUserPermissions();
+        });
+
+        // 페이지 네비게이션
+        document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = item.dataset.page;
+                
+                // 모든 nav-item에서 active 클래스 제거
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // 클릭된 item에 active 클래스 추가
+                item.classList.add('active');
+                
+                // 페이지로 스크롤
+                const section = document.getElementById(page);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                // 모바일에서는 사이드바 닫기
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
         // Discord OAuth2 로그인
         let isLoggingIn = false;
         document.getElementById('discord-login').addEventListener('click', async function() {
@@ -309,6 +510,53 @@
                 this.disabled = false;
                 this.innerHTML = '<i class="fab fa-discord"></i> <span>Discord로 로그인</span>';
             }
+        });
+
+        // 봇 추가 버튼들
+        async function getInviteLink() {
+            try {
+                const response = await fetch('/api/invite');
+                const data = await response.json();
+                return data.url;
+            } catch (error) {
+                console.error('초대 링크 가져오기 실패:', error);
+                return null;
+            }
+        }
+
+        // 봇 추가 이벤트 리스너
+        document.getElementById('header-add-bot').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const inviteUrl = await getInviteLink();
+            if (inviteUrl) {
+                window.open(inviteUrl, '_blank');
+            } else {
+                alert('초대 링크를 가져올 수 없습니다.');
+            }
+        });
+
+        // 스크롤 시 active 상태 업데이트
+        window.addEventListener('scroll', () => {
+            const sections = ['home', 'features'];
+            const scrollPosition = window.scrollY + 100;
+            
+            sections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        document.querySelectorAll('.nav-item').forEach(nav => {
+                            nav.classList.remove('active');
+                        });
+                        const activeNav = document.querySelector(`[data-page="${sectionId}"]`);
+                        if (activeNav) {
+                            activeNav.classList.add('active');
+                        }
+                    }
+                }
+            });
         });
     </script>
 </body>

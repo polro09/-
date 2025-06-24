@@ -42,8 +42,24 @@ router.get('/', checkPermission('member'), async (req, res) => {
     try {
         const botStatus = await BotStatus.findOne({ botId: req.client.user.id });
         
+        // 사용자 정보 업데이트 (닉네임과 게임 전적 포함)
+        const user = await User.findOne({ discordId: req.session.user.id });
+        const userData = {
+            ...req.session.user,
+            nickname: user?.nickname || req.session.user.username,
+            gameStats: user?.gameStats || {
+                wins: 0,
+                losses: 0,
+                totalKills: 0,
+                totalDeaths: 0,
+                avgKills: 0,
+                rankedGames: 0,
+                practiceGames: 0
+            }
+        };
+        
         res.json({
-            user: req.session.user,
+            user: userData,
             permissions: req.userPermissions,
             botStatus: botStatus || { status: 'offline' }
         });

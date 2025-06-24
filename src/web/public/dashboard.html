@@ -61,6 +61,8 @@
             border-right: 1px solid #1a1a1a;
             padding: 20px;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar-logo {
@@ -82,6 +84,165 @@
             font-size: 18px;
             font-weight: 600;
             color: #F2F3F5;
+        }
+
+        /* 사용자 프로필 섹션 */
+        .user-profile-section {
+            background-color: #0f0f0f;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .user-profile-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #5865F2;
+        }
+
+        .user-profile-info {
+            flex: 1;
+        }
+
+        .user-profile-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-nickname-btn {
+            font-size: 12px;
+            color: #5865F2;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .edit-nickname-btn:hover {
+            color: #7289DA;
+        }
+
+        .user-profile-role {
+            font-size: 12px;
+            color: #949BA4;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 12px;
+            color: #B5BAC1;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 12px;
+            margin-bottom: 12px;
+        }
+
+        .user-stat-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .user-stat-label {
+            color: #949BA4;
+        }
+
+        .user-stat-value {
+            color: #F2F3F5;
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-btn {
+            padding: 8px 12px;
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .profile-btn:hover {
+            background-color: #2a2a2a;
+        }
+
+        .profile-btn.logout {
+            background-color: #ED4245;
+            color: #FFFFFF;
+        }
+
+        .profile-btn.logout:hover {
+            background-color: #C53030;
+        }
+
+        /* 닉네임 편집 모달 */
+        .nickname-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nickname-modal-content {
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .nickname-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            color: #F2F3F5;
+            font-size: 14px;
+            margin: 16px 0;
+        }
+
+        .nickname-input:focus {
+            outline: none;
+            border-color: #5865F2;
+        }
+
+        /* 네비게이션 섹션 조정 */
+        nav {
+            flex: 1;
         }
 
         .nav-section {
@@ -136,88 +297,12 @@
             background-color: #000000;
             padding: 16px 24px;
             border-bottom: 1px solid #1a1a1a;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .page-title {
             font-size: 24px;
             font-weight: 700;
             color: #F2F3F5;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .main-link {
-            padding: 10px 20px;
-            background-color: #57F287;
-            color: #000000;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .main-link:hover {
-            background-color: #3BA55C;
-            box-shadow: 0 4px 12px rgba(87, 242, 135, 0.3);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            background-color: #1a1a1a;
-            border-radius: 8px;
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-size: 14px;
-            font-weight: 500;
-            color: #F2F3F5;
-        }
-
-        .user-role {
-            font-size: 12px;
-            color: #949BA4;
-        }
-
-        .logout-btn {
-            padding: 8px 16px;
-            background-color: #ED4245;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover {
-            background-color: #C53030;
         }
 
         /* 컨텐츠 영역 */
@@ -788,20 +873,76 @@
             <h2>Aimdot.dev</h2>
         </div>
 
+        <!-- 사용자 프로필 섹션 -->
+        <div class="user-profile-section">
+            <div class="user-profile-header">
+                <img src="" alt="Avatar" class="user-profile-avatar" id="user-profile-avatar">
+                <div class="user-profile-info">
+                    <div class="user-profile-name">
+                        <span id="user-profile-name">사용자</span>
+                        <i class="fas fa-edit edit-nickname-btn" onclick="openNicknameModal()"></i>
+                    </div>
+                    <div class="user-profile-role" id="user-profile-role">Guest</div>
+                </div>
+            </div>
+            
+            <div class="user-stats">
+                <div class="user-stat-item">
+                    <span class="user-stat-label">전적</span>
+                    <span class="user-stat-value" id="stat-record">0승 0패</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">승률</span>
+                    <span class="user-stat-value" id="stat-winrate">0%</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">평균 킬</span>
+                    <span class="user-stat-value" id="stat-avgkill">0</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">정규전</span>
+                    <span class="user-stat-value" id="stat-ranked">0회</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">모의전</span>
+                    <span class="user-stat-value" id="stat-practice">0회</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">총 게임</span>
+                    <span class="user-stat-value" id="stat-total">0회</span>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="profile-btn" onclick="viewFullProfile()">
+                    <i class="fas fa-user"></i>
+                    프로필 보기
+                </button>
+                <a href="/auth/logout" class="profile-btn logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    로그아웃
+                </a>
+            </div>
+        </div>
+
         <nav>
             <div class="nav-section">
                 <div class="nav-title">메인</div>
                 <a href="/" class="nav-item">
                     <i class="fas fa-home"></i>
-                    <span>메인 페이지</span>
-                </a>
-                <a href="#dashboard" class="nav-item active" data-page="dashboard">
-                    <i class="fas fa-chart-line"></i>
-                    <span>대시보드</span>
+                    <span>홈</span>
                 </a>
                 <a href="#servers" class="nav-item" data-page="servers">
                     <i class="fas fa-server"></i>
                     <span>서버 관리</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">메뉴</div>
+                <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>대시보드</span>
                 </a>
             </div>
 
@@ -840,23 +981,6 @@
         <!-- 헤더 -->
         <header class="header">
             <h1 class="page-title" id="page-title">대시보드</h1>
-            <div class="header-right">
-                <a href="/" class="main-link">
-                    <i class="fas fa-home"></i>
-                    <span>메인으로</span>
-                </a>
-                <div class="user-info">
-                    <img src="" alt="Avatar" class="user-avatar" id="user-avatar">
-                    <div class="user-details">
-                        <span class="user-name" id="user-name">사용자</span>
-                        <span class="user-role" id="user-role">Guest</span>
-                    </div>
-                </div>
-                <a href="/auth/logout" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    로그아웃
-                </a>
-            </div>
         </header>
 
         <!-- 컨텐츠 영역 -->
@@ -949,8 +1073,10 @@
                         <!-- 로그 엔트리들이 여기에 표시됩니다 -->
                     </div>
                 </div>
+            </div>
 
-                <!-- 서버 목록 -->
+            <!-- 서버 관리 페이지 -->
+            <div id="servers-page" class="page-content" style="display: none;">
                 <div class="servers-section">
                     <div class="servers-header">
                         <h2 class="control-title">내 서버</h2>
@@ -977,6 +1103,21 @@
             </div>
         </div>
     </main>
+
+    <!-- 닉네임 변경 모달 -->
+    <div class="nickname-modal" id="nickname-modal">
+        <div class="nickname-modal-content">
+            <h3 class="modal-header">닉네임 변경</h3>
+            <div class="modal-body">
+                <p style="color: #B5BAC1; margin-bottom: 16px;">새로운 닉네임을 입력하세요.</p>
+                <input type="text" class="nickname-input" id="nickname-input" placeholder="닉네임 입력" maxlength="20">
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" onclick="closeNicknameModal()">취소</button>
+                <button class="modal-btn confirm" onclick="saveNickname()">저장</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 확인 모달 -->
     <div class="modal" id="confirm-modal">
@@ -1038,16 +1179,36 @@
                 permissions = data.permissions;
                 botStatus = data.botStatus;
                 
-                // 사용자 정보 표시
-                document.getElementById('user-name').textContent = currentUser.username;
-                document.getElementById('user-role').textContent = permissions.name;
+                // 사용자 정보 표시 (사이드바만)
+                document.getElementById('user-profile-name').textContent = currentUser.nickname || currentUser.username;
+                document.getElementById('user-profile-role').textContent = permissions.name;
+                
                 if (currentUser.avatar) {
-                    document.getElementById('user-avatar').src = 
-                        `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`;
+                    const avatarUrl = `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`;
+                    document.getElementById('user-profile-avatar').src = avatarUrl;
                 } else {
-                    document.getElementById('user-avatar').src = 
-                        'https://cdn.discordapp.com/embed/avatars/0.png';
+                    const defaultAvatar = 'https://cdn.discordapp.com/embed/avatars/0.png';
+                    document.getElementById('user-profile-avatar').src = defaultAvatar;
                 }
+                
+                // 게임 전적 표시 (나중에 실제 데이터로 교체)
+                const stats = currentUser.gameStats || {
+                    wins: 0,
+                    losses: 0,
+                    avgKills: 0,
+                    rankedGames: 0,
+                    practiceGames: 0
+                };
+                
+                const totalGames = stats.wins + stats.losses;
+                const winRate = totalGames > 0 ? Math.round((stats.wins / totalGames) * 100) : 0;
+                
+                document.getElementById('stat-record').textContent = `${stats.wins}승 ${stats.losses}패`;
+                document.getElementById('stat-winrate').textContent = `${winRate}%`;
+                document.getElementById('stat-avgkill').textContent = stats.avgKills.toFixed(1);
+                document.getElementById('stat-ranked').textContent = `${stats.rankedGames}회`;
+                document.getElementById('stat-practice').textContent = `${stats.practiceGames}회`;
+                document.getElementById('stat-total').textContent = `${totalGames}회`;
                 
                 // 권한에 따라 메뉴 표시
                 if (permissions.permissions.users.permissions) {
@@ -1354,6 +1515,11 @@
             if (page === 'permissions') {
                 loadPermissionsPage();
             }
+            
+            // 서버 관리 페이지인 경우 서버 목록 로드
+            if (page === 'servers') {
+                loadServers();
+            }
         }
 
         // 권한 관리 페이지 로드
@@ -1445,6 +1611,66 @@
                     showToast('권한 변경 중 오류가 발생했습니다.', 'error');
                 }
             });
+        }
+
+        // 닉네임 변경 모달
+        function openNicknameModal() {
+            const modal = document.getElementById('nickname-modal');
+            const input = document.getElementById('nickname-input');
+            input.value = currentUser.nickname || currentUser.username;
+            modal.style.display = 'flex';
+            input.focus();
+        }
+
+        function closeNicknameModal() {
+            document.getElementById('nickname-modal').style.display = 'none';
+        }
+
+        async function saveNickname() {
+            const nickname = document.getElementById('nickname-input').value.trim();
+            
+            if (!nickname) {
+                showToast('닉네임을 입력해주세요.', 'error');
+                return;
+            }
+            
+            if (nickname.length > 20) {
+                showToast('닉네임은 20자 이내로 입력해주세요.', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/user/nickname', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nickname })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('닉네임 변경 실패');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentUser.nickname = nickname;
+                    document.getElementById('user-profile-name').textContent = nickname;
+                    closeNicknameModal();
+                    showToast('닉네임이 변경되었습니다.', 'success');
+                } else {
+                    showToast(result.error || '닉네임 변경 실패', 'error');
+                }
+            } catch (error) {
+                showToast('닉네임 변경 중 오류가 발생했습니다.', 'error');
+            }
+        }
+
+        // 프로필 전체 보기
+        function viewFullProfile() {
+            // TODO: 프로필 페이지로 이동 또는 모달 표시
+            showToast('프로필 기능은 준비 중입니다.', 'info');
         }
 
         // 확인 모달 표시
