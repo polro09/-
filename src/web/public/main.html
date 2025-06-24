@@ -19,17 +19,19 @@
             min-height: 100vh;
         }
 
-        /* 사이드바 */
-        .sidebar {
+        /* 좌측 사이드바 - 사용자 프로필 전용 */
+        .sidebar-left {
             position: fixed;
             left: 0;
             top: 0;
-            width: 250px;
+            width: 280px;
             height: 100%;
             background-color: #000000;
             border-right: 1px solid #1a1a1a;
             padding: 20px;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
             z-index: 100;
         }
 
@@ -53,7 +55,224 @@
             font-weight: 600;
             color: #F2F3F5;
         }
-        
+
+        /* 로그인 전 섹션 */
+        .login-section {
+            background-color: #0f0f0f;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #1a1a1a;
+            text-align: center;
+        }
+
+        .login-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 16px;
+        }
+
+        .login-section p {
+            font-size: 14px;
+            color: #949BA4;
+            margin-bottom: 20px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 10px 16px;
+            background-color: #5865F2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .login-btn:hover {
+            background-color: #4752C4;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        /* 사용자 프로필 섹션 */
+        .user-profile-section {
+            background-color: #0f0f0f;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #1a1a1a;
+            display: none;
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .user-profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid #5865F2;
+        }
+
+        .user-profile-info {
+            flex: 1;
+        }
+
+        .user-profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-nickname-btn {
+            font-size: 14px;
+            color: #5865F2;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .edit-nickname-btn:hover {
+            color: #7289DA;
+        }
+
+        .user-profile-role {
+            font-size: 13px;
+            color: #949BA4;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            font-size: 13px;
+            color: #B5BAC1;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 16px;
+            margin-bottom: 16px;
+        }
+
+        .user-stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+
+        .user-stat-label {
+            color: #949BA4;
+        }
+
+        .user-stat-value {
+            color: #F2F3F5;
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .profile-btn, .login-btn {
+            padding: 10px 16px;
+            background-color: #5865F2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .profile-btn:hover, .login-btn:hover {
+            background-color: #4752C4;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        .profile-btn.secondary {
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+        }
+
+        .profile-btn.secondary:hover {
+            background-color: #2a2a2a;
+        }
+
+        .profile-btn.logout {
+            background-color: #ED4245;
+            color: #FFFFFF;
+        }
+
+        .profile-btn.logout:hover {
+            background-color: #C53030;
+        }
+
+        /* 봇 추가 버튼 (프로필 박스 외부) */
+        .add-bot-button {
+            margin-top: 16px;
+            padding: 10px 16px;
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-bot-button:hover {
+            background-color: #2a2a2a;
+        }
+
+        /* 우측 사이드바 - 메뉴 */
+        .sidebar-right {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #000000;
+            border-left: 1px solid #1a1a1a;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .menu-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
         .nav-section {
             margin-bottom: 25px;
@@ -98,7 +317,8 @@
 
         /* 메인 컨텐츠 */
         .main-content {
-            margin-left: 250px;
+            margin-left: 280px;
+            margin-right: 250px;
             min-height: 100vh;
         }
 
@@ -116,57 +336,6 @@
             font-size: 24px;
             font-weight: 700;
             color: #F2F3F5;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .btn-add {
-            background-color: #5865F2;
-            color: #FFFFFF;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .btn-add:hover {
-            background-color: #4752C4;
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
-        }
-
-        .btn-login {
-            background-color: #5865F2;
-            color: #FFFFFF;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-login:hover {
-            background-color: #4752C4;
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
-        }
-
-        .btn-login:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
         }
 
         /* 컨텐츠 영역 */
@@ -225,8 +394,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 30px;
-            max-width: 900px;
-            margin: 0 auto;
         }
 
         .feature-card {
@@ -285,8 +452,6 @@
         .mobile-toggle {
             display: none;
             position: fixed;
-            top: 20px;
-            left: 20px;
             z-index: 101;
             background-color: #5865F2;
             color: #FFFFFF;
@@ -296,19 +461,182 @@
             cursor: pointer;
         }
 
+        .mobile-toggle.left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .mobile-toggle.right {
+            top: 20px;
+            right: 20px;
+        }
+
+        /* 닉네임 편집 모달 */
+        .nickname-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nickname-modal-content {
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 20px;
+        }
+
+        .modal-body {
+            color: #B5BAC1;
+            margin-bottom: 24px;
+        }
+
+        .nickname-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            color: #F2F3F5;
+            font-size: 14px;
+            margin: 16px 0;
+        }
+
+        .nickname-input:focus {
+            outline: none;
+            border-color: #5865F2;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn.cancel {
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+        }
+
+        .modal-btn.cancel:hover {
+            background-color: #2a2a2a;
+        }
+
+        .modal-btn.confirm {
+            background-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        .modal-btn.confirm:hover {
+            background-color: #4752C4;
+        }
+
+        /* 토스트 알림 */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 270px;
+            padding: 16px 20px;
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-color: #3BA55C;
+        }
+
+        .toast.error {
+            border-color: #ED4245;
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        .toast.success .toast-icon {
+            color: #3BA55C;
+        }
+
+        .toast.error .toast-icon {
+            color: #ED4245;
+        }
+
+        .toast-message {
+            color: #F2F3F5;
+            font-size: 14px;
+        }
+
         /* 반응형 */
+        @media (max-width: 1200px) {
+            .sidebar-left {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .sidebar {
+            .sidebar-left {
                 transform: translateX(-100%);
                 transition: transform 0.3s;
             }
 
-            .sidebar.open {
+            .sidebar-left.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-right {
+                transform: translateX(100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar-right.open {
                 transform: translateX(0);
             }
 
             .main-content {
                 margin-left: 0;
+                margin-right: 0;
             }
 
             .mobile-toggle {
@@ -318,40 +646,128 @@
             .feature-grid {
                 grid-template-columns: 1fr;
             }
+
+            .toast {
+                right: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- 모바일 메뉴 토글 -->
-    <button class="mobile-toggle" onclick="toggleSidebar()">
+    <button class="mobile-toggle left" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
     </button>
+    <button class="mobile-toggle right" onclick="toggleMenu()">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
 
-    <!-- 사이드바 -->
-    <aside class="sidebar" id="sidebar">
+    <!-- 좌측 사이드바 - 사용자 프로필 또는 로그인 -->
+    <aside class="sidebar-left" id="sidebar-left">
         <div class="sidebar-logo">
             <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
             <h2>Aimdot.dev</h2>
         </div>
 
-        <nav>
-            <div class="nav-section">
-                <div class="nav-title">메인</div>
-                <a href="#home" class="nav-item active" data-page="home">
-                    <i class="fas fa-home"></i>
-                    <span>홈</span>
-                </a>
-                <a href="#features" class="nav-item" data-page="features">
-                    <i class="fas fa-star"></i>
-                    <span>기능</span>
+        <!-- 로그인 전 섹션 -->
+        <div class="login-section" id="login-section">
+            <h3>시작하기</h3>
+            <p>Discord 계정으로 로그인하여 더 많은 기능을 이용하세요!</p>
+            <button class="login-btn" id="discord-login">
+                <i class="fab fa-discord"></i>
+                <span>Discord로 로그인</span>
+            </button>
+        </div>
+        
+        <!-- Discord에 봇 추가 버튼 (로그인 박스 외부) -->
+        <a href="#" class="add-bot-button" id="add-bot-guest">
+            <i class="fab fa-discord"></i>
+            Discord에 봇 추가
+        </a>
+
+        <!-- 사용자 프로필 섹션 (로그인 후) -->
+        <div class="user-profile-section" id="user-profile-section">
+            <div class="user-profile-header">
+                <img src="" alt="Avatar" class="user-profile-avatar" id="user-profile-avatar">
+                <div class="user-profile-info">
+                    <div class="user-profile-name">
+                        <span id="user-profile-name">사용자</span>
+                        <i class="fas fa-edit edit-nickname-btn" onclick="openNicknameModal()"></i>
+                    </div>
+                    <div class="user-profile-role" id="user-profile-role">Guest</div>
+                </div>
+            </div>
+            
+            <div class="user-stats">
+                <div class="user-stat-item">
+                    <span class="user-stat-label">전적</span>
+                    <span class="user-stat-value" id="stat-record">0승 0패</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">승률</span>
+                    <span class="user-stat-value" id="stat-winrate">0%</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">평균 킬</span>
+                    <span class="user-stat-value" id="stat-avgkill">0</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">정규전</span>
+                    <span class="user-stat-value" id="stat-ranked">0회</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">모의전</span>
+                    <span class="user-stat-value" id="stat-practice">0회</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">총 게임</span>
+                    <span class="user-stat-value" id="stat-total">0회</span>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="profile-btn" onclick="viewFullProfile()">
+                    <i class="fas fa-user"></i>
+                    프로필 보기
+                </button>
+                <a href="/auth/logout" class="profile-btn logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    로그아웃
                 </a>
             </div>
+        </div>
+        
+        <!-- Discord에 봇 추가 버튼 (프로필 박스 외부) -->
+        <a href="#" class="add-bot-button" id="add-bot-user" style="display: none;">
+            <i class="fab fa-discord"></i>
+            Discord에 봇 추가
+        </a>
+    </aside>
 
+    <!-- 우측 사이드바 - 메뉴 -->
+    <aside class="sidebar-right" id="sidebar-right">
+        <div class="menu-header">
+            <i class="fas fa-bars"></i>
+            <span>메뉴</span>
+        </div>
+
+        <nav>
             <div class="nav-section" id="menu-section" style="display: none;">
                 <div class="nav-title">메뉴</div>
                 <a href="/dashboard" class="nav-item">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>대시보드</span>
+                </a>
+            </div>
+            <div class="nav-section">
+<div class="nav-title">메인</div>
+<a href="#home" class="nav-item active" data-page="home">
+    <i class="fas fa-info-circle"></i>
+    <span>정보</span>
+</a>
+                <a href="#features" class="nav-item" data-page="features">
+                    <i class="fas fa-star"></i>
+                    <span>기능</span>
                 </a>
             </div>
         </nav>
@@ -362,16 +778,6 @@
         <!-- 헤더 -->
         <header class="header">
             <h1 class="page-title">Aimdot.dev Bot</h1>
-            <div class="header-right">
-                <a href="#" class="btn-add" id="header-add-bot">
-                    <i class="fab fa-discord"></i>
-                    <span>Discord에 추가</span>
-                </a>
-                <button class="btn-login" id="discord-login">
-                    <i class="fab fa-discord"></i>
-                    <span>Discord로 로그인</span>
-                </button>
-            </div>
         </header>
 
         <!-- 컨텐츠 영역 -->
@@ -425,41 +831,193 @@
         </footer>
     </main>
 
-    <script>
-        // 사이드바 토글
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('open');
-        }
+    <!-- 닉네임 변경 모달 -->
+    <div class="nickname-modal" id="nickname-modal">
+        <div class="nickname-modal-content">
+            <h3 class="modal-header">닉네임 변경</h3>
+            <div class="modal-body">
+                <p style="color: #B5BAC1; margin-bottom: 16px;">새로운 닉네임을 입력하세요.</p>
+                <input type="text" class="nickname-input" id="nickname-input" placeholder="닉네임 입력" maxlength="20">
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" onclick="closeNicknameModal()">취소</button>
+                <button class="modal-btn confirm" onclick="saveNickname()">저장</button>
+            </div>
+        </div>
+    </div>
 
-        // 사용자 권한 확인
-        async function checkUserPermissions() {
+    <!-- 토스트 알림 -->
+    <div class="toast" id="toast">
+        <i class="toast-icon fas fa-check-circle"></i>
+        <span class="toast-message" id="toast-message">작업이 완료되었습니다.</span>
+    </div>
+
+    <script>
+        // 전역 변수
+        let currentUser = null;
+
+        // 사용자 정보 확인 및 UI 업데이트
+        async function checkUserSession() {
             try {
                 const response = await fetch('/api/user');
                 if (response.ok) {
                     const user = await response.json();
-                    // member 이상 권한이면 메뉴 섹션 표시
-                    const permissionLevels = {
-                        'guest': 0,
-                        'member': 1,
-                        'subadmin': 2,
-                        'admin': 3,
-                        'owner': 4
+                    currentUser = user;
+                    
+                    // 로그인 섹션 숨기고 프로필 섹션 표시
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('add-bot-guest').style.display = 'none';
+                    document.getElementById('user-profile-section').style.display = 'block';
+                    document.getElementById('add-bot-user').style.display = 'flex';
+                    
+                    // 사용자 정보 업데이트
+                    document.getElementById('user-profile-name').textContent = user.nickname || user.username;
+                    document.getElementById('user-profile-role').textContent = getRoleName(user.dashboardRole);
+                    
+                    if (user.avatar) {
+                        const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                        document.getElementById('user-profile-avatar').src = avatarUrl;
+                    } else {
+                        document.getElementById('user-profile-avatar').src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+                    }
+                    
+                    // 게임 전적 표시
+                    const stats = user.gameStats || {
+                        wins: 0,
+                        losses: 0,
+                        avgKills: 0,
+                        rankedGames: 0,
+                        practiceGames: 0
                     };
                     
-                    if (user.dashboardRole && permissionLevels[user.dashboardRole] >= 1) {
-                        document.getElementById('menu-section').style.display = 'block';
-                    }
+                    const totalGames = stats.wins + stats.losses;
+                    const winRate = totalGames > 0 ? Math.round((stats.wins / totalGames) * 100) : 0;
+                    
+                    document.getElementById('stat-record').textContent = `${stats.wins}승 ${stats.losses}패`;
+                    document.getElementById('stat-winrate').textContent = `${winRate}%`;
+                    document.getElementById('stat-avgkill').textContent = stats.avgKills.toFixed(1);
+                    document.getElementById('stat-ranked').textContent = `${stats.rankedGames}회`;
+                    document.getElementById('stat-practice').textContent = `${stats.practiceGames}회`;
+                    document.getElementById('stat-total').textContent = `${totalGames}회`;
+                    
+                    // 사용자 메뉴 표시
+                    document.getElementById('menu-section').style.display = 'block';
                 }
             } catch (error) {
-                // 로그인하지 않은 경우 무시
-                console.log('사용자 정보를 가져올 수 없습니다.');
+                // 로그인하지 않은 경우 - 기본 상태 유지
+                console.log('사용자 세션 없음');
             }
         }
 
-        // 페이지 로드 시 권한 확인
+        // 권한 이름 변환
+        function getRoleName(role) {
+            const roleNames = {
+                'guest': 'Guest',
+                'member': 'Member',
+                'subadmin': 'Sub Admin',
+                'admin': 'Admin',
+                'owner': 'Owner'
+            };
+            return roleNames[role] || 'Guest';
+        }
+
+        // 프로필 전체 보기
+        function viewFullProfile() {
+            showToast('프로필 기능은 준비 중입니다.', 'info');
+        }
+
+        // 닉네임 변경 모달 열기
+        function openNicknameModal() {
+            const modal = document.getElementById('nickname-modal');
+            const input = document.getElementById('nickname-input');
+            input.value = currentUser.nickname || currentUser.username;
+            modal.style.display = 'flex';
+            input.focus();
+        }
+
+        function closeNicknameModal() {
+            document.getElementById('nickname-modal').style.display = 'none';
+        }
+
+        async function saveNickname() {
+            const nickname = document.getElementById('nickname-input').value.trim();
+            
+            if (!nickname) {
+                showToast('닉네임을 입력해주세요.', 'error');
+                return;
+            }
+            
+            if (nickname.length > 20) {
+                showToast('닉네임은 20자 이내로 입력해주세요.', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/user/nickname', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nickname })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('닉네임 변경 실패');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentUser.nickname = nickname;
+                    document.getElementById('user-profile-name').textContent = nickname;
+                    closeNicknameModal();
+                    showToast('닉네임이 변경되었습니다.', 'success');
+                } else {
+                    showToast(result.error || '닉네임 변경 실패', 'error');
+                }
+            } catch (error) {
+                showToast('닉네임 변경 중 오류가 발생했습니다.', 'error');
+            }
+        }
+
+        // 토스트 알림 표시
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = toast.querySelector('.toast-icon');
+            
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            
+            if (type === 'success') {
+                toastIcon.className = 'toast-icon fas fa-check-circle';
+            } else if (type === 'error') {
+                toastIcon.className = 'toast-icon fas fa-exclamation-circle';
+            } else {
+                toastIcon.className = 'toast-icon fas fa-info-circle';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 사이드바 토글
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar-left');
+            sidebar.classList.toggle('open');
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('sidebar-right');
+            menu.classList.toggle('open');
+        }
+
+        // 페이지 로드 시 세션 확인
         document.addEventListener('DOMContentLoaded', () => {
-            checkUserPermissions();
+            checkUserSession();
         });
 
         // 페이지 네비게이션
@@ -484,7 +1042,7 @@
                 
                 // 모바일에서는 사이드바 닫기
                 if (window.innerWidth <= 768) {
-                    toggleSidebar();
+                    toggleMenu();
                 }
             });
         });
@@ -492,7 +1050,6 @@
         // Discord OAuth2 로그인
         let isLoggingIn = false;
         document.getElementById('discord-login').addEventListener('click', async function() {
-            // 중복 클릭 방지
             if (isLoggingIn) return;
             
             try {
@@ -500,13 +1057,11 @@
                 this.disabled = true;
                 this.innerHTML = '<i class="fab fa-discord"></i> <span>로그인 중...</span>';
                 
-                // 직접 auth 경로로 리다이렉트
                 window.location.href = '/auth/discord';
             } catch (error) {
                 console.error('로그인 오류:', error);
                 alert('로그인 중 오류가 발생했습니다.');
                 
-                // 에러 시 버튼 복구
                 isLoggingIn = false;
                 this.disabled = false;
                 this.innerHTML = '<i class="fab fa-discord"></i> <span>Discord로 로그인</span>';
@@ -526,7 +1081,17 @@
         }
 
         // 봇 추가 이벤트 리스너
-        document.getElementById('header-add-bot').addEventListener('click', async (e) => {
+        document.getElementById('add-bot-guest').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const inviteUrl = await getInviteLink();
+            if (inviteUrl) {
+                window.open(inviteUrl, '_blank');
+            } else {
+                alert('초대 링크를 가져올 수 없습니다.');
+            }
+        });
+
+        document.getElementById('add-bot-user').addEventListener('click', async (e) => {
             e.preventDefault();
             const inviteUrl = await getInviteLink();
             if (inviteUrl) {
@@ -558,6 +1123,50 @@
                     }
                 }
             });
+        });
+
+        // 윈도우 리사이즈 이벤트
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('sidebar-left').classList.remove('open');
+                document.getElementById('sidebar-right').classList.remove('open');
+            }
+        });
+
+        // ESC 키로 사이드바 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && window.innerWidth <= 768) {
+                document.getElementById('sidebar-left').classList.remove('open');
+                document.getElementById('sidebar-right').classList.remove('open');
+            }
+        });
+
+        // 외부 클릭으로 사이드바 닫기 (모바일)
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                const leftSidebar = document.getElementById('sidebar-left');
+                const rightSidebar = document.getElementById('sidebar-right');
+                const toggleButtons = document.querySelectorAll('.mobile-toggle');
+                
+                if (leftSidebar.classList.contains('open') && 
+                    !leftSidebar.contains(e.target) && 
+                    !Array.from(toggleButtons).some(btn => btn.contains(e.target))) {
+                    leftSidebar.classList.remove('open');
+                }
+                
+                if (rightSidebar.classList.contains('open') && 
+                    !rightSidebar.contains(e.target) && 
+                    !Array.from(toggleButtons).some(btn => btn.contains(e.target))) {
+                    rightSidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // 엔터 키로 닉네임 저장
+        document.getElementById('nickname-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                saveNickname();
+            }
         });
     </script>
 </body>

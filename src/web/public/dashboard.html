@@ -1002,21 +1002,23 @@
             <i class="fas fa-bars"></i>
             <span>메뉴</span>
         </div>
-
-        <nav>
-            <div class="nav-section">
-    <div class="nav-title">메인</div>
-    <a href="#servers" class="nav-item" data-page="servers">
-        <i class="fas fa-server"></i>
-        <span>서버 관리</span>
-    </a>
-</div>
-
 <div class="nav-section">
     <div class="nav-title">메뉴</div>
     <a href="/" class="nav-item">
         <i class="fas fa-home"></i>
         <span>홈</span>
+    </a>
+</div>
+        <nav>
+            <div class="nav-section">
+    <div class="nav-title">메인</div>
+            <a href="#dashboard" class="nav-item active" data-page="dashboard">
+        <i class="fas fa-chart-line"></i>
+        <span>통계</span>
+    </a>
+    <a href="#servers" class="nav-item" data-page="servers">
+        <i class="fas fa-server"></i>
+        <span>서버 관리</span>
     </a>
 </div>
 
@@ -1261,7 +1263,7 @@
                 
                 // 사용자 정보 표시 (사이드바만)
                 document.getElementById('user-profile-name').textContent = currentUser.nickname || currentUser.username;
-                document.getElementById('user-profile-role').textContent = permissions.name;
+                document.getElementById('user-profile-role').textContent = getRoleName(currentUser.dashboardRole);
                 
                 if (currentUser.avatar) {
                     const avatarUrl = `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`;
@@ -1457,7 +1459,7 @@
                         <div class="server-stats">
                             <div class="server-stat">
                                 <i class="fas fa-crown"></i>
-                                <span>${guild.owner ? '소유자' : '관리자'}</span>
+                                <span>${guild.owner ? 'Owner' : '관리자'}</span>
                             </div>
                             ${guild.botJoined ? `
                                 <div class="server-stat">
@@ -1567,6 +1569,18 @@
             });
         }
 
+        // 권한 이름 변환 함수
+function getRoleName(role) {
+    const roleNames = {
+        'guest': 'Guest',
+        'member': 'Member',
+        'subadmin': 'Sub Admin',
+        'admin': 'Admin',
+        'owner': 'Owner'
+    };
+    return roleNames[role] || 'Guest';
+}
+
         // 페이지 네비게이션
         function navigateToPage(page) {
             // 모든 페이지 숨기기
@@ -1653,11 +1667,11 @@
                         </div>
                         <div>
                             <select class="role-select" data-user-id="${user.discordId}" ${user.dashboardRole === 'owner' ? 'disabled' : ''}>
-                                <option value="guest" ${user.dashboardRole === 'guest' ? 'selected' : ''}>게스트</option>
-                                <option value="member" ${user.dashboardRole === 'member' ? 'selected' : ''}>멤버</option>
-                                <option value="subadmin" ${user.dashboardRole === 'subadmin' ? 'selected' : ''}>부관리자</option>
-                                <option value="admin" ${user.dashboardRole === 'admin' ? 'selected' : ''}>관리자</option>
-                                ${user.dashboardRole === 'owner' ? '<option value="owner" selected>소유자</option>' : ''}
+                                <option value="guest" ${user.dashboardRole === 'guest' ? 'selected' : ''}>Guest</option>
+                                <option value="member" ${user.dashboardRole === 'member' ? 'selected' : ''}>Member</option>
+                                <option value="subadmin" ${user.dashboardRole === 'subadmin' ? 'selected' : ''}>Sub Admin</option>
+                                <option value="admin" ${user.dashboardRole === 'admin' ? 'selected' : ''}>Admin</option>
+                                ${user.dashboardRole === 'owner' ? '<option value="owner" selected>Owner</option>' : ''}
                             </select>
                         </div>
                         <div>${lastLogin}</div>
