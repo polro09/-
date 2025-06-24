@@ -68,17 +68,21 @@ router.get('/statistics', checkPermission('member'), async (req, res) => {
             ping: client.ws.ping
         };
         
-        // BotStatus 업데이트
-        await BotStatus.findOneAndUpdate(
-            { botId: client.user.id },
-            { 
-                'statistics.guilds': stats.guilds,
-                'statistics.users': stats.users,
-                'statistics.channels': stats.channels,
-                'statistics.memoryUsage': stats.memory.heapUsed,
-                lastUpdate: new Date()
-            }
-        );
+        // BotStatus 업데이트 (DB 연결된 경우에만)
+        try {
+            await BotStatus.findOneAndUpdate(
+                { botId: client.user.id },
+                { 
+                    'statistics.guilds': stats.guilds,
+                    'statistics.users': stats.users,
+                    'statistics.channels': stats.channels,
+                    'statistics.memoryUsage': stats.memory.heapUsed,
+                    lastUpdate: new Date()
+                }
+            );
+        } catch (dbError) {
+            logger.warn('통계 DB 업데이트 실패 (DB 연결 필요)', 'database');
+        }
         
         res.json(stats);
     } catch (error) {
@@ -90,7 +94,7 @@ router.get('/statistics', checkPermission('member'), async (req, res) => {
 // 봇 제어 - 재시작
 router.post('/control/restart', checkPermission('subadmin'), async (req, res) => {
     try {
-        logger.bot('대시보드에서 봇 재시작 요청', 'control');
+        logger.bot('대시보드에서 봇 재시작 요청');
         
         await BotStatus.findOneAndUpdate(
             { botId: req.client.user.id },
@@ -116,7 +120,7 @@ router.post('/control/restart', checkPermission('subadmin'), async (req, res) =>
 // 봇 제어 - 종료
 router.post('/control/stop', checkPermission('admin'), async (req, res) => {
     try {
-        logger.bot('대시보드에서 봇 종료 요청', 'control');
+        logger.bot('대시보드에서 봇 종료 요청');
         
         await BotStatus.findOneAndUpdate(
             { botId: req.client.user.id },

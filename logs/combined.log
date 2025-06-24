@@ -717,3 +717,148 @@
 {"category":"bot","level":"info","message":"📊 7개의 서버에서 활동 중","timestamp":"2025-06-24T02:20:01.483Z"}
 {"category":"bot","level":"info","message":"👥 810명의 사용자와 함께","timestamp":"2025-06-24T02:20:01.483Z"}
 {"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-06-24T02:20:01.490Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-06-24T02:25:20.817Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-06-24T02:25:20.830Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-06-24T02:25:20.853Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-06-24T02:25:20.857Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-06-24T02:25:20.857Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-06-24T02:25:20.858Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-06-24T02:25:20.861Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-06-24T02:25:20.862Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-06-24T02:25:20.864Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-06-24T02:25:20.865Z"}
+{"category":"command","level":"info","message":"3개의 슬래시 명령어 등록 완료","timestamp":"2025-06-24T02:25:21.490Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-06-24T02:25:21.491Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-06-24T02:25:21.494Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-06-24T02:25:21.495Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-06-24T02:25:21.495Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-06-24T02:25:21.496Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-06-24T02:25:21.497Z"}
+{"category":"server","level":"info","message":"메모리 세션 스토어 사용 (디버깅용)","timestamp":"2025-06-24T02:25:21.552Z"}
+{"category":"server","level":"info","message":"🌐 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-06-24T02:25:21.569Z"}
+{"category":"server","level":"info","message":"📍 로컬: http://localhost:3000","timestamp":"2025-06-24T02:25:21.569Z"}
+{"category":"server","level":"warn","message":"MongoDB가 로컬에서 실행 중입니다. 프로덕션에서는 원격 DB를 사용하세요.","timestamp":"2025-06-24T02:25:21.570Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-06-24T02:25:22.579Z"}
+{"category":"bot","level":"info","message":"📊 7개의 서버에서 활동 중","timestamp":"2025-06-24T02:25:22.580Z"}
+{"category":"bot","level":"info","message":"👥 811명의 사용자와 함께","timestamp":"2025-06-24T02:25:22.580Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-06-24T02:25:22.593Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: yhlbQ5ue_71TOMGOPR1fGMVFjqRzgfpw","timestamp":"2025-06-24T02:25:42.309Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: mmwnjv","timestamp":"2025-06-24T02:25:42.310Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/callback - 세션 ID: yhlbQ5ue_71TOMGOPR1fGMVFjqRzgfpw","timestamp":"2025-06-24T02:25:46.834Z"}
+{"category":"auth","level":"info","message":"OAuth 콜백 수신 - State: mmwnjv","timestamp":"2025-06-24T02:25:46.835Z"}
+{"category":"auth","level":"info","message":"Discord 토큰 요청 중...","timestamp":"2025-06-24T02:25:46.835Z"}
+{"category":"auth","level":"info","message":"사용자 정보 획득: ad_origina1#0","timestamp":"2025-06-24T02:25:47.483Z"}
+{"category":"auth","level":"debug","message":"52개의 길드 정보 획득","timestamp":"2025-06-24T02:25:48.247Z"}
+{"category":"auth","level":"info","message":"관리 권한이 있는 서버: polro, ROK - region trade, ashpex, TM-Shop, 몰랑 만드는 중이양 외 12개","timestamp":"2025-06-24T02:25:48.247Z"}
+{"category":"auth","level":"info","message":"사용자 세션 저장 완료","timestamp":"2025-06-24T02:25:48.260Z"}
+{"category":"auth","level":"debug","message":"저장된 사용자 정보: ad_origina1 (257097077782216704), 서버 수: 52","timestamp":"2025-06-24T02:25:48.260Z"}
+{"category":"auth","level":"info","message":"사용자 로그인 성공: ad_origina1","timestamp":"2025-06-24T02:25:48.260Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-06-24T02:30:14.252Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-06-24T02:30:14.263Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-06-24T02:30:14.286Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-06-24T02:30:14.289Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-06-24T02:30:14.290Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-06-24T02:30:14.291Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-06-24T02:30:14.294Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-06-24T02:30:14.295Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-06-24T02:30:14.298Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-06-24T02:30:14.298Z"}
+{"category":"command","level":"info","message":"3개의 슬래시 명령어 등록 완료","timestamp":"2025-06-24T02:30:15.264Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-06-24T02:30:15.265Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-06-24T02:30:15.267Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-06-24T02:30:15.268Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-06-24T02:30:15.269Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-06-24T02:30:15.270Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-06-24T02:30:15.270Z"}
+{"category":"server","level":"info","message":"메모리 세션 스토어 사용 (디버깅용)","timestamp":"2025-06-24T02:30:15.328Z"}
+{"category":"server","level":"info","message":"🌐 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-06-24T02:30:15.345Z"}
+{"category":"server","level":"info","message":"📍 로컬: http://localhost:3000","timestamp":"2025-06-24T02:30:15.345Z"}
+{"category":"server","level":"warn","message":"MongoDB가 로컬에서 실행 중입니다. 프로덕션에서는 원격 DB를 사용하세요.","timestamp":"2025-06-24T02:30:15.345Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-06-24T02:30:16.895Z"}
+{"category":"bot","level":"info","message":"📊 7개의 서버에서 활동 중","timestamp":"2025-06-24T02:30:16.896Z"}
+{"category":"bot","level":"info","message":"👥 811명의 사용자와 함께","timestamp":"2025-06-24T02:30:16.896Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-06-24T02:30:16.908Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: Mo5-fCVyaoWzTQKtPa5edNwle4l3mfPy","timestamp":"2025-06-24T02:30:54.826Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: z8puexh","timestamp":"2025-06-24T02:30:54.827Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: Mo5-fCVyaoWzTQKtPa5edNwle4l3mfPy","timestamp":"2025-06-24T02:30:54.829Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: e4tx8b","timestamp":"2025-06-24T02:30:54.829Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: Mo5-fCVyaoWzTQKtPa5edNwle4l3mfPy","timestamp":"2025-06-24T02:31:54.831Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: guwek5","timestamp":"2025-06-24T02:31:54.832Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: Mo5-fCVyaoWzTQKtPa5edNwle4l3mfPy","timestamp":"2025-06-24T02:31:54.833Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: jichbc","timestamp":"2025-06-24T02:31:54.833Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-06-24T02:32:46.054Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-06-24T02:32:46.065Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-06-24T02:32:46.089Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-06-24T02:32:46.092Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-06-24T02:32:46.093Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-06-24T02:32:46.094Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-06-24T02:32:46.097Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-06-24T02:32:46.097Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-06-24T02:32:46.100Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-06-24T02:32:46.100Z"}
+{"category":"command","level":"info","message":"3개의 슬래시 명령어 등록 완료","timestamp":"2025-06-24T02:32:46.523Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-06-24T02:32:46.524Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-06-24T02:32:46.526Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-06-24T02:32:46.527Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-06-24T02:32:46.527Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-06-24T02:32:46.528Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-06-24T02:32:46.529Z"}
+{"category":"server","level":"info","message":"메모리 세션 스토어 사용 (디버깅용)","timestamp":"2025-06-24T02:32:46.585Z"}
+{"category":"server","level":"info","message":"🌐 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-06-24T02:32:46.602Z"}
+{"category":"server","level":"info","message":"📍 로컬: http://localhost:3000","timestamp":"2025-06-24T02:32:46.603Z"}
+{"category":"server","level":"warn","message":"MongoDB가 로컬에서 실행 중입니다. 프로덕션에서는 원격 DB를 사용하세요.","timestamp":"2025-06-24T02:32:46.603Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-06-24T02:32:47.958Z"}
+{"category":"bot","level":"info","message":"📊 7개의 서버에서 활동 중","timestamp":"2025-06-24T02:32:47.958Z"}
+{"category":"bot","level":"info","message":"👥 811명의 사용자와 함께","timestamp":"2025-06-24T02:32:47.958Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-06-24T02:32:47.972Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: tfGwr__EAFjP4Q_dHDOBUvt0TkZjgCAe","timestamp":"2025-06-24T02:32:54.823Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: t4t5ba","timestamp":"2025-06-24T02:32:54.824Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: tfGwr__EAFjP4Q_dHDOBUvt0TkZjgCAe","timestamp":"2025-06-24T02:32:54.825Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 78pnlh","timestamp":"2025-06-24T02:32:54.825Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: tfGwr__EAFjP4Q_dHDOBUvt0TkZjgCAe","timestamp":"2025-06-24T02:33:45.796Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: di9jo9","timestamp":"2025-06-24T02:33:45.796Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/callback - 세션 ID: tfGwr__EAFjP4Q_dHDOBUvt0TkZjgCAe","timestamp":"2025-06-24T02:33:50.182Z"}
+{"category":"auth","level":"info","message":"OAuth 콜백 수신 - State: di9jo9","timestamp":"2025-06-24T02:33:50.183Z"}
+{"category":"auth","level":"info","message":"Discord 토큰 요청 중...","timestamp":"2025-06-24T02:33:50.183Z"}
+{"category":"auth","level":"info","message":"사용자 정보 획득: ad_origina1#0","timestamp":"2025-06-24T02:33:50.788Z"}
+{"category":"auth","level":"debug","message":"52개의 길드 정보 획득","timestamp":"2025-06-24T02:33:51.569Z"}
+{"category":"auth","level":"info","message":"관리 권한이 있는 서버: polro, ROK - region trade, ashpex, TM-Shop, 몰랑 만드는 중이양 외 12개","timestamp":"2025-06-24T02:33:51.569Z"}
+{"category":"auth","level":"info","message":"사용자 세션 저장 완료","timestamp":"2025-06-24T02:33:51.580Z"}
+{"category":"auth","level":"debug","message":"저장된 사용자 정보: ad_origina1 (257097077782216704), 서버 수: 52","timestamp":"2025-06-24T02:33:51.581Z"}
+{"category":"auth","level":"info","message":"사용자 로그인 성공: ad_origina1","timestamp":"2025-06-24T02:33:51.581Z"}
+{"category":"bot","level":"info","message":"대시보드에서 봇 재시작 요청","timestamp":"2025-06-24T02:34:23.293Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-06-24T02:34:49.075Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-06-24T02:34:49.086Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-06-24T02:34:49.109Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-06-24T02:34:49.112Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-06-24T02:34:49.112Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-06-24T02:34:49.113Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-06-24T02:34:49.116Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-06-24T02:34:49.117Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-06-24T02:34:49.120Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-06-24T02:34:49.120Z"}
+{"category":"command","level":"info","message":"3개의 슬래시 명령어 등록 완료","timestamp":"2025-06-24T02:34:49.585Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-06-24T02:34:49.586Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-06-24T02:34:49.589Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-06-24T02:34:49.590Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-06-24T02:34:49.591Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-06-24T02:34:49.592Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-06-24T02:34:49.592Z"}
+{"category":"server","level":"info","message":"메모리 세션 스토어 사용 (디버깅용)","timestamp":"2025-06-24T02:34:49.649Z"}
+{"category":"server","level":"info","message":"🌐 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-06-24T02:34:49.667Z"}
+{"category":"server","level":"info","message":"📍 로컬: http://localhost:3000","timestamp":"2025-06-24T02:34:49.667Z"}
+{"category":"server","level":"warn","message":"MongoDB가 로컬에서 실행 중입니다. 프로덕션에서는 원격 DB를 사용하세요.","timestamp":"2025-06-24T02:34:49.667Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-06-24T02:34:51.227Z"}
+{"category":"bot","level":"info","message":"📊 7개의 서버에서 활동 중","timestamp":"2025-06-24T02:34:51.227Z"}
+{"category":"bot","level":"info","message":"👥 811명의 사용자와 함께","timestamp":"2025-06-24T02:34:51.227Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-06-24T02:34:51.242Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: 3fLAPn7FwFOdeXrOOe3xoEGxNwS8o2pm","timestamp":"2025-06-24T02:34:51.823Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: bn06jr","timestamp":"2025-06-24T02:34:51.824Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: 3fLAPn7FwFOdeXrOOe3xoEGxNwS8o2pm","timestamp":"2025-06-24T02:34:51.825Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: j60v3q","timestamp":"2025-06-24T02:34:51.826Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: 3fLAPn7FwFOdeXrOOe3xoEGxNwS8o2pm","timestamp":"2025-06-24T02:34:56.807Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: q2bxth","timestamp":"2025-06-24T02:34:56.807Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: 3fLAPn7FwFOdeXrOOe3xoEGxNwS8o2pm","timestamp":"2025-06-24T02:35:01.947Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: nya485","timestamp":"2025-06-24T02:35:01.947Z"}
+{"category":"session","level":"debug","message":"[GET] /auth/discord - 세션 ID: 3fLAPn7FwFOdeXrOOe3xoEGxNwS8o2pm","timestamp":"2025-06-24T02:35:01.949Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: a7bn37f","timestamp":"2025-06-24T02:35:01.949Z"}

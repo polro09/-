@@ -32,10 +32,16 @@ module.exports = {
             if (botStatus) {
                 botStatus.runtime.restarts = (botStatus.runtime.restarts || 0) + 1;
                 await botStatus.save();
+                
+                // 시작 로그 추가
+                await botStatus.addLog('info', `봇이 시작되었습니다 (${client.user.tag})`, 'startup');
+                await botStatus.addLog('info', `${client.guilds.cache.size}개 서버, ${client.users.cache.size}명 사용자`, 'startup');
+                
                 logger.database('봇 상태 업데이트 완료');
             }
         } catch (error) {
             logger.database('봇 상태 업데이트 실패 (DB 연결 필요)', 'warn');
+            logger.error(`봇 상태 업데이트 오류: ${error.message}`, 'database');
         }
         
         // 봇 상태 설정
@@ -75,5 +81,25 @@ module.exports = {
                 logger.error(`만료된 컴포넌트 정리 중 오류: ${error.message}`, 'handler');
             }
         }, 24 * 60 * 60 * 1000); // 24시간
+        
+        // 통계 업데이트 (5분마다)
+        setInterval(async () => {
+            try {
+                const BotStatus = require('../models/BotStatus');
+                await BotStatus.findOneAndUpdate(
+                    { botId: client.user.id },
+                    {
+                        'statistics.guilds': client.guilds.cache.size,
+                        'statistics.users': client.users.cache.size,
+                        'statistics.channels': client.channels.cache.size,
+                        'statistics.uptime': client.uptime,
+                        'statistics.memoryUsage': process.memoryUsage().heapUsed,
+                        lastUpdate: new Date()
+                    }
+                );
+            } catch (error) {
+                logger.error(`통계 업데이트 오류: ${error.message}`, 'database');
+            }
+        }, 5 * 60 * 1000); // 5분마다
     }
 };

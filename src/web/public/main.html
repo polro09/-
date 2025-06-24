@@ -60,7 +60,7 @@
         .btn-add {
             background-color: #5865F2;
             color: #FFFFFF;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: 500;
@@ -76,10 +76,30 @@
             box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
         }
 
+        /* 대시보드 버튼 - 연두색 */
+        .btn-dashboard {
+            background-color: #57F287;
+            color: #000000;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-dashboard:hover {
+            background-color: #3BA55C;
+            box-shadow: 0 4px 12px rgba(87, 242, 135, 0.3);
+        }
+
         .btn-login {
             background-color: #5865F2;
             color: #FFFFFF;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: 500;
@@ -218,7 +238,7 @@
             <h1>Aimdot.dev</h1>
         </div>
         <div class="nav-auth">
-            <a href="/dashboard" class="btn-add">
+            <a href="/dashboard" class="btn-dashboard">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>대시보드</span>
             </a>
