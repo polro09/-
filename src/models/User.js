@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     // Discord 정보
-    discordId: {
+    userId: {
         type: String,
         required: true,
         unique: true
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     },
     discriminator: {
         type: String,
-        required: true
+        default: '0'
     },
     avatar: {
         type: String,
@@ -28,15 +28,15 @@ const userSchema = new mongoose.Schema({
     // OAuth 정보
     accessToken: {
         type: String,
-        required: true
+        default: null
     },
     refreshToken: {
         type: String,
-        required: true
+        default: null
     },
     tokenExpiry: {
         type: Date,
-        required: true
+        default: null
     },
     
     // 권한 관리
@@ -60,16 +60,18 @@ const userSchema = new mongoose.Schema({
         maxLength: 20
     },
     
-    // 게임 전적 (파티 시스템용)
+    // 게임 통계 (파티 시스템용)
     gameStats: {
         wins: { type: Number, default: 0 },
         losses: { type: Number, default: 0 },
-        totalKills: { type: Number, default: 0 },
-        totalDeaths: { type: Number, default: 0 },
-        avgKills: { type: Number, default: 0 },
+        totalGames: { type: Number, default: 0 },
+        kills: { type: Number, default: 0 },
+        deaths: { type: Number, default: 0 },
         rankedGames: { type: Number, default: 0 },
-        practiceGames: { type: Number, default: 0 },
-        lastGameAt: { type: Date, default: null }
+        customGames: { type: Number, default: 0 },
+        lastPlayed: Date,
+        favoriteCountry: String,
+        favoriteUnit: String
     },
     
     // 파티 통계
@@ -123,6 +125,25 @@ userSchema.methods.updateLogin = async function() {
     this.lastLogin = new Date();
     this.loginCount += 1;
     await this.save();
+};
+
+// 전적 승률 계산
+userSchema.methods.getWinRate = function() {
+    if (this.gameStats.totalGames === 0) return 0;
+    return ((this.gameStats.wins / this.gameStats.totalGames) * 100).toFixed(2);
+};
+
+// K/D 비율 계산
+userSchema.methods.getKDRatio = function() {
+    if (this.gameStats.deaths === 0) return this.gameStats.kills;
+    return (this.gameStats.kills / this.gameStats.deaths).toFixed(2);
+};
+
+// 평균 평점 계산
+userSchema.methods.getAverageRating = function() {
+    const { communication, teamwork, skill, totalRatings } = this.partyStats.rating;
+    if (totalRatings === 0) return 0;
+    return ((communication + teamwork + skill) / 3).toFixed(1);
 };
 
 module.exports = mongoose.model('User', userSchema);

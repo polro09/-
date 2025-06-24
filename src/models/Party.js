@@ -1,110 +1,95 @@
 // src/models/Party.js
 const mongoose = require('mongoose');
 
-const partySchema = new mongoose.Schema({
-    // 기본 정보
-    name: {
-        type: String,
-        required: true,
-        maxLength: 50
-    },
-    game: {
-        type: String,
-        required: true,
-        enum: ['valorant', 'leagueoflegends', 'overwatch', 'other']
-    },
-    mode: {
+const participantSchema = new mongoose.Schema({
+    userId: {
         type: String,
         required: true
     },
-    
-    // 파티 설정
-    maxMembers: {
-        type: Number,
+    username: String,
+    avatar: String,
+    team: {
+        type: String,
+        enum: ['team1', 'team2', 'waitlist'],
+        default: 'waitlist'
+    },
+    country: {
+        type: String,
+        enum: ['empire', 'vlandia', 'battania', 'sturgia', 'khuzait', 'aserai'],
+        default: null
+    },
+    unit: {
+        type: String,
+        default: null
+    },
+    stats: {
+        wins: { type: Number, default: 0 },
+        losses: { type: Number, default: 0 },
+        kills: { type: Number, default: 0 },
+        deaths: { type: Number, default: 0 }
+    },
+    joinedAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+const partySchema = new mongoose.Schema({
+    partyId: {
+        type: String,
         required: true,
-        min: 2,
-        max: 10,
-        default: 5
+        unique: true
     },
-    minTier: {
-        type: String,
-        default: '제한 없음'
-    },
-    voiceRequired: {
-        type: Boolean,
-        default: false
-    },
-    description: {
-        type: String,
-        maxLength: 200
-    },
-    
-    // 리더와 멤버
-    leader: {
-        type: String,
-        required: true,
-        ref: 'User'
-    },
-    members: [{
-        user: {
-            type: String,
-            ref: 'User'
-        },
-        role: {
-            type: String,
-            enum: ['leader', 'member'],
-            default: 'member'
-        },
-        joinedAt: {
-            type: Date,
-            default: Date.now
-        }
-    }],
-    
-    // 상태
-    status: {
-        type: String,
-        enum: ['waiting', 'in_game', 'completed', 'cancelled'],
-        default: 'waiting'
-    },
-    
-    // Discord 정보
     guildId: {
         type: String,
-        default: null
+        required: true
     },
-    voiceChannelId: {
+    channelId: {
         type: String,
-        default: null
+        required: true
     },
-    textChannelId: {
+    messageId: String,
+    hostId: {
         type: String,
-        default: null
+        required: true
     },
-    messageId: {
+    hostName: String,
+    title: {
         type: String,
-        default: null
+        required: true
     },
-    
-    // 게임 결과
-    gameResult: {
-        winner: { type: Boolean, default: null },
-        mvp: { type: String, default: null },
-        stats: { type: mongoose.Schema.Types.Mixed, default: {} }
+    description: String,
+    type: {
+        type: String,
+        enum: ['정규전', '모의전', '훈련', 'PVP', '검은발톱', '레이드'],
+        required: true
     },
-    
-    // 타임스탬프
+    maxPlayers: {
+        type: Number,
+        default: 100
+    },
+    requirements: String,
+    startTime: Date,
+    status: {
+        type: String,
+        enum: ['recruiting', 'in_progress', 'completed', 'cancelled'],
+        default: 'recruiting'
+    },
+    participants: [participantSchema],
+    result: {
+        winner: {
+            type: String,
+            enum: ['team1', 'team2', 'draw', null],
+            default: null
+        },
+        team1Score: { type: Number, default: 0 },
+        team2Score: { type: Number, default: 0 },
+        completedBy: String,
+        completedAt: Date
+    },
     createdAt: {
         type: Date,
         default: Date.now
-    },
-    startedAt: {
-        type: Date,
-        default: null
-    },
-    completedAt: {
-        type: Date,
-        default: null
     },
     updatedAt: {
         type: Date,
@@ -112,73 +97,143 @@ const partySchema = new mongoose.Schema({
     }
 });
 
-// 인덱스
+// 인덱스 추가
 partySchema.index({ status: 1, createdAt: -1 });
-partySchema.index({ leader: 1 });
-partySchema.index({ 'members.user': 1 });
-partySchema.index({ game: 1, mode: 1 });
+partySchema.index({ hostId: 1, status: 1 });
+partySchema.index({ 'participants.userId': 1 });
 
-// 가상 필드
-partySchema.virtual('currentMembers').get(function() {
-    return this.members.length;
-});
-
-partySchema.virtual('isFull').get(function() {
-    return this.members.length >= this.maxMembers;
-});
-
-// 업데이트 시 updatedAt 갱신
-partySchema.pre('save', function(next) {
+// 메서드 추가
+partySchema.methods.addParticipant = async function(userData) {
+    const existing = this.participants.find(p => p.userId === userData.userId);
+    if (existing) {
+        return { success: false, message: '이미 참여 중입니다.' };
+    }
+    
+    this.participants.push(userData);
     this.updatedAt = new Date();
-    next();
-});
-
-// 파티 시작 메서드
-partySchema.methods.startGame = async function() {
-    this.status = 'in_game';
-    this.startedAt = new Date();
     await this.save();
+    
+    return { success: true };
 };
 
-// 파티 완료 메서드
-partySchema.methods.completeGame = async function(result) {
-    this.status = 'completed';
-    this.completedAt = new Date();
-    if (result) {
-        this.gameResult = result;
+partySchema.methods.removeParticipant = async function(userId) {
+    const index = this.participants.findIndex(p => p.userId === userId);
+    if (index === -1) {
+        return { success: false, message: '참여자를 찾을 수 없습니다.' };
     }
+    
+    this.participants.splice(index, 1);
+    this.updatedAt = new Date();
     await this.save();
+    
+    return { success: true };
 };
 
-// 멤버 추가 메서드
-partySchema.methods.addMember = async function(userId) {
-    if (this.isFull) {
-        throw new Error('파티가 가득 찼습니다.');
+partySchema.methods.changeTeam = async function(userId, newTeam) {
+    const participant = this.participants.find(p => p.userId === userId);
+    if (!participant) {
+        return { success: false, message: '참여자를 찾을 수 없습니다.' };
     }
     
-    if (this.members.some(m => m.user === userId)) {
-        throw new Error('이미 파티에 참가했습니다.');
-    }
+    participant.team = newTeam;
+    this.updatedAt = new Date();
+    await this.save();
     
-    this.members.push({
-        user: userId,
-        role: 'member',
-        joinedAt: new Date()
+    return { success: true };
+};
+
+partySchema.methods.updateDiscordMessage = async function(client) {
+    try {
+        if (!this.messageId || !this.channelId) return;
+        
+        const channel = await client.channels.fetch(this.channelId);
+        if (!channel) return;
+        
+        const message = await channel.messages.fetch(this.messageId);
+        if (!message) return;
+        
+        const embed = await this.createDiscordEmbed();
+        await message.edit({ embeds: [embed] });
+        
+        return true;
+    } catch (error) {
+        console.error('Discord 메시지 업데이트 오류:', error);
+        return false;
+    }
+};
+
+partySchema.methods.createDiscordEmbed = async function() {
+    const CustomEmbedBuilder = require('../utils/embedBuilder');
+    
+    const team1 = this.participants.filter(p => p.team === 'team1');
+    const team2 = this.participants.filter(p => p.team === 'team2');
+    const waitlist = this.participants.filter(p => p.team === 'waitlist');
+    
+    const statusEmoji = {
+        recruiting: '🟢',
+        in_progress: '🟡',
+        completed: '⚫',
+        cancelled: '🔴'
+    };
+    
+    const embed = CustomEmbedBuilder.createBasicEmbed({
+        title: `${statusEmoji[this.status]} ${this.title}`,
+        description: this.description || '설명이 없습니다.',
+        fields: [
+            {
+                name: '🎮 파티 타입',
+                value: this.type,
+                inline: true
+            },
+            {
+                name: '👤 주최자',
+                value: `<@${this.hostId}>`,
+                inline: true
+            },
+            {
+                name: '⏰ 시작 시간',
+                value: this.startTime ? new Date(this.startTime).toLocaleString('ko-KR') : '미정',
+                inline: true
+            },
+            {
+                name: `⚔️ 팀 1 (${team1.length}명)`,
+                value: team1.length > 0 
+                    ? team1.slice(0, 10).map(p => `<@${p.userId}>`).join('\n') + (team1.length > 10 ? `\n... 외 ${team1.length - 10}명` : '')
+                    : '참여자 없음',
+                inline: true
+            },
+            {
+                name: `🛡️ 팀 2 (${team2.length}명)`,
+                value: team2.length > 0 
+                    ? team2.slice(0, 10).map(p => `<@${p.userId}>`).join('\n') + (team2.length > 10 ? `\n... 외 ${team2.length - 10}명` : '')
+                    : '참여자 없음',
+                inline: true
+            },
+            {
+                name: `⏳ 대기자 (${waitlist.length}명)`,
+                value: waitlist.length > 0 
+                    ? waitlist.slice(0, 10).map(p => `<@${p.userId}>`).join('\n') + (waitlist.length > 10 ? `\n... 외 ${waitlist.length - 10}명` : '')
+                    : '대기자 없음',
+                inline: true
+            }
+        ],
+        footer: {
+            text: `파티 ID: ${this.partyId} | 상태: ${this.status}`,
+            iconURL: 'https://i.imgur.com/Sd8qK9c.gif'
+        },
+        timestamp: this.updatedAt
     });
     
-    await this.save();
-};
-
-// 멤버 제거 메서드
-partySchema.methods.removeMember = async function(userId) {
-    const index = this.members.findIndex(m => m.user === userId);
-    
-    if (index === -1) {
-        throw new Error('파티 멤버가 아닙니다.');
+    // 결과가 있는 경우 추가
+    if (this.status === 'completed' && this.result.winner) {
+        embed.addFields({
+            name: '🏆 결과',
+            value: `승리: ${this.result.winner === 'draw' ? '무승부' : this.result.winner} | 점수: ${this.result.team1Score} - ${this.result.team2Score}`,
+            inline: false
+        });
     }
     
-    this.members.splice(index, 1);
-    await this.save();
+    return embed;
 };
 
 module.exports = mongoose.model('Party', partySchema);

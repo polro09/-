@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aimdot.dev - 파티 상세</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>파티 상세 - Aimdot.dev</title>
+    <link rel="icon" href="https://i.imgur.com/IOPA7gL.gif" type="image/gif">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -13,25 +14,29 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-            background-color: #000000;
-            color: #DBDEE1;
+            background-color: #0a0a0a;
+            color: #F2F3F5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(88, 101, 242, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(88, 101, 242, 0.05) 0%, transparent 50%);
         }
 
         /* 헤더 */
         .header {
-            background-color: #000000;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid #1a1a1a;
-            padding: 16px 24px;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .header-content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -56,16 +61,11 @@
             font-weight: 600;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* 메인 컨테이너 */
+        /* 컨테이너 */
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 40px 24px;
         }
 
         /* 파티 헤더 */
@@ -73,70 +73,110 @@
             background-color: #0f0f0f;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
-            padding: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .party-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .party-status-badge.recruiting {
+            background-color: rgba(59, 165, 92, 0.2);
+            color: #3BA55C;
+        }
+
+        .party-status-badge.in_progress {
+            background-color: rgba(250, 166, 26, 0.2);
+            color: #FAA61A;
+        }
+
+        .party-status-badge.completed {
+            background-color: rgba(116, 127, 141, 0.2);
+            color: #747F8D;
+        }
+
+        .party-title-section {
             margin-bottom: 24px;
         }
 
         .party-title {
             font-size: 32px;
             font-weight: 700;
-            color: #F2F3F5;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .party-status {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-left: 16px;
+        .party-type-icon {
+            font-size: 36px;
         }
 
-        .party-status.recruiting {
-            background-color: #3BA55C;
-            color: #FFFFFF;
+        .party-subtitle {
+            font-size: 16px;
+            color: #B5BAC1;
         }
 
-        .party-status.in_progress {
-            background-color: #FAA61A;
-            color: #FFFFFF;
-        }
-
-        .party-status.completed {
-            background-color: #747F8D;
-            color: #FFFFFF;
-        }
-
-        .party-info {
+        .party-info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
-        .info-item {
+        .party-info-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: #B5BAC1;
+            gap: 12px;
         }
 
-        .info-item i {
+        .party-info-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #5865F2;
-            width: 20px;
+        }
+
+        .party-info-content {
+            flex: 1;
+        }
+
+        .party-info-label {
+            font-size: 12px;
+            color: #949BA4;
+            text-transform: uppercase;
+        }
+
+        .party-info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #F2F3F5;
         }
 
         .party-description {
-            color: #B5BAC1;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            padding: 16px;
             background-color: #000000;
+            border: 1px solid #1a1a1a;
             border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .party-description p {
+            line-height: 1.6;
+            color: #B5BAC1;
         }
 
         .party-actions {
@@ -148,7 +188,7 @@
         /* 팀 섹션 */
         .teams-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 24px;
             margin-bottom: 24px;
         }
@@ -157,14 +197,14 @@
             background-color: #0f0f0f;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
-            padding: 20px;
+            padding: 24px;
         }
 
         .team-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .team-title {
@@ -175,25 +215,50 @@
             gap: 8px;
         }
 
-        .team1 { color: #0099FF; }
-        .team2 { color: #FF0000; }
+        .team-title.team1 {
+            color: #5865F2;
+        }
+
+        .team-title.team2 {
+            color: #EB459E;
+        }
 
         .team-count {
             font-size: 14px;
             color: #949BA4;
         }
 
-        .participant-list {
+        .team-join-btn {
+            padding: 8px 16px;
+            background-color: #5865F2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .team-join-btn:hover {
+            background-color: #4752C4;
+        }
+
+        .team-join-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 참여자 목록 */
+        .participants-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: 400px;
-            overflow-y: auto;
         }
 
         .participant-item {
             background-color: #000000;
-            border: 1px solid #2a2a2a;
+            border: 1px solid #1a1a1a;
             border-radius: 8px;
             padding: 12px;
             display: flex;
@@ -204,12 +269,19 @@
 
         .participant-item:hover {
             border-color: #5865F2;
+            transform: translateX(4px);
         }
 
         .participant-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
+            background-color: #5865F2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #FFFFFF;
         }
 
         .participant-info {
@@ -226,6 +298,8 @@
         .participant-stats {
             font-size: 12px;
             color: #949BA4;
+            display: flex;
+            gap: 12px;
         }
 
         .participant-tags {
@@ -235,8 +309,9 @@
         }
 
         .country-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
         }
 
         .unit-tag {
@@ -273,70 +348,24 @@
             background-color: #0f0f0f;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
-            padding: 20px;
+            padding: 24px;
             margin-bottom: 24px;
         }
 
-        .empty-state {
-            text-align: center;
-            color: #949BA4;
-            padding: 40px;
+        .waitlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        /* 버튼 스타일 */
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
+        .waitlist-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #FAA61A;
+            display: flex;
             align-items: center;
             gap: 8px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background-color: #5865F2;
-            color: #FFFFFF;
-        }
-
-        .btn-primary:hover {
-            background-color: #4752C4;
-        }
-
-        .btn-secondary {
-            background-color: #1a1a1a;
-            color: #F2F3F5;
-        }
-
-        .btn-secondary:hover {
-            background-color: #2a2a2a;
-        }
-
-        .btn-success {
-            background-color: #3BA55C;
-            color: #FFFFFF;
-        }
-
-        .btn-success:hover {
-            background-color: #2D7D46;
-        }
-
-        .btn-danger {
-            background-color: #ED4245;
-            color: #FFFFFF;
-        }
-
-        .btn-danger:hover {
-            background-color: #C53030;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
 
         /* 참여 모달 */
@@ -354,19 +383,39 @@
         }
 
         .modal-content {
-            background-color: #000000;
+            background-color: #0f0f0f;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
-            padding: 24px;
+            padding: 32px;
             max-width: 500px;
             width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
-            font-size: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 24px;
             font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #B5BAC1;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
             color: #F2F3F5;
-            margin-bottom: 20px;
         }
 
         /* 국가 선택 */
@@ -374,84 +423,129 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
-        .country-btn {
-            padding: 12px;
+        .country-option {
             background-color: #000000;
-            border: 2px solid #2a2a2a;
+            border: 2px solid #1a1a1a;
             border-radius: 8px;
+            padding: 16px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .country-btn:hover {
+        .country-option:hover {
             border-color: #5865F2;
+            transform: translateY(-2px);
         }
 
-        .country-btn.selected {
+        .country-option.selected {
             background-color: #5865F2;
             border-color: #5865F2;
         }
 
-        .country-btn img {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 4px;
+        .country-option img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 8px;
         }
 
         .country-name {
-            font-size: 12px;
-            color: #F2F3F5;
-        }
-
-        /* 전적 기록 섹션 */
-        .stats-section {
-            background-color: #0f0f0f;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-            display: none;
-        }
-
-        .stats-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .stats-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .stats-player-item {
-            background-color: #000000;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 12px;
-            display: grid;
-            grid-template-columns: 200px 100px 100px 100px 150px;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .stats-input {
-            padding: 6px 12px;
-            background-color: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 4px;
-            color: #F2F3F5;
             font-size: 14px;
-            text-align: center;
+            font-weight: 500;
         }
 
-        /* 로딩 스피너 */
+        /* 병종 선택 */
+        .unit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .unit-option {
+            padding: 12px;
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .unit-option:hover {
+            border-color: #5865F2;
+        }
+
+        .unit-option.selected {
+            background-color: #5865F2;
+            border-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        /* 버튼 */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background-color: #4752C4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+        }
+
+        .btn-secondary:hover {
+            background-color: #2a2a2a;
+        }
+
+        .btn-danger {
+            background-color: #ED4245;
+            color: #FFFFFF;
+        }
+
+        .btn-danger:hover {
+            background-color: #C53030;
+        }
+
+        .btn-success {
+            background-color: #3BA55C;
+            color: #FFFFFF;
+        }
+
+        .btn-success:hover {
+            background-color: #2D7D46;
+        }
+
+        /* 빈 상태 */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #949BA4;
+        }
+
+        /* 로딩 */
         .loading {
             display: none;
             position: fixed;
@@ -471,14 +565,14 @@
             border: 3px solid #1a1a1a;
             border-top-color: #5865F2;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* 토스트 알림 */
+        /* 토스트 */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -511,11 +605,23 @@
 
         /* 반응형 */
         @media (max-width: 768px) {
-            .teams-container {
+            .container {
+                padding: 24px 16px;
+            }
+
+            .party-header {
+                padding: 24px 16px;
+            }
+
+            .party-title {
+                font-size: 24px;
+            }
+
+            .party-info-grid {
                 grid-template-columns: 1fr;
             }
 
-            .party-info {
+            .teams-container {
                 grid-template-columns: 1fr;
             }
 
@@ -523,15 +629,19 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .stats-player-item {
-                grid-template-columns: 1fr;
-                gap: 8px;
+            .party-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 로딩 화면 -->
+    <!-- 로딩 -->
     <div class="loading" id="loading">
         <div class="spinner"></div>
     </div>
@@ -543,33 +653,18 @@
                 <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
                 <h1>Aimdot.dev 파티 시스템</h1>
             </a>
-            <div class="nav-buttons">
-                <a href="/party" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    파티 목록
-                </a>
-            </div>
+            <a href="/party" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                파티 목록
+            </a>
         </div>
     </header>
 
     <!-- 메인 컨테이너 -->
     <div class="container">
         <!-- 파티 헤더 -->
-        <div class="party-header" id="party-header">
-            <div class="party-title">
-                <span id="party-emoji"></span>
-                <span id="party-title"></span>
-                <span class="party-status" id="party-status"></span>
-            </div>
-            <div class="party-info" id="party-info">
-                <!-- 파티 정보가 여기에 표시됩니다 -->
-            </div>
-            <div class="party-description" id="party-description">
-                <!-- 파티 설명이 여기에 표시됩니다 -->
-            </div>
-            <div class="party-actions" id="party-actions">
-                <!-- 액션 버튼들이 여기에 표시됩니다 -->
-            </div>
+        <div class="party-header" id="partyHeader">
+            <!-- 동적으로 생성됩니다 -->
         </div>
 
         <!-- 팀 섹션 -->
@@ -580,10 +675,13 @@
                         <i class="fas fa-users"></i>
                         1팀
                     </h3>
-                    <span class="team-count" id="team1-count">0/50</span>
+                    <span class="team-count" id="team1Count">0명</span>
                 </div>
-                <div class="participant-list" id="team1-list">
-                    <div class="empty-state">팀원이 없습니다</div>
+                <div class="participants-list" id="team1List">
+                    <!-- 참여자 목록이 동적으로 생성됩니다 -->
+                </div>
+                <div class="empty-state" id="team1Empty">
+                    참여자가 없습니다
                 </div>
             </div>
 
@@ -593,191 +691,122 @@
                         <i class="fas fa-users"></i>
                         2팀
                     </h3>
-                    <span class="team-count" id="team2-count">0/50</span>
+                    <span class="team-count" id="team2Count">0명</span>
                 </div>
-                <div class="participant-list" id="team2-list">
-                    <div class="empty-state">팀원이 없습니다</div>
+                <div class="participants-list" id="team2List">
+                    <!-- 참여자 목록이 동적으로 생성됩니다 -->
+                </div>
+                <div class="empty-state" id="team2Empty">
+                    참여자가 없습니다
                 </div>
             </div>
         </div>
 
         <!-- 대기자 섹션 -->
         <div class="waitlist-section">
-            <div class="team-header">
-                <h3 class="team-title">
+            <div class="waitlist-header">
+                <h3 class="waitlist-title">
                     <i class="fas fa-clock"></i>
                     대기자
                 </h3>
-                <span class="team-count" id="waitlist-count">0명</span>
+                <span class="team-count" id="waitlistCount">0명</span>
             </div>
-            <div class="participant-list" id="waitlist-list">
-                <div class="empty-state">대기자가 없습니다</div>
+            <div class="participants-list" id="waitlistList">
+                <!-- 대기자 목록이 동적으로 생성됩니다 -->
             </div>
-        </div>
-
-        <!-- 전적 기록 섹션 (Sub Admin 이상) -->
-        <div class="stats-section" id="stats-section">
-            <div class="stats-header">
-                <h3 class="team-title">
-                    <i class="fas fa-chart-bar"></i>
-                    전적 기록
-                </h3>
-                <button class="btn btn-primary" onclick="saveStats()">
-                    <i class="fas fa-save"></i>
-                    전적 저장
-                </button>
-            </div>
-            <div class="stats-form" id="stats-form">
-                <!-- 전적 입력 폼이 여기에 표시됩니다 -->
+            <div class="empty-state" id="waitlistEmpty">
+                대기자가 없습니다
             </div>
         </div>
     </div>
 
     <!-- 참여 모달 -->
-    <div class="modal" id="join-modal">
+    <div class="modal" id="joinModal">
         <div class="modal-content">
-            <h3 class="modal-header">파티 참여</h3>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">국가 선택</label>
-                    <div class="country-grid">
-                        <div class="country-btn" data-country="empire" onclick="selectCountry('empire')">
-                            <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/sturgia_3_[upscaled].png" alt="스터지아">
-                            <div class="country-name">스터지아</div>
-                        </div>
-                        <div class="country-btn" data-country="khuzait" onclick="selectCountry('khuzait')">
-                            <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/khuzait_2_[upscaled].png" alt="쿠자이트">
-                            <div class="country-name">쿠자이트</div>
-                        </div>
-                        <div class="country-btn" data-country="aserai" onclick="selectCountry('aserai')">
-                            <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/aserai_2_%7Bupscaled].png" alt="아세라이">
-                            <div class="country-name">아세라이</div>
-                        </div>
+            <div class="modal-header">
+                <h2 class="modal-title">파티 참여</h2>
+                <button class="modal-close" onclick="closeJoinModal()">×</button>
+            </div>
+            
+            <div class="form-section">
+                <h3 class="section-title">국가 선택</h3>
+                <div class="country-grid" id="countryGrid">
+                    <div class="country-option" data-country="empire">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[remade+upscaled].png" alt="제국">
+                        <div class="country-name">제국</div>
+                    </div>
+                    <div class="country-option" data-country="vlandia">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_v_[upscaled].png" alt="블란디아">
+                        <div class="country-name">블란디아</div>
+                    </div>
+                    <div class="country-option" data-country="battania">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[upscaled].png" alt="바타니아">
+                        <div class="country-name">바타니아</div>
+                    </div>
+                    <div class="country-option" data-country="sturgia">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/sturgia_3_[upscaled].png" alt="스터지아">
+                        <div class="country-name">스터지아</div>
+                    </div>
+                    <div class="country-option" data-country="khuzait">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/khuzait_2_[upscaled].png" alt="쿠자이트">
+                        <div class="country-name">쿠자이트</div>
+                    </div>
+                    <div class="country-option" data-country="aserai">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/aserai_2_%7Bupscaled].png" alt="아세라이">
+                        <div class="country-name">아세라이</div>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label class="form-label">병종 선택</label>
-                    <select class="form-select" id="unit-select" style="width: 100%; padding: 10px; background-color: #000000; border: 1px solid #2a2a2a; border-radius: 6px; color: #F2F3F5;">
-                        <option value="">병종을 선택하세요</option>
-                        <option value="5t_polearm_infantry">5t 폴암보병</option>
-                        <option value="5t_shield_infantry">5t 방패보병</option>
-                        <option value="5t_archer">5t 궁병</option>
-                        <option value="5t_crossbow">5t 석궁병</option>
-                        <option value="5t_spearman">5t 창병</option>
-                        <option value="5t_horse_archer">5t 궁기병</option>
-                        <option value="5t_lancer">5t 창기병</option>
-                        <option value="6t_archer">6t 궁병</option>
-                        <option value="6t_horse_archer">6t 궁기병</option>
-                        <option value="6t_lancer">6t 창기병</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">참여 위치</label>
-                    <select class="form-select" id="join-position" style="width: 100%; padding: 10px; background-color: #000000; border: 1px solid #2a2a2a; border-radius: 6px; color: #F2F3F5;">
-                        <option value="waitlist">대기자</option>
-                        <option value="team1">1팀</option>
-                        <option value="team2">2팀</option>
-                    </select>
+            <div class="form-section">
+                <h3 class="section-title">병종 선택</h3>
+                <div class="unit-grid" id="unitGrid">
+                    <div class="unit-option" data-unit="폴암보병">폴암보병</div>
+                    <div class="unit-option" data-unit="방패보병">방패보병</div>
+                    <div class="unit-option" data-unit="궁병">궁병</div>
+                    <div class="unit-option" data-unit="석궁병">석궁병</div>
+                    <div class="unit-option" data-unit="창병">창병</div>
+                    <div class="unit-option" data-unit="궁기병">궁기병</div>
+                    <div class="unit-option" data-unit="창기병">창기병</div>
                 </div>
             </div>
-            <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+
+            <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="closeJoinModal()">취소</button>
-                <button class="btn btn-primary" onclick="joinParty()">참여</button>
+                <button class="btn btn-primary" id="confirmJoinBtn" onclick="confirmJoin()">참여하기</button>
             </div>
         </div>
     </div>
 
-    <!-- 파티 종료 모달 -->
-    <div class="modal" id="complete-modal">
-        <div class="modal-content">
-            <h3 class="modal-header">파티 종료</h3>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">결과 선택</label>
-                    <select class="form-select" id="party-outcome" style="width: 100%; padding: 10px; background-color: #000000; border: 1px solid #2a2a2a; border-radius: 6px; color: #F2F3F5;">
-                        <option value="team1_win">1팀 승리</option>
-                        <option value="team2_win">2팀 승리</option>
-                        <option value="draw">무승부</option>
-                        <option value="completed">완료</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">결과 메시지</label>
-                    <textarea class="form-textarea" id="result-message" placeholder="결과에 대한 메시지를 입력하세요" style="width: 100%; min-height: 100px; padding: 10px; background-color: #000000; border: 1px solid #2a2a2a; border-radius: 6px; color: #F2F3F5; resize: vertical;"></textarea>
-                </div>
-            </div>
-            <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
-                <button class="btn btn-secondary" onclick="closeCompleteModal()">취소</button>
-                <button class="btn btn-success" onclick="completeParty()">종료</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 토스트 알림 -->
+    <!-- 토스트 -->
     <div class="toast" id="toast">
-        <i class="toast-icon fas fa-check-circle"></i>
-        <span class="toast-message" id="toast-message">작업이 완료되었습니다.</span>
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span class="toast-message"></span>
     </div>
 
     <script>
         // 전역 변수
+        let partyData = null;
         let currentUser = null;
-        let currentParty = null;
         let selectedCountry = null;
-        let myParticipation = null;
+        let selectedUnit = null;
+        let selectedTeam = null;
 
-        // 국가 정보
-        const countries = {
-            empire: { name: '제국', icon: '🏛️' },
-            vlandia: { name: '블란디아', icon: '🦁' },
-            battania: { name: '바타니아', icon: '🌲' },
-            sturgia: { name: '스터지아', icon: '❄️' },
-            khuzait: { name: '쿠자이트', icon: '🏹' },
-            aserai: { name: '아세라이', icon: '🏜️' }
-        };
-
-        // 병종 정보
-        const units = {
-            '5t_polearm_infantry': '5t 폴암보병',
-            '5t_shield_infantry': '5t 방패보병',
-            '5t_archer': '5t 궁병',
-            '5t_crossbow': '5t 석궁병',
-            '5t_spearman': '5t 창병',
-            '5t_horse_archer': '5t 궁기병',
-            '5t_lancer': '5t 창기병',
-            '6t_archer': '6t 궁병',
-            '6t_horse_archer': '6t 궁기병',
-            '6t_lancer': '6t 창기병'
-        };
-
-        // 파티 타입 정보
-        const partyTypes = {
-            ranked: { name: '정규전', emoji: '⚔️' },
-            practice: { name: '모의전', emoji: '🎯' },
-            training: { name: '훈련', emoji: '📚' },
-            pvp: { name: 'PVP', emoji: '⚡' },
-            blackclaw: { name: '검은발톱', emoji: '🦅' },
-            raid_desert: { name: '레이드-사막', emoji: '🏜️' },
-            raid_north: { name: '레이드-북부', emoji: '❄️' }
-        };
-
-        // 페이지 로드 시 초기화
+        // 초기화
         document.addEventListener('DOMContentLoaded', async () => {
             await checkAuth();
-            await loadPartyDetail();
-            
-            // 5초마다 파티 정보 업데이트
-            setInterval(loadPartyDetail, 5000);
+            await loadPartyDetails();
+            initializeEventListeners();
         });
 
         // 인증 확인
         async function checkAuth() {
             try {
                 const response = await fetch('/api/user');
-                if (response.ok) {
-                    currentUser = await response.json();
+                const data = await response.json();
+                
+                if (response.ok && data.user) {
+                    currentUser = data.user;
                 }
             } catch (error) {
                 console.error('인증 확인 오류:', error);
@@ -785,553 +814,396 @@
         }
 
         // 파티 상세 정보 로드
-        async function loadPartyDetail() {
+        async function loadPartyDetails() {
             const partyId = window.location.pathname.split('/').pop();
-            
+            showLoading();
+
             try {
-                const response = await fetch(`/api/party/${partyId}`);
-                if (!response.ok) {
-                    throw new Error('파티를 찾을 수 없습니다');
+                const response = await fetch(`/party/api/${partyId}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    partyData = data;
+                    displayPartyDetails();
+                    displayParticipants();
+                } else {
+                    throw new Error(data.error || '파티 정보를 불러올 수 없습니다');
                 }
-                
-                currentParty = await response.json();
-                displayPartyDetail();
-                
             } catch (error) {
                 console.error('파티 로드 오류:', error);
-                showToast('파티를 불러올 수 없습니다.', 'error');
-                setTimeout(() => {
-                    window.location.href = '/party';
-                }, 2000);
+                showToast('파티 정보를 불러올 수 없습니다', 'error');
+                setTimeout(() => window.location.href = '/party', 2000);
+            } finally {
+                hideLoading();
             }
         }
 
         // 파티 상세 정보 표시
-        function displayPartyDetail() {
-            const party = currentParty;
-            const type = partyTypes[party.type];
-            
-            // 파티 제목
-            document.getElementById('party-emoji').textContent = type.emoji;
-            document.getElementById('party-title').textContent = party.title;
-            
-            // 파티 상태
-            const statusElement = document.getElementById('party-status');
-            statusElement.className = `party-status ${party.status}`;
-            statusElement.textContent = {
-                recruiting: '모집 중',
-                in_progress: '진행 중',
-                completed: '종료',
-                cancelled: '취소됨'
-            }[party.status];
-            
-            // 파티 정보
-            const dateStr = new Date(party.scheduledDate).toLocaleDateString('ko-KR');
-            document.getElementById('party-info').innerHTML = `
-                <div class="info-item">
-                    <i class="fas fa-tag"></i>
-                    <span>${type.name}</span>
+        function displayPartyDetails() {
+            const typeEmojis = {
+                '정규전': '⚔️',
+                '모의전': '🛡️',
+                '훈련': '🎯',
+                'PVP': '🏆',
+                '검은발톱': '🦅',
+                '레이드': '🏜️'
+            };
+
+            const statusTexts = {
+                'recruiting': '모집 중',
+                'in_progress': '진행 중',
+                'completed': '완료',
+                'cancelled': '취소됨'
+            };
+
+            const isHost = currentUser && currentUser.id === partyData.hostId;
+            const isParticipant = partyData.participants.some(p => p.userId === currentUser?.id);
+
+            let actionButtons = '';
+            if (partyData.status === 'recruiting') {
+                if (!isParticipant) {
+                    actionButtons = `
+                        <button class="btn btn-primary" onclick="openJoinModal('team2')">
+                            <i class="fas fa-user-plus"></i>
+                            2팀 참여
+                        </button>
+                        <button class="btn btn-secondary" onclick="openJoinModal('waitlist')">
+                            <i class="fas fa-clock"></i>
+                            대기자 등록
+                        </button>
+                    `;
+                } else {
+                    actionButtons = `
+                        <button class="btn btn-danger" onclick="leaveParty()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            파티 나가기
+                        </button>
+                    `;
+                }
+                
+                if (isHost) {
+                    actionButtons += `
+                        <button class="btn btn-secondary" onclick="editParty()">
+                            <i class="fas fa-edit"></i>
+                            수정
+                        </button>
+                        <button class="btn btn-danger" onclick="endParty()">
+                            <i class="fas fa-times"></i>
+                            파티 종료
+                        </button>
+                    `;
+                }
+            }
+
+            const headerHTML = `
+                <div class="party-status-badge ${partyData.status}">
+                    ${statusTexts[partyData.status]}
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-user"></i>
-                    <span>${party.hostName}</span>
+                
+                <div class="party-title-section">
+                    <h1 class="party-title">
+                        <span class="party-type-icon">${typeEmojis[partyData.type] || '🎮'}</span>
+                        ${escapeHtml(partyData.title)}
+                    </h1>
+                    <p class="party-subtitle">주최: ${escapeHtml(partyData.hostName || '알 수 없음')}</p>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-calendar"></i>
-                    <span>${dateStr}</span>
+
+                <div class="party-info-grid">
+                    <div class="party-info-item">
+                        <div class="party-info-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="party-info-content">
+                            <div class="party-info-label">파티 타입</div>
+                            <div class="party-info-value">${partyData.type}</div>
+                        </div>
+                    </div>
+                    <div class="party-info-item">
+                        <div class="party-info-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="party-info-content">
+                            <div class="party-info-label">시작 시간</div>
+                            <div class="party-info-value">${partyData.startTime ? formatDateTime(partyData.startTime) : '미정'}</div>
+                        </div>
+                    </div>
+                    <div class="party-info-item">
+                        <div class="party-info-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="party-info-content">
+                            <div class="party-info-label">참여자</div>
+                            <div class="party-info-value">${partyData.participants.length}명</div>
+                        </div>
+                    </div>
+                    <div class="party-info-item">
+                        <div class="party-info-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div class="party-info-content">
+                            <div class="party-info-label">파티 ID</div>
+                            <div class="party-info-value">${partyData.partyId}</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-clock"></i>
-                    <span>${party.scheduledTime}</span>
+
+                ${partyData.description ? `
+                    <div class="party-description">
+                        <p>${escapeHtml(partyData.description)}</p>
+                    </div>
+                ` : ''}
+
+                ${partyData.requirements ? `
+                    <div class="party-description">
+                        <p><strong>참가 조건:</strong> ${escapeHtml(partyData.requirements)}</p>
+                    </div>
+                ` : ''}
+
+                <div class="party-actions">
+                    ${actionButtons}
                 </div>
             `;
-            
-            // 파티 설명
-            if (party.description) {
-                document.getElementById('party-description').innerHTML = `
-                    <strong>설명:</strong><br>
-                    ${party.description}
-                `;
-            }
-            
-            if (party.preparations) {
-                document.getElementById('party-description').innerHTML += `
-                    <br><br>
-                    <strong>준비물:</strong><br>
-                    ${party.preparations}
-                `;
-            }
-            
-            // 참여 확인
-            checkMyParticipation();
-            
-            // 액션 버튼
-            displayActions();
-            
-            // 팀 표시
-            displayTeam('team1', party.team1);
-            displayTeam('team2', party.team2);
-            displayTeam('waitlist', party.waitlist);
-            
-            // 팀 카운트 업데이트
-            document.getElementById('team1-count').textContent = `${party.team1.length}/${party.maxTeamSize}`;
-            document.getElementById('team2-count').textContent = `${party.team2.length}/${party.maxTeamSize}`;
-            document.getElementById('waitlist-count').textContent = `${party.waitlist.length}명`;
-            
-            // 전적 섹션 표시 (종료된 파티 & Sub Admin 이상)
-            if (party.status === 'completed' && currentUser && 
-                ['subadmin', 'admin', 'owner'].includes(currentUser.dashboardRole)) {
-                displayStatsSection();
-            }
+
+            document.getElementById('partyHeader').innerHTML = headerHTML;
         }
 
-        // 내 참여 확인
-        function checkMyParticipation() {
-            if (!currentUser) {
-                myParticipation = null;
-                return;
-            }
-            
-            const userId = currentUser.id;
-            
-            if (currentParty.team1.some(p => p.userId === userId)) {
-                myParticipation = { team: 'team1', data: currentParty.team1.find(p => p.userId === userId) };
-            } else if (currentParty.team2.some(p => p.userId === userId)) {
-                myParticipation = { team: 'team2', data: currentParty.team2.find(p => p.userId === userId) };
-            } else if (currentParty.waitlist.some(p => p.userId === userId)) {
-                myParticipation = { team: 'waitlist', data: currentParty.waitlist.find(p => p.userId === userId) };
-            } else {
-                myParticipation = null;
-            }
+        // 참여자 표시
+        function displayParticipants() {
+            const team1 = partyData.participants.filter(p => p.team === 'team1');
+            const team2 = partyData.participants.filter(p => p.team === 'team2');
+            const waitlist = partyData.participants.filter(p => p.team === 'waitlist');
+
+            displayTeamParticipants('team1', team1);
+            displayTeamParticipants('team2', team2);
+            displayTeamParticipants('waitlist', waitlist);
+
+            document.getElementById('team1Count').textContent = `${team1.length}명`;
+            document.getElementById('team2Count').textContent = `${team2.length}명`;
+            document.getElementById('waitlistCount').textContent = `${waitlist.length}명`;
         }
 
-        // 액션 버튼 표시
-        function displayActions() {
-            const actionsContainer = document.getElementById('party-actions');
-            actionsContainer.innerHTML = '';
-            
-            if (currentParty.status !== 'recruiting') {
-                return;
-            }
-            
-            if (!currentUser) {
-                actionsContainer.innerHTML = `
-                    <a href="/auth/discord" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt"></i>
-                        로그인하여 참여
-                    </a>
-                `;
-                return;
-            }
-            
-            if (!myParticipation) {
-                // 참여하지 않은 경우
-                actionsContainer.innerHTML = `
-                    <button class="btn btn-primary" onclick="openJoinModal()">
-                        <i class="fas fa-plus"></i>
-                        파티 참여
-                    </button>
-                `;
-            } else {
-                // 이미 참여한 경우
-                actionsContainer.innerHTML = `
-                    <button class="btn btn-danger" onclick="leaveParty()">
-                        <i class="fas fa-sign-out-alt"></i>
-                        파티 탈퇴
-                    </button>
-                `;
-            }
-            
-            // 개최자인 경우
-            if (currentUser.id === currentParty.hostId) {
-                actionsContainer.innerHTML += `
-                    <button class="btn btn-secondary" onclick="editParty()">
-                        <i class="fas fa-edit"></i>
-                        파티 수정
-                    </button>
-                    <button class="btn btn-success" onclick="openCompleteModal()">
-                        <i class="fas fa-check"></i>
-                        파티 종료
-                    </button>
-                    <button class="btn btn-danger" onclick="cancelParty()">
-                        <i class="fas fa-times"></i>
-                        파티 취소
-                    </button>
-                `;
-            }
-        }
+        // 팀별 참여자 표시
+        function displayTeamParticipants(team, participants) {
+            const listElement = document.getElementById(`${team}List`);
+            const emptyElement = document.getElementById(`${team}Empty`);
 
-        // 팀 표시
-        function displayTeam(teamName, participants) {
-            const container = document.getElementById(`${teamName}-list`);
-            container.innerHTML = '';
-            
             if (participants.length === 0) {
-                container.innerHTML = '<div class="empty-state">참여자가 없습니다</div>';
+                listElement.style.display = 'none';
+                emptyElement.style.display = 'block';
                 return;
             }
-            
+
+            listElement.style.display = 'flex';
+            emptyElement.style.display = 'none';
+            listElement.innerHTML = '';
+
             participants.forEach(participant => {
-                const item = createParticipantItem(participant, teamName);
-                container.appendChild(item);
+                const item = createParticipantItem(participant);
+                listElement.appendChild(item);
             });
         }
 
         // 참여자 아이템 생성
-        function createParticipantItem(participant, currentTeam) {
+        function createParticipantItem(participant) {
             const div = document.createElement('div');
             div.className = 'participant-item';
-            
-            const avatar = participant.avatar 
-                ? `https://cdn.discordapp.com/avatars/${participant.userId}/${participant.avatar}.png`
-                : 'https://cdn.discordapp.com/embed/avatars/0.png';
-            
-            const countryInfo = participant.country ? countries[participant.country] : null;
-            const unitName = participant.unit ? units[participant.unit] : null;
-            
-            let actionsHtml = '';
-            if (currentUser && participant.userId === currentUser.id && currentParty.status === 'recruiting') {
-                // 본인인 경우 이동 버튼
-                if (currentTeam !== 'team1') {
-                    actionsHtml += `<button class="move-btn" onclick="moveParticipant('${currentTeam}', 'team1')">1팀으로</button>`;
-                }
-                if (currentTeam !== 'team2') {
-                    actionsHtml += `<button class="move-btn" onclick="moveParticipant('${currentTeam}', 'team2')">2팀으로</button>`;
-                }
-                if (currentTeam !== 'waitlist') {
-                    actionsHtml += `<button class="move-btn" onclick="moveParticipant('${currentTeam}', 'waitlist')">대기로</button>`;
-                }
-            }
-            
+
+            const countryIcons = {
+                'empire': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[remade+upscaled].png',
+                'vlandia': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_v_[upscaled].png',
+                'battania': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[upscaled].png',
+                'sturgia': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/sturgia_3_[upscaled].png',
+                'khuzait': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/khuzait_2_[upscaled].png',
+                'aserai': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/aserai_2_%7Bupscaled].png'
+            };
+
+            const stats = participant.stats || {};
+            const winRate = stats.totalGames > 0 
+                ? ((stats.wins / stats.totalGames) * 100).toFixed(1) 
+                : 0;
+
+            const isHost = participant.userId === partyData.hostId;
+            const isMe = currentUser && participant.userId === currentUser.id;
+
             div.innerHTML = `
-                <img src="${avatar}" alt="${participant.username}" class="participant-avatar">
+                <div class="participant-avatar">${participant.username.charAt(0).toUpperCase()}</div>
                 <div class="participant-info">
-                    <div class="participant-name">${participant.nickname || participant.username}</div>
+                    <div class="participant-name">
+                        ${escapeHtml(participant.username)}
+                        ${isHost ? '<span style="color: #FAA61A; font-size: 12px;"> (주최자)</span>' : ''}
+                        ${isMe ? '<span style="color: #5865F2; font-size: 12px;"> (나)</span>' : ''}
+                    </div>
                     <div class="participant-stats">
-                        승률: ${participant.stats.winRate}% | 평균킬: ${participant.stats.avgKills}
+                        <span>승률: ${winRate}%</span>
+                        <span>승: ${stats.wins || 0}</span>
+                        <span>패: ${stats.losses || 0}</span>
                     </div>
                 </div>
                 <div class="participant-tags">
-                    ${countryInfo ? `<span title="${countryInfo.name}">${countryInfo.icon}</span>` : ''}
-                    ${unitName ? `<span class="unit-tag">${unitName}</span>` : ''}
-                </div>
-                <div class="participant-actions">
-                    ${actionsHtml}
+                    ${participant.country ? `<img src="${countryIcons[participant.country]}" alt="${participant.country}" class="country-icon">` : ''}
+                    ${participant.unit ? `<span class="unit-tag">${participant.unit}</span>` : ''}
                 </div>
             `;
-            
+
             return div;
         }
 
-        // 국가 선택
-        function selectCountry(country) {
-            document.querySelectorAll('.country-btn').forEach(btn => {
-                btn.classList.remove('selected');
+        // 이벤트 리스너 초기화
+        function initializeEventListeners() {
+            // 국가 선택
+            document.querySelectorAll('.country-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.country-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedCountry = option.dataset.country;
+                });
             });
-            
-            document.querySelector(`[data-country="${country}"]`).classList.add('selected');
-            selectedCountry = country;
+
+            // 병종 선택
+            document.querySelectorAll('.unit-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.unit-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedUnit = option.dataset.unit;
+                });
+            });
         }
 
         // 참여 모달 열기
-        function openJoinModal() {
-            document.getElementById('join-modal').style.display = 'flex';
+        function openJoinModal(team) {
+            if (!currentUser) {
+                showToast('로그인이 필요합니다', 'error');
+                setTimeout(() => window.location.href = '/auth/discord', 1500);
+                return;
+            }
+
+            selectedTeam = team;
+            document.getElementById('joinModal').style.display = 'flex';
         }
 
         // 참여 모달 닫기
         function closeJoinModal() {
-            document.getElementById('join-modal').style.display = 'none';
+            document.getElementById('joinModal').style.display = 'none';
             selectedCountry = null;
+            selectedUnit = null;
+            selectedTeam = null;
+            document.querySelectorAll('.country-option').forEach(o => o.classList.remove('selected'));
+            document.querySelectorAll('.unit-option').forEach(o => o.classList.remove('selected'));
         }
 
-        // 파티 참여
-        async function joinParty() {
-            const country = selectedCountry;
-            const unit = document.getElementById('unit-select').value;
-            const position = document.getElementById('join-position').value;
-            
-            if (!country || !unit) {
-                showToast('국가와 병종을 선택해주세요.', 'error');
+        // 파티 참여 확인
+        async function confirmJoin() {
+            if (!selectedCountry || !selectedUnit) {
+                showToast('국가와 병종을 선택해주세요', 'error');
                 return;
             }
-            
-            showLoading();
-            
+
+            const joinBtn = document.getElementById('confirmJoinBtn');
+            joinBtn.disabled = true;
+            joinBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 참여 중...';
+
             try {
-                const response = await fetch(`/api/party/${currentParty.partyId}/join`, {
+                const response = await fetch(`/party/api/${partyData.partyId}/join`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        action: 'join',
-                        to: position,
-                        country,
-                        unit
+                        team: selectedTeam,
+                        country: selectedCountry,
+                        unit: selectedUnit
                     })
                 });
-                
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || '파티 참여 실패');
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast('파티에 참여했습니다!', 'success');
+                    closeJoinModal();
+                    await loadPartyDetails();
+                } else {
+                    throw new Error(result.error || '파티 참여에 실패했습니다');
                 }
-                
-                showToast('파티에 참여했습니다!', 'success');
-                closeJoinModal();
-                await loadPartyDetail();
-                
             } catch (error) {
-                showToast(error.message, 'error');
+                console.error('파티 참여 오류:', error);
+                showToast(error.message || '파티 참여 중 오류가 발생했습니다', 'error');
             } finally {
-                hideLoading();
+                joinBtn.disabled = false;
+                joinBtn.innerHTML = '참여하기';
             }
         }
 
-        // 참여자 이동
-        async function moveParticipant(from, to) {
-            showLoading();
-            
-            try {
-                const response = await fetch(`/api/party/${currentParty.partyId}/join`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'move',
-                        from,
-                        to
-                    })
-                });
-                
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || '이동 실패');
-                }
-                
-                showToast('위치를 이동했습니다!', 'success');
-                await loadPartyDetail();
-                
-            } catch (error) {
-                showToast(error.message, 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // 파티 탈퇴
+        // 파티 나가기
         async function leaveParty() {
-            if (!confirm('정말로 파티에서 탈퇴하시겠습니까?')) {
-                return;
-            }
-            
-            showLoading();
-            
+            if (!confirm('정말로 파티에서 나가시겠습니까?')) return;
+
             try {
-                const response = await fetch(`/api/party/${currentParty.partyId}/join`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'move',
-                        from: myParticipation.team,
-                        to: 'remove'
-                    })
+                const response = await fetch(`/party/api/${partyData.partyId}/leave`, {
+                    method: 'POST'
                 });
-                
-                if (!response.ok) {
-                    throw new Error('탈퇴 실패');
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast('파티에서 나갔습니다', 'success');
+                    await loadPartyDetails();
+                } else {
+                    throw new Error(result.error || '파티 나가기에 실패했습니다');
                 }
-                
-                showToast('파티에서 탈퇴했습니다.', 'success');
-                await loadPartyDetail();
-                
             } catch (error) {
-                showToast('탈퇴 중 오류가 발생했습니다.', 'error');
-            } finally {
-                hideLoading();
+                console.error('파티 나가기 오류:', error);
+                showToast(error.message || '파티 나가기 중 오류가 발생했습니다', 'error');
             }
-        }
-
-        // 파티 종료 모달 열기
-        function openCompleteModal() {
-            document.getElementById('complete-modal').style.display = 'flex';
-        }
-
-        // 파티 종료 모달 닫기
-        function closeCompleteModal() {
-            document.getElementById('complete-modal').style.display = 'none';
         }
 
         // 파티 종료
-        async function completeParty() {
-            const outcome = document.getElementById('party-outcome').value;
-            const resultMessage = document.getElementById('result-message').value;
+        async function endParty() {
+            const action = confirm('파티를 완료하시겠습니까? (취소하려면 "취소"를 누르세요)') ? 'complete' : 'cancel';
             
-            showLoading();
-            
+            let winner = null;
+            let team1Score = 0;
+            let team2Score = 0;
+
+            if (action === 'complete') {
+                winner = prompt('승리 팀을 입력하세요 (team1, team2, draw):');
+                if (!['team1', 'team2', 'draw'].includes(winner)) {
+                    showToast('올바른 승리 팀을 입력해주세요', 'error');
+                    return;
+                }
+
+                team1Score = parseInt(prompt('팀 1 점수:') || '0');
+                team2Score = parseInt(prompt('팀 2 점수:') || '0');
+            }
+
             try {
-                const response = await fetch(`/api/party/${currentParty.partyId}/complete`, {
+                const response = await fetch(`/party/api/${partyData.partyId}/end`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        action: 'complete',
-                        outcome,
-                        resultMessage
+                        action,
+                        winner,
+                        team1Score,
+                        team2Score
                     })
                 });
-                
-                if (!response.ok) {
-                    throw new Error('파티 종료 실패');
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast(`파티가 ${action === 'complete' ? '완료' : '취소'}되었습니다`, 'success');
+                    setTimeout(() => window.location.href = '/party', 1500);
+                } else {
+                    throw new Error(result.error || '파티 종료에 실패했습니다');
                 }
-                
-                showToast('파티가 종료되었습니다!', 'success');
-                closeCompleteModal();
-                await loadPartyDetail();
-                
             } catch (error) {
-                showToast('파티 종료 중 오류가 발생했습니다.', 'error');
-            } finally {
-                hideLoading();
+                console.error('파티 종료 오류:', error);
+                showToast(error.message || '파티 종료 중 오류가 발생했습니다', 'error');
             }
         }
 
-        // 파티 취소
-        async function cancelParty() {
-            if (!confirm('정말로 파티를 취소하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-                return;
-            }
-            
-            showLoading();
-            
-            try {
-                const response = await fetch(`/api/party/${currentParty.partyId}/complete`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'cancel'
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error('파티 취소 실패');
-                }
-                
-                showToast('파티가 취소되었습니다.', 'success');
-                setTimeout(() => {
-                    window.location.href = '/party';
-                }, 1500);
-                
-            } catch (error) {
-                showToast('파티 취소 중 오류가 발생했습니다.', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // 파티 수정
-        function editParty() {
-            // TODO: 파티 수정 기능 구현
-            showToast('파티 수정 기능은 준비 중입니다.', 'info');
-        }
-
-        // 전적 섹션 표시
-        function displayStatsSection() {
-            document.getElementById('stats-section').style.display = 'block';
-            
-            const statsForm = document.getElementById('stats-form');
-            statsForm.innerHTML = '';
-            
-            // 모든 참여자 목록
-            const allParticipants = [...currentParty.team1, ...currentParty.team2];
-            
-            allParticipants.forEach(participant => {
-                const statsItem = document.createElement('div');
-                statsItem.className = 'stats-player-item';
-                
-                const team = currentParty.team1.some(p => p.userId === participant.userId) ? 1 : 2;
-                const existingStat = currentParty.playerStats?.find(s => s.userId === participant.userId);
-                
-                statsItem.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <img src="${participant.avatar ? `https://cdn.discordapp.com/avatars/${participant.userId}/${participant.avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width: 24px; height: 24px; border-radius: 50%;">
-                        <span>${participant.nickname || participant.username}</span>
-                    </div>
-                    <div>
-                        <select class="stats-input" data-user="${participant.userId}" data-field="team">
-                            <option value="1" ${team === 1 ? 'selected' : ''}>1팀</option>
-                            <option value="2" ${team === 2 ? 'selected' : ''}>2팀</option>
-                        </select>
-                    </div>
-                    <input type="number" class="stats-input" data-user="${participant.userId}" data-field="kills" 
-                           value="${existingStat?.kills || 0}" min="0" placeholder="킬">
-                    <input type="number" class="stats-input" data-user="${participant.userId}" data-field="deaths" 
-                           value="${existingStat?.deaths || 0}" min="0" placeholder="데스">
-                    <div>
-                        <select class="stats-input" data-user="${participant.userId}" data-field="won">
-                            <option value="true" ${existingStat?.won ? 'selected' : ''}>승리</option>
-                            <option value="false" ${!existingStat?.won ? 'selected' : ''}>패배</option>
-                        </select>
-                    </div>
-                `;
-                
-                statsForm.appendChild(statsItem);
-            });
-        }
-
-        // 전적 저장
-        async function saveStats() {
-            const statsInputs = document.querySelectorAll('.stats-input');
-            const playerStats = {};
-            
-            statsInputs.forEach(input => {
-                const userId = input.dataset.user;
-                const field = input.dataset.field;
-                
-                if (!playerStats[userId]) {
-                    playerStats[userId] = { userId };
-                }
-                
-                if (field === 'team' || field === 'kills' || field === 'deaths') {
-                    playerStats[userId][field] = parseInt(input.value);
-                } else if (field === 'won') {
-                    playerStats[userId][field] = input.value === 'true';
-                }
-            });
-            
-            const statsArray = Object.values(playerStats);
-            
-            showLoading();
-            
-            try {
-                const response = await fetch(`/api/party/${currentParty.partyId}/stats`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ playerStats: statsArray })
-                });
-                
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || '전적 저장 실패');
-                }
-                
-                showToast('전적이 저장되었습니다!', 'success');
-                
-            } catch (error) {
-                showToast(error.message, 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // 로딩 표시
+        // 유틸리티 함수
         function showLoading() {
             document.getElementById('loading').style.display = 'flex';
         }
@@ -1340,41 +1212,150 @@
             document.getElementById('loading').style.display = 'none';
         }
 
-        // 토스트 알림
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
-            const toastIcon = toast.querySelector('.toast-icon');
-            
+            const icon = toast.querySelector('.toast-icon');
+            const msg = toast.querySelector('.toast-message');
+
             toast.className = `toast ${type}`;
-            toastMessage.textContent = message;
-            
-            if (type === 'success') {
-                toastIcon.className = 'toast-icon fas fa-check-circle';
-            } else if (type === 'error') {
-                toastIcon.className = 'toast-icon fas fa-exclamation-circle';
-            } else {
-                toastIcon.className = 'toast-icon fas fa-info-circle';
-            }
-            
+            icon.className = type === 'success' ? 'fas fa-check-circle toast-icon' : 'fas fa-exclamation-circle toast-icon';
+            msg.textContent = message;
+
             toast.classList.add('show');
-            
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
         }
+
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 자동 새로고침 (30초마다)
+        setInterval(() => {
+            if (partyData && partyData.status === 'recruiting') {
+                loadPartyDetails();
+            }
+        }, 30000);
     </script>
 </body>
-</html>ord/emblem_[remade+upscaled].png" alt="제국">
-                            <div class="country-name">제국</div>
+</html>" onclick="openJoinModal('team1')">
+                            <i class="fas fa-user-plus"></i>
+                            1팀 참여
+                        </button>
+                        <button class="btn btn-primary" onclick="openJoinModal('team2')">
+                            <i class="fas fa-user-plus"></i>
+                            2팀 참여
+                        </button>
+                        <button class="btn btn-secondary" onclick="openJoinModal('waitlist')">
+                            <i class="fas fa-clock"></i>
+                            대기자 등록
+                        </button>
+                    `;
+                } else {
+                    actionButtons = `
+                        <button class="btn btn-danger" onclick="leaveParty()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            파티 나가기
+                        </button>
+                    `;
+                }
+                
+                if (isHost) {
+                    actionButtons += `
+                        <button class="btn btn-secondary" onclick="editParty()">
+                            <i class="fas fa-edit"></i>
+                            수정
+                        </button>
+                        <button class="btn btn-danger" onclick="endParty()">
+                            <i class="fas fa-times"></i>
+                            파티 종료
+                        </button>
+                    `;
+                }
+            }
+
+            const headerHTML = `
+                <div class="party-status-badge ${partyData.status}">
+                    ${statusTexts[partyData.status]}
+                </div>
+                
+                <div class="party-title-section">
+                    <h1 class="party-title">
+                        <span class="party-type-icon">${typeEmojis[partyData.type] || '🎮'}</span>
+                        ${escapeHtml(partyData.title)}
+                    </h1>
+                    <p class="party-subtitle">주최: ${escapeHtml(partyData.hostName || '알 수 없음')}</p>
+                </div>
+
+                <div class="party-info-grid">
+                    <div class="party-info-item">
+                        <div class="party-info-icon">
+                            <i class="fas fa-gamepad"></i>
                         </div>
-                        <div class="country-btn" data-country="vlandia" onclick="selectCountry('vlandia')">
-                            <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_v_[upscaled].png" alt="블란디아">
-                            <div class="country-name">블란디아</div>
+                        <div class="party-info-content">
+                            <div class="party-info-label">파티 타입</div>
+                            <div class="party-info-value">${partyData.type}</div>
                         </div>
-                        <div class="country-btn" data-country="battania" onclick="selectCountry('battania')">
-                            <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[upscaled].png" alt="바타니아">
-                            <div class="country-name">바타니아</div>
+                    </div>
+                    <div class="party-info-item">
+                        <div class="party-info-icon">
+                            <i class="fas fa-calendar"></i>
                         </div>
-                        <div class="country-btn" data-country="sturgia" onclick="selectCountry('sturgia')">
-                            <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerl
+                        <div class="party-info-content">
+                            <div class="party-info-label">시작 시간</div>
+                            <div class="party-info-value">${partyData.startTime ? formatDateTime(partyData.startTime) : '미정'}</div>
+                        </div>
+                    </div>
+                    <div class="party-info-item">
+                        <div class="party-info-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="party-info-content">
+                            <div class="party-info-label">참여자</div>
+                            <div class="party-info-value">${partyData.participants.length}명</div>
+                        </div>
+                    </div>
+                    <div class="party-info-item">
+                        <div class="party-info-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div class="party-info-content">
+                            <div class="party-info-label">파티 ID</div>
+                            <div class="party-info-value">${partyData.partyId}</div>
+                        </div>
+                    </div>
+                </div>
+
+                ${partyData.description ? `
+                    <div class="party-description">
+                        <p>${escapeHtml(partyData.description)}</p>
+                    </div>
+                ` : ''}
+
+                ${partyData.requirements ? `
+                    <div class="party-description">
+                        <p><strong>참가 조건:</strong> ${escapeHtml(partyData.requirements)}</p>
+                    </div>
+                ` : ''}
+
+                <div class="party-actions">
+                    ${actionButtons}
+                </div>
+            `;
+
+            document.getElementById('partyHeader').innerHTML = headerHTML;
+        }

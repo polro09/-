@@ -85,6 +85,7 @@ module.exports = async (client) => {
     app.use('/auth', require('./routes/auth'));
     app.use('/api', require('./routes/api'));
     app.use('/dashboard/api', require('./routes/dashboard'));
+    app.use('/party/api', require('./routes/party'));
     app.use('/test', require('./routes/test')); // 테스트 라우트
     
     // 메인 페이지 (최초 방문 체크)
@@ -106,13 +107,16 @@ module.exports = async (client) => {
         res.sendFile(path.join(__dirname, 'public', 'main.html'));
     });
     
-    // 파티 페이지
-    app.get('/party.html', (req, res) => {
+    // 파티 페이지 라우트
+    app.get('/party', (req, res) => {
         res.sendFile(path.join(__dirname, 'public', 'party.html'));
     });
     
-    // 파티 상세 페이지
-    app.get('/party-detail.html', (req, res) => {
+    app.get('/party/create', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'party-create.html'));
+    });
+    
+    app.get('/party/:partyId', (req, res) => {
         res.sendFile(path.join(__dirname, 'public', 'party-detail.html'));
     });
     

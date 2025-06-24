@@ -2,52 +2,41 @@
 const winston = require('winston');
 const chalk = require('chalk');
 const path = require('path');
+const fs = require('fs');
 
-// 로그 레벨별 이모지와 색상 정의
+// 로그 레벨별 스타일 정의
 const levelStyles = {
-    error: { emoji: '❌', color: 'red', label: 'ERROR' },
-    warn: { emoji: '⚠️ ', color: 'yellow', label: 'WARN ' },
-    info: { emoji: '📌', color: 'cyan', label: 'INFO ' },
-    debug: { emoji: '🔍', color: 'green', label: 'DEBUG' },
-    success: { emoji: '✅', color: 'green', label: 'OK   ' }
+    error: { color: 'red', emoji: '❌', label: 'ERROR' },
+    warn: { color: 'yellow', emoji: '⚠️', label: 'WARN' },
+    info: { color: 'cyan', emoji: 'ℹ️', label: 'INFO' },
+    debug: { color: 'gray', emoji: '🐛', label: 'DEBUG' }
 };
 
-// 카테고리별 이모지와 색상
+// 카테고리별 색상과 이모지 정의
 const categoryEmojis = {
     database: { emoji: '🗄️', color: 'blue' },
     server: { emoji: '🌐', color: 'green' },
     bot: { emoji: '🤖', color: 'cyan' },
     command: { emoji: '⚡', color: 'yellow' },
     event: { emoji: '📡', color: 'magenta' },
-    handler: { emoji: '🔧', color: 'blue' },
+    handler: { emoji: '🔧', color: 'gray' },
     auth: { emoji: '🔐', color: 'red' },
-    api: { emoji: '🔌', color: 'green' },
-    error: { emoji: '💥', color: 'red' },
-    startup: { emoji: '🚀', color: 'cyan' }
+    api: { emoji: '🔌', color: 'blue' },
+    startup: { emoji: '🚀', color: 'green' },
+    party: { emoji: '🎮', color: 'magenta' },
+    error: { emoji: '💀', color: 'red' },
+    success: { emoji: '✅', color: 'green' },
+    session: { emoji: '🍪', color: 'yellow' }
 };
 
-// 커스텀 포맷 생성
+// 커스텀 포맷 정의
 const customFormat = winston.format.printf(({ level, message, timestamp, category }) => {
-    const style = levelStyles[level] || levelStyles.info;
+    const style = levelStyles[level] || { color: 'white', emoji: '📝', label: level.toUpperCase() };
     
-    // category가 문자열이 아닌 경우 안전하게 처리
-    let safeCategory = category;
-    if (category && typeof category !== 'string') {
-        // Error 객체인 경우
-        if (category instanceof Error) {
-            safeCategory = 'error';
-        }
-        // 기타 객체인 경우
-        else if (typeof category === 'object') {
-            safeCategory = 'unknown';
-        }
-        // 그 외의 경우
-        else {
-            safeCategory = String(category);
-        }
-    }
-    
-    const categoryInfo = safeCategory ? categoryEmojis[safeCategory] || { emoji: '📝', color: 'white' } : { emoji: '📝', color: 'white' };
+    // 카테고리 객체 체크 (category가 Error 객체인 경우 처리)
+    const safeCategory = category && typeof category === 'string' ? category : null;
+    const categoryInfo = safeCategory && categoryEmojis[safeCategory] ? 
+        categoryEmojis[safeCategory] || { emoji: '📝', color: 'white' } : { emoji: '📝', color: 'white' };
     
     // 시간 포맷
     const time = new Date(timestamp).toLocaleTimeString('ko-KR', {
@@ -104,7 +93,6 @@ const logger = winston.createLogger({
 });
 
 // 로그 디렉토리 생성
-const fs = require('fs');
 const logDir = path.join(__dirname, '../../logs');
 
 if (!fs.existsSync(logDir)) {
@@ -160,6 +148,11 @@ class CategoryLogger {
     // 시작 관련
     startup(message, level = 'info') {
         this.logger.log({ level, message, category: 'startup' });
+    }
+    
+    // 파티 관련
+    party(message, level = 'info') {
+        this.logger.log({ level, message, category: 'party' });
     }
     
     // 성공 메시지 (커스텀 레벨)
