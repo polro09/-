@@ -29,7 +29,25 @@ const categoryEmojis = {
 // 커스텀 포맷 생성
 const customFormat = winston.format.printf(({ level, message, timestamp, category }) => {
     const style = levelStyles[level] || levelStyles.info;
-    const categoryInfo = category ? categoryEmojis[category] || { emoji: '📝', color: 'white' } : { emoji: '📝', color: 'white' };
+    
+    // category가 문자열이 아닌 경우 안전하게 처리
+    let safeCategory = category;
+    if (category && typeof category !== 'string') {
+        // Error 객체인 경우
+        if (category instanceof Error) {
+            safeCategory = 'error';
+        }
+        // 기타 객체인 경우
+        else if (typeof category === 'object') {
+            safeCategory = 'unknown';
+        }
+        // 그 외의 경우
+        else {
+            safeCategory = String(category);
+        }
+    }
+    
+    const categoryInfo = safeCategory ? categoryEmojis[safeCategory] || { emoji: '📝', color: 'white' } : { emoji: '📝', color: 'white' };
     
     // 시간 포맷
     const time = new Date(timestamp).toLocaleTimeString('ko-KR', {
@@ -44,7 +62,7 @@ const customFormat = winston.format.printf(({ level, message, timestamp, categor
     const emoji = style.emoji;
     
     // 카테고리가 있으면 추가 (카테고리별 색상 적용)
-    const categoryStr = category ? chalk[categoryInfo.color](`[${category.toUpperCase()}]`) : '';
+    const categoryStr = safeCategory ? chalk[categoryInfo.color](`[${safeCategory.toUpperCase()}]`) : '';
     
     return `${coloredTime} ${emoji} ${coloredLevel} ${categoryInfo.emoji} ${categoryStr} ${message}`;
 });
@@ -154,8 +172,22 @@ class CategoryLogger {
 const categoryLogger = new CategoryLogger(logger);
 
 // 기본 메서드들도 카테고리 로거에 추가
-categoryLogger.info = (message, category = null) => logger.info({ message, category });
-categoryLogger.error = (message, category = null) => logger.error({ message, category });
+categoryLogger.info = (message, category = null) => {
+    // category가 Error 객체인 경우 처리
+    if (category instanceof Error) {
+        logger.error({ message: `${message}: ${category.message}`, category: 'error' });
+    } else {
+        logger.info({ message, category });
+    }
+};
+categoryLogger.error = (message, category = null) => {
+    // category가 Error 객체인 경우 처리
+    if (category instanceof Error) {
+        logger.error({ message: `${message}: ${category.message}`, category: 'error' });
+    } else {
+        logger.error({ message, category });
+    }
+};
 categoryLogger.warn = (message, category = null) => logger.warn({ message, category });
 categoryLogger.debug = (message, category = null) => logger.debug({ message, category });
 
