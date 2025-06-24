@@ -58,14 +58,33 @@ router.get('/statistics', checkPermission('member'), async (req, res) => {
     try {
         const client = req.client;
         
+        // 더 정확한 사용자 수 계산 (중복 제거)
+        let totalUsers = 0;
+        const uniqueUsers = new Set();
+        
+        client.guilds.cache.forEach(guild => {
+            guild.members.cache.forEach(member => {
+                if (!member.user.bot) {
+                    uniqueUsers.add(member.user.id);
+                }
+            });
+            totalUsers = uniqueUsers.size;
+        });
+        
+        // 전체 채널 수 계산
+        let totalChannels = 0;
+        client.guilds.cache.forEach(guild => {
+            totalChannels += guild.channels.cache.size;
+        });
+        
         const stats = {
             guilds: client.guilds.cache.size,
-            users: client.users.cache.size,
-            channels: client.channels.cache.size,
+            users: totalUsers || client.users.cache.size,
+            channels: totalChannels,
             uptime: client.uptime,
             memory: process.memoryUsage(),
             commands: client.commands.size,
-            ping: client.ws.ping
+            ping: Math.round(client.ws.ping) // 정수로 반올림
         };
         
         // BotStatus 업데이트 (DB 연결된 경우에만)
@@ -91,24 +110,69 @@ router.get('/statistics', checkPermission('member'), async (req, res) => {
     }
 });
 
+// 봇 제어 - 시작 (개발 환경용)
+router.post('/control/start', checkPermission('admin'), async (req, res) => {
+    try {
+        logger.bot('대시보드에서 봇 시작 요청');
+        
+        // 이미 온라인인 경우
+        if (req.client.ws.status === 0) {
+            return res.json({ success: false, message: '봇이 이미 실행 중입니다.' });
+        }
+        
+        res.json({ success: true, message: '봇을 시작합니다...' });
+        
+        // 봇 재연결 시도
+        req.client.login(config.token);
+        
+    } catch (error) {
+        logger.error('봇 시작 오류:', error);
+        res.status(500).json({ error: '봇 시작 중 오류가 발생했습니다.' });
+    }
+});
+
 // 봇 제어 - 재시작
 router.post('/control/restart', checkPermission('subadmin'), async (req, res) => {
     try {
         logger.bot('대시보드에서 봇 재시작 요청');
         
-        await BotStatus.findOneAndUpdate(
-            { botId: req.client.user.id },
-            { 
-                status: 'restarting',
-                'runtime.lastRestart': new Date()
-            }
-        );
+        // MongoDB 연결 상태 확인
+        const mongoose = require('mongoose');
+        if (mongoose.connection.readyState === 1) {
+            await BotStatus.findOneAndUpdate(
+                { botId: req.client.user.id },
+                { 
+                    status: 'restarting',
+                    'runtime.lastRestart': new Date(),
+                    '$inc': { 'runtime.restarts': 1 }
+                }
+            );
+        }
         
         res.json({ success: true, message: '봇을 재시작합니다...' });
         
-        // 1초 후 재시작
-        setTimeout(() => {
-            process.exit(0); // PM2나 nodemon이 자동으로 재시작
+        // 봇 종료 후 재시작
+        setTimeout(async () => {
+            logger.bot('봇 재시작 중...');
+            
+            // 봇 클라이언트 종료
+            await req.client.destroy();
+            
+            // nodemon이 아닌 경우를 위한 처리
+            if (process.env.NODE_ENV === 'production') {
+                // 프로덕션 환경에서는 프로세스 종료 (PM2가 재시작)
+                process.exit(0);
+            } else {
+                // 개발 환경에서는 재로그인 시도
+                setTimeout(() => {
+                    req.client.login(config.token)
+                        .then(() => logger.bot('봇 재시작 완료'))
+                        .catch(err => {
+                            logger.error('봇 재시작 실패:', err);
+                            process.exit(1);
+                        });
+                }, 2000);
+            }
         }, 1000);
         
     } catch (error) {
@@ -122,17 +186,28 @@ router.post('/control/stop', checkPermission('admin'), async (req, res) => {
     try {
         logger.bot('대시보드에서 봇 종료 요청');
         
-        await BotStatus.findOneAndUpdate(
-            { botId: req.client.user.id },
-            { status: 'offline' }
-        );
+        // MongoDB 연결 상태 확인
+        const mongoose = require('mongoose');
+        if (mongoose.connection.readyState === 1) {
+            await BotStatus.findOneAndUpdate(
+                { botId: req.client.user.id },
+                { status: 'offline' }
+            );
+        }
         
         res.json({ success: true, message: '봇을 종료합니다...' });
         
         // 봇 종료
         setTimeout(async () => {
+            logger.bot('봇 종료 중...');
             await req.client.destroy();
-            process.exit(0);
+            
+            // 개발 환경에서는 프로세스를 종료하지 않음
+            if (process.env.NODE_ENV === 'production') {
+                process.exit(0);
+            } else {
+                logger.bot('봇이 종료되었습니다. (개발 모드 - 프로세스 유지)');
+            }
         }, 1000);
         
     } catch (error) {
@@ -145,16 +220,23 @@ router.post('/control/stop', checkPermission('admin'), async (req, res) => {
 router.get('/logs', checkPermission('subadmin'), async (req, res) => {
     try {
         const { limit = 100, level } = req.query;
+        
+        // MongoDB 연결 확인
+        const mongoose = require('mongoose');
+        if (mongoose.connection.readyState !== 1) {
+            return res.json({ logs: [] });
+        }
+        
         const botStatus = await BotStatus.findOne({ botId: req.client.user.id });
         
         if (!botStatus) {
             return res.json({ logs: [] });
         }
         
-        let logs = botStatus.logs;
+        let logs = botStatus.logs || [];
         
         // 레벨 필터링
-        if (level) {
+        if (level && level !== 'all') {
             logs = logs.filter(log => log.level === level);
         }
         
