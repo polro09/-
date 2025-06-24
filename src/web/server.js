@@ -81,11 +81,12 @@ module.exports = async (client) => {
         next();
     });
     
-    // 라우트 등록
-    app.use('/auth', require('./routes/auth'));
-    app.use('/api', require('./routes/api'));
-    app.use('/dashboard/api', require('./routes/dashboard'));
-    app.use('/test', require('./routes/test')); // 테스트 라우트
+            // 라우트 등록
+        app.use('/auth', require('./routes/auth'));
+        app.use('/api', require('./routes/api'));
+        app.use('/api/party', require('./routes/party')); // 파티 API 라우트
+        app.use('/dashboard/api', require('./routes/dashboard'));
+        app.use('/test', require('./routes/test')); // 테스트 라우트
     
     // 메인 페이지 (최초 방문 체크)
     app.get('/', (req, res) => {
