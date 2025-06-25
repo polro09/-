@@ -152,7 +152,7 @@ partySchema.methods.updateDiscordMessage = async function(client) {
         const message = await channel.messages.fetch(this.messageId);
         if (!message) return;
         
-        const embed = await this.createDiscordEmbed();
+        const embed = await this.createDiscordEmbed(client);
         await message.edit({ embeds: [embed] });
         
         return true;
@@ -162,76 +162,169 @@ partySchema.methods.updateDiscordMessage = async function(client) {
     }
 };
 
-partySchema.methods.createDiscordEmbed = async function() {
+// 개선된 Discord 임베드 생성 메서드
+partySchema.methods.createDiscordEmbed = async function(client) {
     const CustomEmbedBuilder = require('../utils/embedBuilder');
+    const User = require('./User');
     
     const team1 = this.participants.filter(p => p.team === 'team1');
     const team2 = this.participants.filter(p => p.team === 'team2');
     const waitlist = this.participants.filter(p => p.team === 'waitlist');
     
-    const statusEmoji = {
-        recruiting: '🟢',
-        in_progress: '🟡',
-        completed: '⚫',
-        cancelled: '🔴'
+    // 파티 타입별 이모지와 색상
+    const partyTypeData = {
+        '정규전': { emoji: '⚔️', color: 0xED4245 },
+        '모의전': { emoji: '🛡️', color: 0x5865F2 },
+        '훈련': { emoji: '🎯', color: 0xFEE75C },
+        'PVP': { emoji: '🏆', color: 0xEB459E },
+        '검은발톱': { emoji: '🦅', color: 0x57F287 },
+        '레이드': { emoji: '🏜️', color: 0xFAA61A }
     };
     
+    const typeData = partyTypeData[this.type] || { emoji: '🎮', color: 0x5865F2 };
+    
+    // 상태별 표시
+    const statusDisplay = {
+        recruiting: '🟢 모집 중',
+        in_progress: '🟡 진행 중',
+        completed: '⚫ 완료됨',
+        cancelled: '🔴 취소됨'
+    };
+    
+    // 길드 정보 미리 가져오기
+    let guild = null;
+    if (client) {
+        try {
+            guild = await client.guilds.fetch(this.guildId);
+        } catch (error) {
+            console.log('길드를 가져올 수 없음:', error.message);
+        }
+    }
+    
+    // 참여자 전적 정보 가져오기
+    const formatParticipant = async (participant) => {
+        try {
+            // Discord에서 길드 멤버 정보 가져오기
+            let displayName = participant.username;
+            if (guild) {
+                try {
+                    const member = await guild.members.fetch(participant.userId);
+                    displayName = member.nickname || member.user.username;
+                } catch (memberError) {
+                    console.log('멤버 정보를 가져올 수 없음:', participant.userId);
+                }
+            }
+            
+            const user = await User.findOne({ discordId: participant.userId });
+            if (user && user.gameStats) {
+                const winRate = user.gameStats.totalGames > 0 
+                    ? Math.round((user.gameStats.wins / user.gameStats.totalGames) * 100)
+                    : 0;
+                const kdRatio = user.gameStats.totalDeaths > 0
+                    ? (user.gameStats.totalKills / user.gameStats.totalDeaths).toFixed(2)
+                    : user.gameStats.totalKills;
+                
+                return `${displayName} | 승률 ${winRate}% | K/D ${kdRatio}`;
+            }
+            return displayName;
+        } catch (error) {
+            console.error('참여자 정보 조회 오류:', error);
+            return participant.username || '알 수 없음';
+        }
+    };
+    
+    // 팀별 참여자 목록 생성
+    const formatTeam = async (team, maxDisplay = 5) => {
+        if (team.length === 0) return '```\n참여자 없음\n```';
+        
+        const formatted = await Promise.all(
+            team.slice(0, maxDisplay).map(p => formatParticipant(p))
+        );
+        
+        let result = '```\n' + formatted.join('\n');
+        if (team.length > maxDisplay) {
+            result += `\n... 외 ${team.length - maxDisplay}명`;
+        }
+        result += '\n```';
+        
+        return result;
+    };
+    
+    // 임베드 생성
     const embed = CustomEmbedBuilder.createBasicEmbed({
-        title: `${statusEmoji[this.status]} ${this.title}`,
-        description: this.description || '설명이 없습니다.',
+        title: `${typeData.emoji} ${this.title}`,
+        color: typeData.color,
         fields: [
             {
-                name: '🎮 파티 타입',
-                value: this.type,
+                name: '📋 파티 정보',
+                value: `**타입:** ${this.type}\n**상태:** ${statusDisplay[this.status]}\n**주최자:** <@${this.hostId}>`,
                 inline: true
             },
             {
-                name: '👤 주최자',
-                value: `<@${this.hostId}>`,
+                name: '⏰ 일정',
+                value: this.startTime 
+                    ? `**시작:** ${new Date(this.startTime).toLocaleString('ko-KR')}`
+                    : '**시작:** 미정',
                 inline: true
             },
             {
-                name: '⏰ 시작 시간',
-                value: this.startTime ? new Date(this.startTime).toLocaleString('ko-KR') : '미정',
-                inline: true
-            },
-            {
-                name: `⚔️ 팀 1 (${team1.length}명)`,
-                value: team1.length > 0 
-                    ? team1.slice(0, 10).map(p => `<@${p.userId}>`).join('\n') + (team1.length > 10 ? `\n... 외 ${team1.length - 10}명` : '')
-                    : '참여자 없음',
-                inline: true
-            },
-            {
-                name: `🛡️ 팀 2 (${team2.length}명)`,
-                value: team2.length > 0 
-                    ? team2.slice(0, 10).map(p => `<@${p.userId}>`).join('\n') + (team2.length > 10 ? `\n... 외 ${team2.length - 10}명` : '')
-                    : '참여자 없음',
-                inline: true
-            },
-            {
-                name: `⏳ 대기자 (${waitlist.length}명)`,
-                value: waitlist.length > 0 
-                    ? waitlist.slice(0, 10).map(p => `<@${p.userId}>`).join('\n') + (waitlist.length > 10 ? `\n... 외 ${waitlist.length - 10}명` : '')
-                    : '대기자 없음',
+                name: '📊 참여 현황',
+                value: `**총원:** ${this.participants.length}명\n**1팀:** ${team1.length}명 | **2팀:** ${team2.length}명\n**대기:** ${waitlist.length}명`,
                 inline: true
             }
-        ],
-        footer: {
-            text: `파티 ID: ${this.partyId} | 상태: ${this.status}`,
-            iconURL: 'https://i.imgur.com/Sd8qK9c.gif'
-        },
-        timestamp: this.updatedAt
+        ]
     });
     
-    // 결과가 있는 경우 추가
-    if (this.status === 'completed' && this.result.winner) {
+    // 설명 추가
+    if (this.description) {
+        embed.setDescription(`📝 **설명**\n${this.description}`);
+    }
+    
+    // 참가 조건 추가
+    if (this.requirements) {
         embed.addFields({
-            name: '🏆 결과',
-            value: `승리: ${this.result.winner === 'draw' ? '무승부' : this.result.winner} | 점수: ${this.result.team1Score} - ${this.result.team2Score}`,
+            name: '⚠️ 참가 조건',
+            value: this.requirements,
             inline: false
         });
     }
+    
+    // 팀 구성 표시
+    embed.addFields(
+        {
+            name: `⚔️ 1팀 (${team1.length}명)`,
+            value: await formatTeam(team1),
+            inline: true
+        },
+        {
+            name: `🛡️ 2팀 (${team2.length}명)`,
+            value: await formatTeam(team2),
+            inline: true
+        },
+        {
+            name: `⏳ 대기자 (${waitlist.length}명)`,
+            value: await formatTeam(waitlist),
+            inline: false
+        }
+    );
+    
+    // 푸터 설정
+    embed.setFooter({
+        text: `파티 ID: ${this.partyId} • ${new Date().toLocaleString('ko-KR')}`,
+        iconURL: 'https://i.imgur.com/Sd8qK9c.gif'
+    });
+    
+    // 썸네일 설정 (파티 타입별 이미지)
+    const thumbnails = {
+        '정규전': 'https://i.imgur.com/IOPA7gL.gif',
+        '모의전': 'https://i.imgur.com/IOPA7gL.gif',
+        '훈련': 'https://i.imgur.com/IOPA7gL.gif',
+        'PVP': 'https://i.imgur.com/IOPA7gL.gif',
+        '검은발톱': 'https://i.imgur.com/IOPA7gL.gif',
+        '레이드': 'https://i.imgur.com/IOPA7gL.gif'
+    };
+    
+    embed.setThumbnail(thumbnails[this.type] || 'https://i.imgur.com/IOPA7gL.gif');
     
     return embed;
 };

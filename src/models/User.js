@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     // Discord 정보
-    userId: {
+    discordId: {
         type: String,
         required: true,
         unique: true
@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
     dashboardRole: {
         type: String,
         enum: ['guest', 'member', 'subadmin', 'admin', 'owner'],
-        default: 'guest'
+        default: 'member'  // guest가 아닌 member를 기본값으로
     },
     
     // 닉네임 (대시보드용)
@@ -65,10 +65,11 @@ const userSchema = new mongoose.Schema({
         wins: { type: Number, default: 0 },
         losses: { type: Number, default: 0 },
         totalGames: { type: Number, default: 0 },
-        kills: { type: Number, default: 0 },
-        deaths: { type: Number, default: 0 },
+        totalKills: { type: Number, default: 0 },
+        totalDeaths: { type: Number, default: 0 },
+        avgKills: { type: Number, default: 0 },
         rankedGames: { type: Number, default: 0 },
-        customGames: { type: Number, default: 0 },
+        practiceGames: { type: Number, default: 0 },
         lastPlayed: Date,
         favoriteCountry: String,
         favoriteUnit: String
@@ -95,17 +96,28 @@ const userSchema = new mongoose.Schema({
         name: String,
         icon: String,
         owner: Boolean,
-        permissions: Number
+        permissions: String  // BigInt는 String으로 저장
     }],
     
     // 설정
     settings: {
         theme: { type: String, default: 'dark' },
         language: { type: String, default: 'ko' },
-        notifications: { type: Boolean, default: true }
+        notifications: {
+            partyInvites: { type: Boolean, default: true },
+            partyReminders: { type: Boolean, default: true },
+            gameResults: { type: Boolean, default: true }
+        }
     },
     
-    // 메타데이터
+    // 상태
+    status: {
+        banned: { type: Boolean, default: false },
+        banReason: { type: String, default: null },
+        warningCount: { type: Number, default: 0 }
+    },
+    
+    // 타임스탬프
     firstLogin: {
         type: Date,
         default: Date.now
@@ -113,37 +125,74 @@ const userSchema = new mongoose.Schema({
     lastLogin: {
         type: Date,
         default: Date.now
-    },
-    loginCount: {
-        type: Number,
-        default: 1
     }
+}, {
+    timestamps: true
 });
 
-// 로그인 시 정보 업데이트
-userSchema.methods.updateLogin = async function() {
-    this.lastLogin = new Date();
-    this.loginCount += 1;
-    await this.save();
-};
+// 인덱스
+userSchema.index({ discordId: 1 });
+userSchema.index({ username: 1 });
+userSchema.index({ dashboardRole: 1 });
 
-// 전적 승률 계산
-userSchema.methods.getWinRate = function() {
+// 가상 필드
+userSchema.virtual('displayName').get(function() {
+    return this.nickname || this.username;
+});
+
+// 승률 계산
+userSchema.virtual('winRate').get(function() {
     if (this.gameStats.totalGames === 0) return 0;
-    return ((this.gameStats.wins / this.gameStats.totalGames) * 100).toFixed(2);
-};
+    return Math.round((this.gameStats.wins / this.gameStats.totalGames) * 100);
+});
 
 // K/D 비율 계산
-userSchema.methods.getKDRatio = function() {
-    if (this.gameStats.deaths === 0) return this.gameStats.kills;
-    return (this.gameStats.kills / this.gameStats.deaths).toFixed(2);
+userSchema.virtual('kdRatio').get(function() {
+    if (this.gameStats.totalDeaths === 0) return this.gameStats.totalKills;
+    return (this.gameStats.totalKills / this.gameStats.totalDeaths).toFixed(2);
+});
+
+// 메서드
+userSchema.methods.updateLogin = async function() {
+    this.lastLogin = new Date();
+    return this.save();
 };
 
-// 평균 평점 계산
-userSchema.methods.getAverageRating = function() {
-    const { communication, teamwork, skill, totalRatings } = this.partyStats.rating;
-    if (totalRatings === 0) return 0;
-    return ((communication + teamwork + skill) / 3).toFixed(1);
+userSchema.methods.updateGameStats = async function(gameResult) {
+    const { won, kills, deaths, gameType } = gameResult;
+    
+    this.gameStats.totalGames += 1;
+    this.gameStats.totalKills += kills || 0;
+    this.gameStats.totalDeaths += deaths || 0;
+    
+    if (won) {
+        this.gameStats.wins += 1;
+    } else {
+        this.gameStats.losses += 1;
+    }
+    
+    if (gameType === 'ranked') {
+        this.gameStats.rankedGames += 1;
+    } else if (gameType === 'practice') {
+        this.gameStats.practiceGames += 1;
+    }
+    
+    // 평균 킬 계산
+    this.gameStats.avgKills = Math.round(this.gameStats.totalKills / this.gameStats.totalGames);
+    this.gameStats.lastPlayed = new Date();
+    
+    return this.save();
+};
+
+userSchema.methods.addWarning = async function(reason) {
+    this.status.warningCount += 1;
+    
+    if (this.status.warningCount >= 3) {
+        this.status.banned = true;
+        this.status.banReason = `경고 3회 누적: ${reason}`;
+    }
+    
+    return this.save();
 };
 
 module.exports = mongoose.model('User', userSchema);

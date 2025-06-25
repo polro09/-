@@ -29,19 +29,89 @@ router.get('/oauth-url', (req, res) => {
 });
 
 // 사용자 정보
-router.get('/user', requireAuth, (req, res) => {
+router.get('/user', (req, res) => {
+    // 로그인하지 않은 경우
+    if (!req.session.user) {
+        return res.status(401).json({ error: '로그인이 필요합니다.', user: null });
+    }
+    
     // 민감한 정보 제외하고 필요한 정보만 반환
-    const { id, username, avatar, email, dashboardRole, guildCount } = req.session.user;
+    const { id, username, avatar, email, dashboardRole, guildCount, nickname, gameStats } = req.session.user;
     res.json({ 
-        id, 
-        username, 
-        avatar, 
-        email, 
-        dashboardRole, 
-        guildCount,
-        nickname: req.session.user.nickname,
-        gameStats: req.session.user.gameStats
+        user: {
+            id, 
+            username, 
+            avatar, 
+            email, 
+            dashboardRole, 
+            guildCount,
+            nickname: nickname || username,
+            gameStats: gameStats || {
+                wins: 0,
+                losses: 0,
+                totalKills: 0,
+                totalDeaths: 0,
+                avgKills: 0,
+                rankedGames: 0,
+                practiceGames: 0
+            }
+        }
     });
+});
+
+// 사용자 길드 목록
+router.get('/guilds', requireAuth, (req, res) => {
+    const userGuilds = req.session.user.guilds || [];
+    
+    // 관리 권한이 있는 서버만 필터링
+    const adminGuilds = userGuilds.filter(guild => {
+        const permissions = BigInt(guild.permissions);
+        return (permissions & BigInt(0x8)) === BigInt(0x8) || // Administrator
+               (permissions & BigInt(0x20)) === BigInt(0x20);   // Manage Guild
+    });
+    
+    res.json({ 
+        guilds: adminGuilds.map(guild => ({
+            id: guild.id,
+            name: guild.name,
+            icon: guild.icon,
+            owner: guild.owner
+        }))
+    });
+});
+
+// 특정 길드의 채널 목록
+router.get('/guilds/:guildId/channels', requireAuth, async (req, res) => {
+    const { guildId } = req.params;
+    
+    try {
+        // 사용자가 해당 길드에 권한이 있는지 확인
+        const userGuild = req.session.user.guilds.find(g => g.id === guildId);
+        if (!userGuild) {
+            return res.status(403).json({ error: '해당 서버에 대한 권한이 없습니다.' });
+        }
+        
+        // 봇이 해당 길드에 있는지 확인
+        const guild = req.client.guilds.cache.get(guildId);
+        if (!guild) {
+            return res.status(404).json({ error: '봇이 해당 서버에 없습니다.' });
+        }
+        
+        // 텍스트 채널만 필터링
+        const textChannels = guild.channels.cache
+            .filter(channel => channel.type === 0) // 0 = GUILD_TEXT
+            .map(channel => ({
+                id: channel.id,
+                name: channel.name,
+                position: channel.position
+            }))
+            .sort((a, b) => a.position - b.position);
+        
+        res.json({ channels: textChannels });
+    } catch (error) {
+        logger.error(`채널 목록 조회 오류: ${error.message}`, 'api');
+        res.status(500).json({ error: '채널 목록을 불러올 수 없습니다.' });
+    }
 });
 
 // 닉네임 변경
@@ -85,83 +155,60 @@ router.put('/user/nickname', requireAuth, async (req, res) => {
     }
 });
 
-// 사용자가 관리할 수 있는 서버 목록
-router.get('/guilds', requireAuth, async (req, res) => {
+// 서버 설정 조회
+router.get('/servers/:guildId/settings', requireAuth, async (req, res) => {
+    const { guildId } = req.params;
+    
     try {
-        // 세션에 저장된 길드 정보 사용
-        const userGuilds = req.session.user.guilds || [];
-        
-        const managableGuilds = userGuilds.filter(guild => {
-            // 관리자 권한이 있는 서버만 필터링
-            const permissions = BigInt(guild.permissions);
-            return (permissions & BigInt(0x8)) === BigInt(0x8); // ADMINISTRATOR
-        });
-        
-        // 봇이 있는 서버 확인
-        const botGuilds = req.client.guilds.cache.map(g => g.id);
-        
-        const guildsWithBot = managableGuilds.map(guild => ({
-            id: guild.id,
-            name: guild.name,
-            icon: guild.icon,
-            botJoined: botGuilds.includes(guild.id)
-        }));
-        
-        res.json({
-            guilds: guildsWithBot,
-            totalCount: req.session.user.guildCount || userGuilds.length
-        });
-    } catch (error) {
-        logger.error('길드 목록 가져오기 오류:', error);
-        res.status(500).json({ error: '서버 목록을 가져올 수 없습니다.' });
-    }
-});
-
-// 특정 서버 설정 가져오기
-router.get('/guilds/:guildId', requireAuth, async (req, res) => {
-    try {
-        const { guildId } = req.params;
-        
         // 권한 확인
-        const hasPermission = req.session.user.guilds.some(guild => {
-            if (guild.id !== guildId) return false;
-            const permissions = BigInt(guild.permissions);
-            return (permissions & BigInt(0x8)) === BigInt(0x8);
-        });
-        
-        if (!hasPermission) {
-            return res.status(403).json({ error: '권한이 없습니다.' });
+        const userGuild = req.session.user.guilds.find(g => g.id === guildId);
+        if (!userGuild) {
+            return res.status(403).json({ error: '해당 서버에 대한 권한이 없습니다.' });
         }
         
-        // 길드 설정 가져오기
-        const guildData = await Guild.findOne({ guildId });
+        const permissions = BigInt(userGuild.permissions);
+        if (!(permissions & BigInt(0x8)) && !(permissions & BigInt(0x20))) {
+            return res.status(403).json({ error: '서버 관리 권한이 필요합니다.' });
+        }
+        
+        // 서버 설정 조회
+        let guildData = await Guild.findOne({ guildId });
         
         if (!guildData) {
-            return res.json({ modules: {} });
+            // 기본 설정 생성
+            const guild = req.client.guilds.cache.get(guildId);
+            if (!guild) {
+                return res.status(404).json({ error: '서버를 찾을 수 없습니다.' });
+            }
+            
+            guildData = await Guild.create({
+                guildId: guildId,
+                guildName: guild.name
+            });
         }
         
         res.json(guildData);
     } catch (error) {
-        logger.error('길드 설정 가져오기 오류:', error);
-        res.status(500).json({ error: '서버 설정을 가져올 수 없습니다.' });
+        logger.error('서버 설정 조회 오류:', error);
+        res.status(500).json({ error: '서버 설정을 불러올 수 없습니다.' });
     }
 });
 
-// 서버 설정 업데이트
-router.put('/guilds/:guildId/modules', requireAuth, async (req, res) => {
+// 서버 모듈 설정 업데이트
+router.put('/servers/:guildId/modules/:module', requireAuth, async (req, res) => {
+    const { guildId, module } = req.params;
+    const { settings } = req.body;
+    
     try {
-        const { guildId } = req.params;
-        const { module, settings } = req.body;
-        
         // 권한 확인
-        const hasPermission = req.session.user.guilds.some(guild => {
-            if (guild.id !== guildId) return false;
-            const permissions = BigInt(guild.permissions);
-            return (permissions & BigInt(0x8)) === BigInt(0x8);
-        });
+        const userGuild = req.session.user.guilds.find(g => g.id === guildId);
+        if (!userGuild) {
+            return res.status(403).json({ error: '해당 서버에 대한 권한이 없습니다.' });
+        }
         
-        if (!hasPermission) {
-            return res.status(403).json({ error: '권한이 없습니다.' });
+        const permissions = BigInt(userGuild.permissions);
+        if (!(permissions & BigInt(0x8)) && !(permissions & BigInt(0x20))) {
+            return res.status(403).json({ error: '서버 관리 권한이 필요합니다.' });
         }
         
         // 길드 설정 업데이트

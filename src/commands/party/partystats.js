@@ -36,34 +36,34 @@ module.exports = {
 
             // 파티 통계 가져오기
             const totalParties = await Party.countDocuments({
-                'members.user': targetUser.id
+                'participants.userId': targetUser.id
             });
 
             const completedParties = await Party.countDocuments({
-                'members.user': targetUser.id,
+                'participants.userId': targetUser.id,
                 status: 'completed'
             });
 
             const createdParties = await Party.countDocuments({
-                leader: targetUser.id
+                hostId: targetUser.id
             });
 
             const activeParties = await Party.countDocuments({
-                'members.user': targetUser.id,
-                status: 'waiting'
+                'participants.userId': targetUser.id,
+                status: { $in: ['recruiting', 'in_progress'] }
             });
 
             // 게임별 통계
             const gameStats = await Party.aggregate([
-                { $match: { 'members.user': targetUser.id } },
+                { $match: { 'participants.userId': targetUser.id } },
                 { $group: { 
-                    _id: '$game',
+                    _id: '$type',
                     count: { $sum: 1 }
                 }},
                 { $sort: { count: -1 } }
             ]);
 
-            const favoriteGame = gameStats.length > 0 ? getGameName(gameStats[0]._id) : '없음';
+            const favoriteGame = gameStats.length > 0 ? gameStats[0]._id : '없음';
 
             // 전적 임베드 생성
             const statsEmbed = CustomEmbedBuilder.createBasicEmbed({
@@ -81,7 +81,7 @@ module.exports = {
                     },
                     {
                         name: '🎲 게임 모드',
-                        value: `**정규전:** ${user.gameStats.rankedGames}회\n**모의전:** ${user.gameStats.practiceGames}회\n**총 게임:** ${user.gameStats.rankedGames + user.gameStats.practiceGames}회`,
+                        value: `**정규전:** ${user.gameStats.rankedGames}회\n**연습전:** ${user.gameStats.practiceGames}회\n**총 게임:** ${user.gameStats.totalGames}회`,
                         inline: true
                     },
                     {
@@ -109,7 +109,7 @@ module.exports = {
                                user.partyStats.rating.skill) / 3).toFixed(1);
 
             statsEmbed.setFooter({
-                text: `평균 평점: ${avgRating}/5.0 | 마지막 게임: ${user.gameStats.lastGameAt ? new Date(user.gameStats.lastGameAt).toLocaleDateString('ko-KR') : '기록 없음'}`
+                text: `평균 평점: ${avgRating}/5.0 | 마지막 게임: ${user.gameStats.lastPlayed ? new Date(user.gameStats.lastPlayed).toLocaleDateString('ko-KR') : '기록 없음'}`
             });
 
             await interaction.reply({ embeds: [statsEmbed] });
@@ -129,15 +129,4 @@ function calculateWinRate(wins, losses) {
     const total = wins + losses;
     if (total === 0) return 0;
     return Math.round((wins / total) * 100);
-}
-
-// 게임 이름 변환
-function getGameName(game) {
-    const gameNames = {
-        'valorant': 'Valorant',
-        'leagueoflegends': 'League of Legends',
-        'overwatch': 'Overwatch 2',
-        'other': '기타'
-    };
-    return gameNames[game] || game;
 }

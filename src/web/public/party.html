@@ -85,6 +85,8 @@
             background: linear-gradient(135deg, #5865F2 0%, #7289DA 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
         }
 
         .page-subtitle {
@@ -349,6 +351,12 @@
             background-color: #2a2a2a;
         }
 
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
         /* 페이지네이션 */
         .pagination {
             display: flex;
@@ -384,6 +392,11 @@
             cursor: not-allowed;
         }
 
+        .page-btn:disabled:hover {
+            border-color: #1a1a1a;
+            color: #B5BAC1;
+        }
+
         /* 로딩 */
         .loading {
             display: none;
@@ -403,6 +416,47 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        /* 토스트 알림 */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1001;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .toast.success {
+            border-color: #3BA55C;
+        }
+
+        .toast.error {
+            border-color: #ED4245;
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        .toast-message {
+            font-size: 14px;
         }
 
         /* 반응형 */
@@ -516,16 +570,30 @@
         </div>
     </div>
 
+    <!-- 토스트 알림 -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span class="toast-message"></span>
+    </div>
+
     <script>
         // 전역 변수
         let currentStatus = 'recruiting';
         let currentPage = 1;
         const partiesPerPage = 12;
+        let isLoading = false;
 
         // 초기화
         document.addEventListener('DOMContentLoaded', () => {
             initializeEventListeners();
             loadParties();
+            
+            // 30초마다 자동 새로고침 (모집 중인 파티만)
+            setInterval(() => {
+                if (currentStatus === 'recruiting' && !isLoading) {
+                    loadParties(true); // silent refresh
+                }
+            }, 30000);
         });
 
         // 이벤트 리스너 초기화
@@ -543,9 +611,14 @@
         }
 
         // 파티 목록 로드
-        async function loadParties() {
-            showLoading();
-            hideEmptyState();
+        async function loadParties(silent = false) {
+            if (isLoading) return;
+            isLoading = true;
+            
+            if (!silent) {
+                showLoading();
+                hideEmptyState();
+            }
 
             try {
                 const response = await fetch(`/party/api/list?status=${currentStatus}&page=${currentPage}&limit=${partiesPerPage}`);
@@ -559,9 +632,15 @@
                 }
             } catch (error) {
                 console.error('파티 로드 오류:', error);
-                showEmptyState();
+                if (!silent) {
+                    showToast('파티 목록을 불러올 수 없습니다', 'error');
+                    showEmptyState();
+                }
             } finally {
-                hideLoading();
+                isLoading = false;
+                if (!silent) {
+                    hideLoading();
+                }
             }
         }
 
@@ -660,7 +739,12 @@
             const container = document.getElementById('pagination');
             container.innerHTML = '';
 
-            if (pagination.pages <= 1) return;
+            if (!pagination || pagination.pages <= 1) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'flex';
 
             // 이전 버튼
             const prevBtn = document.createElement('button');
@@ -690,6 +774,7 @@
                     const dots = document.createElement('span');
                     dots.textContent = '...';
                     dots.style.color = '#949BA4';
+                    dots.style.padding = '0 8px';
                     container.appendChild(dots);
                 }
             }
@@ -731,8 +816,15 @@
         }
 
         function refreshParties() {
-            currentPage = 1;
-            loadParties();
+            const refreshBtn = event.target.closest('.btn-secondary');
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> 새로고침 중...';
+            
+            loadParties().finally(() => {
+                refreshBtn.disabled = false;
+                refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> 새로고침';
+                showToast('파티 목록을 새로고침했습니다', 'success');
+            });
         }
 
         function formatDate(dateString) {
@@ -766,6 +858,21 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = toast.querySelector('.toast-icon');
+            const msg = toast.querySelector('.toast-message');
+
+            toast.className = `toast ${type}`;
+            icon.className = type === 'success' ? 'fas fa-check-circle toast-icon' : 'fas fa-exclamation-circle toast-icon';
+            msg.textContent = message;
+
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
     </script>
 </body>

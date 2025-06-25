@@ -71,10 +71,10 @@ router.get('/:partyId', async (req, res) => {
         
         // 참여자 상세 정보 추가
         const participantIds = party.participants.map(p => p.userId);
-        const users = await User.find({ userId: { $in: participantIds } }).lean();
+        const users = await User.find({ discordId: { $in: participantIds } }).lean();
         
         party.participants = party.participants.map(participant => {
-            const user = users.find(u => u.userId === participant.userId);
+            const user = users.find(u => u.discordId === participant.userId);
             if (user && user.gameStats) {
                 participant.stats = user.gameStats;
             }
@@ -247,73 +247,48 @@ router.post('/:partyId/end', checkPermission('member'), async (req, res) => {
             return res.status(403).json({ error: '파티를 종료할 권한이 없습니다.' });
         }
         
-        if (action === 'cancel') {
-            party.status = 'cancelled';
-        } else if (action === 'complete') {
+        if (action === 'complete') {
             party.status = 'completed';
             party.result = {
                 winner,
-                team1Score: team1Score || 0,
-                team2Score: team2Score || 0,
-                completedBy: req.session.user.id,
+                team1Score,
+                team2Score,
+                completedBy: req.session.user.username,
                 completedAt: new Date()
             };
             
             // 참여자 전적 업데이트
             await updateParticipantStats(party);
+            
+            // 결과 알림
+            await notifyPartyResult(req.client, party);
+        } else {
+            party.status = 'cancelled';
         }
         
-        party.updatedAt = new Date();
         await party.save();
         
-        // 디스코드에 결과 알림
-        if (action === 'complete') {
-            await notifyPartyResult(req.client, party);
-        }
+        // 디스코드 메시지 업데이트
+        await party.updateDiscordMessage(req.client);
         
         logger.party(`파티 ${action}: ${req.params.partyId} by ${req.session.user.username}`);
-        res.json({ success: true, party });
+        res.json({ success: true });
     } catch (error) {
         logger.error(`파티 종료 오류: ${error.message}`, 'party');
         res.status(500).json({ error: '파티 종료에 실패했습니다.' });
     }
 });
 
-// 전적 수정 (Admin만)
-router.put('/record/:userId', checkPermission('admin'), async (req, res) => {
-    try {
-        const { wins, losses, kills, deaths } = req.body;
-        const user = await User.findOneAndUpdate(
-            { userId: req.params.userId },
-            {
-                $set: {
-                    'gameStats.wins': wins,
-                    'gameStats.losses': losses,
-                    'gameStats.kills': kills,
-                    'gameStats.deaths': deaths,
-                    'gameStats.totalGames': wins + losses
-                }
-            },
-            { new: true, upsert: true }
-        );
-        
-        logger.party(`전적 수정: ${req.params.userId} by ${req.session.user.username}`);
-        res.json({ success: true, stats: user.gameStats });
-    } catch (error) {
-        logger.error(`전적 수정 오류: ${error.message}`, 'party');
-        res.status(500).json({ error: '전적 수정에 실패했습니다.' });
-    }
-});
-
-// 디스코드 알림 함수
+// 디스코드 알림 함수 (개선된 버전)
 async function notifyDiscord(client, party) {
     try {
         const channel = await client.channels.fetch(party.channelId);
         if (!channel) return;
         
-        const embed = await party.createDiscordEmbed();
+        const embed = await party.createDiscordEmbed(client);
         const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
         
+        // 버튼 생성
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
@@ -322,20 +297,30 @@ async function notifyDiscord(client, party) {
                     .setStyle(ButtonStyle.Link)
                     .setURL(`${process.env.WEB_URL || 'http://localhost:3000'}/party/${party.partyId}`),
                 new ButtonBuilder()
-                    .setCustomId('party_record')
-                    .setLabel('전적 확인')
-                    .setEmoji('📊')
+                    .setCustomId(`party_info_${party.partyId}`)
+                    .setLabel('상세 정보')
+                    .setEmoji('📋')
+                    .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
+                    .setCustomId(`party_participants_${party.partyId}`)
+                    .setLabel('참여자 목록')
+                    .setEmoji('👥')
                     .setStyle(ButtonStyle.Secondary)
             );
         
+        // 모든 파티 타입에 @everyone 멘션
+        const mention = '@everyone';
+        
         const message = await channel.send({ 
-            content: '@everyone 새로운 파티가 생성되었습니다!',
+            content: `${mention} 🎮 **새로운 파티가 생성되었습니다!**`,
             embeds: [embed],
             components: [row]
         });
         
         party.messageId = message.id;
         await party.save();
+        
+        logger.party(`파티 알림 전송 완료: ${party.partyId} - ${party.title}`);
     } catch (error) {
         logger.error(`디스코드 알림 오류: ${error.message}`, 'party');
     }
@@ -383,14 +368,17 @@ async function updateParticipantStats(party) {
                 (winner === 'team2' && participant.team === 'team2');
             
             await User.findOneAndUpdate(
-                { userId: participant.userId },
+                { discordId: participant.userId },
                 {
                     $inc: {
                         'gameStats.wins': isWinner ? 1 : 0,
                         'gameStats.losses': !isWinner && winner !== 'draw' ? 1 : 0,
                         'gameStats.totalGames': 1,
                         'gameStats.rankedGames': party.type === '정규전' ? 1 : 0,
-                        'gameStats.customGames': party.type === '모의전' ? 1 : 0
+                        'gameStats.practiceGames': party.type === '모의전' ? 1 : 0
+                    },
+                    $set: {
+                        'gameStats.lastPlayed': new Date()
                     }
                 },
                 { upsert: true }

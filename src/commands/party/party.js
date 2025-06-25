@@ -14,7 +14,11 @@ module.exports = {
             // 파티 모집 임베드 생성
             const partyEmbed = CustomEmbedBuilder.createBasicEmbed({
                 title: '🎮 파티 모집 시스템',
-                description: '아래 버튼을 클릭하여 파티를 생성하거나 참여하세요!',
+                description: '아래 버튼을 클릭하여 파티를 생성하거나 참여하세요!\n\n' +
+                           '**📌 사용 방법**\n' +
+                           '• **파티 생성** - 새로운 파티를 만들어 팀원을 모집합니다\n' +
+                           '• **파티 목록** - 현재 모집 중인 파티들을 확인합니다\n' +
+                           '• **내 파티** - 내가 참여 중인 파티를 확인합니다',
                 fields: [
                     {
                         name: '⚔️ 정규전',
@@ -48,30 +52,34 @@ module.exports = {
                     }
                 ],
                 footer: {
-                    text: '파티 시스템',
+                    text: '파티 시스템 • 버튼을 클릭하면 웹사이트로 이동합니다',
                     iconURL: 'https://i.imgur.com/Sd8qK9c.gif'
                 }
             });
 
-            // 버튼 생성
+            // 버튼 생성 (Link 버튼으로 변경)
+            const webUrl = process.env.WEB_URL || 'http://localhost:3000';
             const row = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
-                        .setCustomId('party_create')
                         .setLabel('파티 생성')
                         .setEmoji('✅')
-                        .setStyle(ButtonStyle.Primary)
-                        .setURL(`${process.env.WEB_URL || 'http://localhost:3000'}/party/create`),
+                        .setStyle(ButtonStyle.Link)
+                        .setURL(`${webUrl}/party/create`),
                     new ButtonBuilder()
-                        .setCustomId('party_list')
                         .setLabel('파티 목록')
                         .setEmoji('📋')
-                        .setStyle(ButtonStyle.Secondary)
-                        .setURL(`${process.env.WEB_URL || 'http://localhost:3000'}/party`),
+                        .setStyle(ButtonStyle.Link)
+                        .setURL(`${webUrl}/party`),
                     new ButtonBuilder()
                         .setCustomId('party_myparty')
                         .setLabel('내 파티')
                         .setEmoji('👤')
+                        .setStyle(ButtonStyle.Secondary),
+                    new ButtonBuilder()
+                        .setCustomId('party_stats')
+                        .setLabel('내 전적')
+                        .setEmoji('📊')
                         .setStyle(ButtonStyle.Secondary)
                 );
 

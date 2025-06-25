@@ -17,8 +17,14 @@ router.get('/discord', async (req, res) => {
             return res.status(500).send('세션 오류가 발생했습니다.');
         }
         
-        req.session.oauth_state = state; // 키 이름을 명확하게 변경
+        req.session.oauth_state = state;
         req.session.oauth_timestamp = Date.now();
+        
+        // 리턴 URL 저장 (어디에서 왔는지 기억)
+        const returnUrl = req.query.returnUrl || req.header('Referer') || '/dashboard';
+        req.session.returnUrl = returnUrl;
+        
+        logger.info(`OAuth 시작 - State: ${state}, Return URL: ${returnUrl}`, 'auth');
         
         // 세션 저장을 Promise로 처리
         await new Promise((resolve, reject) => {
@@ -27,7 +33,6 @@ router.get('/discord', async (req, res) => {
                     logger.error(`세션 저장 오류: ${err.message}`, 'auth');
                     reject(err);
                 } else {
-                    logger.info(`OAuth 시작 - State: ${state}`, 'auth');
                     resolve();
                 }
             });
@@ -85,9 +90,13 @@ router.get('/callback', async (req, res) => {
         return res.status(400).send('잘못된 인증 요청입니다. 다시 시도해주세요.');
     }
     
-    // State 삭제
+    // 리턴 URL 가져오기
+    const returnUrl = req.session.returnUrl || '/dashboard';
+    
+    // State와 returnUrl 삭제
     delete req.session.oauth_state;
     delete req.session.oauth_timestamp;
+    delete req.session.returnUrl;
     
     try {
         // 액세스 토큰 획득
@@ -139,66 +148,89 @@ router.get('/callback', async (req, res) => {
         });
         logger.info(`관리 권한이 있는 서버: ${adminGuilds.map(g => g.name).slice(0, 5).join(', ')}${adminGuilds.length > 5 ? ` 외 ${adminGuilds.length - 5}개` : ''}`, 'auth');
         
-        // 데이터베이스에 사용자 정보 저장 또는 업데이트
-        let user;
-        let dashboardRole = 'guest'; // 기본 권한
+        // MongoDB 연결 확인 및 사용자 정보 업데이트
+        const mongoose = require('mongoose');
+        let dbUser = null;
+        let dashboardRole = 'member';
         
-        try {
-            const mongoose = require('mongoose');
-            if (mongoose.connection.readyState === 1) {
-                user = await User.findOneAndUpdate(
-                    { discordId: userData.id },
-                    {
+        if (mongoose.connection.readyState === 1) {
+            try {
+                dbUser = await User.findOne({ discordId: userData.id });
+                
+                if (!dbUser) {
+                    // 첫 사용자는 owner
+                    const userCount = await User.countDocuments();
+                    if (userCount === 0) {
+                        dashboardRole = 'owner';
+                    } else if (config.developers && config.developers.includes(userData.id)) {
+                        // 개발자는 admin
+                        dashboardRole = 'admin';
+                    }
+                    
+                    dbUser = new User({
+                        discordId: userData.id,
                         username: userData.username,
                         discriminator: userData.discriminator || '0',
                         avatar: userData.avatar,
                         email: userData.email,
-                        accessToken: access_token,
-                        refreshToken: refresh_token,
-                        tokenExpiry: new Date(Date.now() + expires_in * 1000),
+                        dashboardRole: dashboardRole,
                         guilds: guilds.map(guild => ({
                             id: guild.id,
                             name: guild.name,
                             icon: guild.icon,
                             owner: guild.owner,
-                            permissions: guild.permissions
-                        }))
-                    },
-                    { upsert: true, new: true }
-                );
-                
-                // 개발자 또는 최초 사용자에게 owner 권한 부여
-                if (!user.dashboardRole || user.dashboardRole === 'guest') {
-                    if (config.developers.includes(userData.id)) {
-                        user.dashboardRole = 'owner';
-                        await user.save();
-                        logger.auth(`개발자 권한 부여: ${userData.username} (${userData.id})`);
-                    } else {
-                        // 최초 사용자인 경우 owner 권한 부여
-                        const userCount = await User.countDocuments();
-                        if (userCount === 1) {
-                            user.dashboardRole = 'owner';
-                            await user.save();
-                            logger.auth(`최초 사용자 owner 권한 부여: ${userData.username}`);
-                        }
-                    }
+                            permissions: guild.permissions.toString() // BigInt를 String으로
+                        })).slice(0, 10) // 최대 10개만 저장
+                    });
+                    
+                    await dbUser.save();
+                    logger.success(`새 사용자 등록: ${userData.username} (역할: ${dashboardRole})`, 'auth');
+                } else {
+                    // 기존 사용자 정보 업데이트
+                    dbUser.username = userData.username;
+                    dbUser.discriminator = userData.discriminator || '0';
+                    dbUser.avatar = userData.avatar;
+                    dbUser.email = userData.email;
+                    dbUser.guilds = guilds.map(guild => ({
+                        id: guild.id,
+                        name: guild.name,
+                        icon: guild.icon,
+                        owner: guild.owner,
+                        permissions: guild.permissions.toString() // BigInt를 String으로
+                    })).slice(0, 10);
+                    
+                    await dbUser.updateLogin(); // 로그인 시간 업데이트
+                    dashboardRole = dbUser.dashboardRole;
+                    logger.info(`사용자 정보 업데이트: ${userData.username} (역할: ${dashboardRole})`, 'auth');
                 }
-                
-                dashboardRole = user.dashboardRole || 'guest';
-                await user.updateLogin();
-            } else {
-                logger.warn('MongoDB 연결 없음 - 사용자 정보를 저장하지 않습니다', 'auth');
+            } catch (dbError) {
+                logger.error(`사용자 DB 작업 오류: ${dbError.message}`, 'auth');
+                // DB 오류가 있어도 세션은 계속 진행
             }
-        } catch (dbError) {
-            logger.error(`사용자 정보 저장 실패: ${dbError.message}`, 'auth');
+        } else {
+            logger.warn('MongoDB 연결이 없어 세션에만 사용자 정보를 저장합니다', 'auth');
         }
         
-        // 세션에 사용자 정보 저장 (필요한 정보만 간단히)
+        // 세션에 사용자 정보 저장
         req.session.user = {
             id: userData.id,
             username: userData.username,
+            discriminator: userData.discriminator,
             avatar: userData.avatar,
             email: userData.email,
+            nickname: dbUser?.nickname || userData.username,
+            gameStats: dbUser?.gameStats || {
+                wins: 0,
+                losses: 0,
+                totalKills: 0,
+                totalDeaths: 0,
+                avgKills: 0,
+                rankedGames: 0,
+                practiceGames: 0
+            },
+            accessToken: access_token,
+            refreshToken: refresh_token,
+            expiresAt: Date.now() + (expires_in * 1000),
             guilds: guilds.map(guild => ({
                 id: guild.id,
                 name: guild.name,
@@ -224,10 +256,10 @@ router.get('/callback', async (req, res) => {
             });
         });
         
-        logger.success(`사용자 로그인 성공: ${userData.username}`, 'auth');
+        logger.success(`사용자 로그인 성공: ${userData.username}, 리다이렉트: ${returnUrl}`, 'auth');
         
-        // 대시보드로 리다이렉트
-        res.redirect('/dashboard');
+        // 원래 페이지로 리다이렉트
+        res.redirect(returnUrl);
         
     } catch (error) {
         logger.error(`OAuth 콜백 오류: ${error.message}`, 'auth');
@@ -251,6 +283,7 @@ router.get('/callback', async (req, res) => {
 // 로그아웃
 router.get('/logout', (req, res) => {
     const username = req.session.user?.username;
+    const returnUrl = req.query.returnUrl || req.header('Referer') || '/';
     
     req.session.destroy((err) => {
         if (err) {
@@ -258,7 +291,7 @@ router.get('/logout', (req, res) => {
         } else {
             logger.auth(`사용자 로그아웃: ${username || '알 수 없음'}`, 'info');
         }
-        res.redirect('/');
+        res.redirect(returnUrl);
     });
 });
 
