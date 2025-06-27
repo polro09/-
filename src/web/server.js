@@ -86,7 +86,7 @@ module.exports = async (client) => {
     app.use('/api', require('./routes/api'));
     app.use('/dashboard/api', require('./routes/dashboard'));
     app.use('/party/api', require('./routes/party'));
-    app.use('/test', require('./routes/test')); // 테스트 라우트
+    // app.use('/test', require('./routes/test')); // 테스트 라우트
     
     // 메인 페이지 (최초 방문 체크)
     app.get('/', (req, res) => {
@@ -126,6 +126,37 @@ module.exports = async (client) => {
             return res.redirect('/auth/discord');
         }
         res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+    });
+    
+    // DB 관리 페이지 추가
+    app.get('/dashboard/db-management', (req, res) => {
+        if (!req.session.user) {
+            return res.redirect('/auth/discord');
+        }
+        
+        // 권한 체크 (선택사항)
+        const userRole = req.session.user.dashboardRole || 'guest';
+        if (!['subadmin', 'admin', 'owner'].includes(userRole)) {
+            return res.status(403).send('권한이 없습니다.');
+        }
+        
+        res.sendFile(path.join(__dirname, 'public', 'db-management.html'));
+    });
+    
+    // 서버 관리 페이지
+    app.get('/dashboard/servers', (req, res) => {
+        if (!req.session.user) {
+            return res.redirect('/auth/discord');
+        }
+        res.sendFile(path.join(__dirname, 'public', 'servers.html'));
+    });
+    
+    // 권한 관리 페이지
+    app.get('/dashboard/permissions', (req, res) => {
+        if (!req.session.user) {
+            return res.redirect('/auth/discord');
+        }
+        res.sendFile(path.join(__dirname, 'public', 'permissions.html'));
     });
     
     // 404 처리

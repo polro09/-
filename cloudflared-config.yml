@@ -1,0 +1,9 @@
+tunnel: 1ea3476a-aef1-424b-95c6-006252b535cc
+credentials-file: C:\Users\AD\.cloudflared\1ea3476a-aef1-424b-95c6-006252b535cc.json
+
+ingress:
+  - hostname: aimdot.dev
+    service: http://localhost:3000
+  - hostname: www.aimdot.dev
+    service: http://localhost:3000  
+  - service: http_status:404

@@ -232,6 +232,103 @@ router.post('/control/stop', checkPermission('admin'), async (req, res) => {
     }
 });
 
+// DB 관리 - 사용자 목록 조회 (Sub Admin 이상)
+router.get('/db-management/users', checkPermission('subadmin'), async (req, res) => {
+    try {
+        const users = await User.find({}, 
+            'discordId username avatar gameStats partyStats lastLogin'
+        ).sort({ lastLogin: -1 });
+        
+        res.json({ users });
+    } catch (error) {
+        logger.error('사용자 목록 조회 오류:', error);
+        res.status(500).json({ error: '사용자 목록을 조회할 수 없습니다.' });
+    }
+});
+
+// DB 관리 - 통계 조회 (Sub Admin 이상)
+router.get('/db-management/statistics', checkPermission('subadmin'), async (req, res) => {
+    try {
+        const totalUsers = await User.countDocuments();
+        
+        // 집계 통계
+        const stats = await User.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalGames: { $sum: '$gameStats.totalGames' },
+                    totalWins: { $sum: '$gameStats.wins' },
+                    avgWinRate: { $avg: '$gameStats.winRate' }
+                }
+            }
+        ]);
+        
+        // 오늘 활동한 사용자
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const activeToday = await User.countDocuments({
+            lastLogin: { $gte: today }
+        });
+        
+        res.json({
+            totalUsers,
+            totalGames: stats[0]?.totalGames || 0,
+            avgWinRate: Math.round(stats[0]?.avgWinRate || 0),
+            activeToday
+        });
+    } catch (error) {
+        logger.error('통계 조회 오류:', error);
+        res.status(500).json({ error: '통계를 조회할 수 없습니다.' });
+    }
+});
+
+// DB 관리 - 사용자 전적 수정 (Sub Admin 이상)
+router.put('/db-management/user/:userId', checkPermission('subadmin'), async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { gameStats } = req.body;
+        
+        // 유효성 검증
+        if (!gameStats || typeof gameStats !== 'object') {
+            return res.status(400).json({ error: '잘못된 데이터 형식입니다.' });
+        }
+        
+        // 승률 재계산
+        const totalGames = (gameStats.wins || 0) + (gameStats.losses || 0);
+        const winRate = totalGames > 0 ? Math.round((gameStats.wins / totalGames) * 100) : 0;
+        
+        // 사용자 업데이트
+        const updatedUser = await User.findOneAndUpdate(
+            { discordId: userId },
+            {
+                'gameStats.wins': gameStats.wins || 0,
+                'gameStats.losses': gameStats.losses || 0,
+                'gameStats.totalGames': gameStats.totalGames || 0,
+                'gameStats.avgKills': gameStats.avgKills || 0,
+                'gameStats.rankedGames': gameStats.rankedGames || 0,
+                'gameStats.winRate': winRate
+            },
+            { new: true }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
+        }
+        
+        logger.database(`사용자 전적 수정: ${userId} by ${req.session.user.username}`);
+        
+        res.json({ 
+            success: true, 
+            message: '전적이 수정되었습니다.',
+            user: updatedUser 
+        });
+        
+    } catch (error) {
+        logger.error('사용자 전적 수정 오류:', error);
+        res.status(500).json({ error: '전적 수정 중 오류가 발생했습니다.' });
+    }
+});
+
 // 로그 조회
 router.get('/logs', checkPermission('subadmin'), async (req, res) => {
     try {

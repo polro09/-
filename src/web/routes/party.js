@@ -459,24 +459,14 @@ async function notifyDiscord(client, party) {
         const embed = await party.createDiscordEmbed(client);
         const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
         
-        // 버튼 생성
+        // 버튼 생성 - 파티 참여 버튼만
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
                     .setLabel('파티 참여')
                     .setEmoji('🎮')
                     .setStyle(ButtonStyle.Link)
-                    .setURL(`${process.env.WEB_URL || 'http://localhost:3000'}/party/${party.partyId}`),
-                new ButtonBuilder()
-                    .setCustomId(`party_info_${party.partyId}`)
-                    .setLabel('상세 정보')
-                    .setEmoji('📋')
-                    .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
-                    .setCustomId(`party_participants_${party.partyId}`)
-                    .setLabel('참여자 목록')
-                    .setEmoji('👥')
-                    .setStyle(ButtonStyle.Secondary)
+                    .setURL(`${process.env.WEB_URL || 'http://localhost:3000'}/party/${party.partyId}`)
             );
         
         // 모든 파티 타입에 @everyone 멘션
@@ -488,12 +478,13 @@ async function notifyDiscord(client, party) {
             components: [row]
         });
         
+        // 메시지 ID 저장
         party.messageId = message.id;
         await party.save();
         
-        logger.party(`파티 알림 전송 완료: ${party.partyId} - ${party.title}`);
+        logger.party(`Discord 알림 전송 완료: ${party.partyId}`);
     } catch (error) {
-        logger.error(`디스코드 알림 오류: ${error.message}`, 'party');
+        logger.error(`Discord 알림 전송 오류: ${error.message}`, 'party');
     }
 }
 

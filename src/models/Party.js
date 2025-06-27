@@ -250,25 +250,40 @@ partySchema.methods.createDiscordEmbed = async function(client) {
     // 참여자 전적 정보 가져오기 (수정된 포맷)
     const formatParticipant = async (participant) => {
         try {
-            // Discord에서 길드 멤버 정보 가져오기
-            let displayName = participant.username;
-            if (guild) {
-                try {
-                    const member = await guild.members.fetch(participant.userId);
-                    displayName = member.nickname || member.user.username;
-                } catch (memberError) {
-                    console.log('멤버 정보를 가져올 수 없음:', participant.userId);
-                }
-            }
+            // 별명 우선 표시 (사이트에서 설정한 별명)
+            let displayName = participant.nickname || participant.username;
             
             const user = await User.findOne({ discordId: participant.userId });
             if (user && user.gameStats) {
-                const winRate = user.gameStats.totalGames > 0 
-                    ? Math.round((user.gameStats.wins / user.gameStats.totalGames) * 100)
-                    : 0;
                 const totalGames = user.gameStats.totalGames || 0;
+                const wins = user.gameStats.wins || 0;
+                const totalKills = user.gameStats.totalKills || 0;
+                const totalDeaths = user.gameStats.totalDeaths || 0;
+                const totalRounds = user.gameStats.totalRounds || totalGames; // 라운드 수 (없으면 게임 수로 대체)
                 
-                // 국가 이모지
+                // W/R (Win Rate) 계산
+                const winRate = totalGames > 0 
+                    ? Math.round((wins / totalGames) * 100)
+                    : 0;
+                
+                // K/R (Kill per Round) 계산
+                const killPerRound = totalRounds > 0
+                    ? (totalKills / totalRounds).toFixed(2)
+                    : '0.00';
+                
+                // T/R (Total Rounds) - 총 라운드 수
+                const totalRoundDisplay = totalRounds;
+                
+                // 국가 정보
+                const countryNames = {
+                    'empire': '제국',
+                    'vlandia': '블란디아',
+                    'battania': '바타니아',
+                    'sturgia': '스투르기아',
+                    'khuzait': '쿠자이트',
+                    'aserai': '아세라이'
+                };
+                
                 const countryEmoji = {
                     'empire': '🏛️',
                     'vlandia': '🛡️',
@@ -278,24 +293,42 @@ partySchema.methods.createDiscordEmbed = async function(client) {
                     'aserai': '☀️'
                 };
                 
-                // 티어 표시
-                const tierDisplay = participant.tier || 'Unranked';
+                // 병력 이름 한글화
+                const unitNames = {
+                    'shield_infantry': '방패보병',
+                    'spear_infantry': '창보병',
+                    'polearm_infantry': '폴암병',
+                    'archer': '궁병',
+                    'crossbow': '석궁병',
+                    'cavalry': '기병',
+                    'spear_cavalry': '창기병',
+                    'horse_archer': '궁기병',
+                    'infantry': '보병',
+                    'skirmisher': '투척병'
+                };
                 
-                // 여백을 줄인 포맷
+                const country = participant.country || user.preferredCountry || '';
+                const countryDisplay = country ? `${countryEmoji[country] || ''}${countryNames[country] || country}` : '';
+                const unitDisplay = participant.unit ? unitNames[participant.unit] || participant.unit : '';
+                
+                // 티어 표시
+                const tier = participant.tier || '5t';
+                
+                // 포맷: 별명 | 국가 | 티어 | 병력
+                // K/R | W/R | T/R (다음 줄)
                 let info = `${displayName}`;
                 
-                // 국가, 티어, 병종을 공백 없이 연결
                 const additionalInfo = [];
-                if (participant.country) additionalInfo.push(`${countryEmoji[participant.country] || '🏳️'}`);
-                if (participant.tier) additionalInfo.push(`${tierDisplay}`);
-                if (participant.unit) additionalInfo.push(`${participant.unit}`);
+                if (countryDisplay) additionalInfo.push(countryDisplay);
+                if (tier) additionalInfo.push(tier);
+                if (unitDisplay) additionalInfo.push(unitDisplay);
                 
                 if (additionalInfo.length > 0) {
-                    info += ` |${additionalInfo.join('|')}`;
+                    info += ` | ${additionalInfo.join(' | ')}`;
                 }
                 
-                // W/R과 T/R 형식 수정 (% 앞에 공백 추가, game 제거)
-                info += ` | W/R: ${winRate} % | T/R: ${totalGames}`;
+                // 전적 정보는 다음 줄에 추가
+                info += `\nK/R: ${killPerRound} | W/R: ${winRate}% | T/R: ${totalRoundDisplay}`;
                 
                 return info;
             }
@@ -303,28 +336,61 @@ partySchema.methods.createDiscordEmbed = async function(client) {
             // 전적 정보가 없는 경우
             let info = displayName;
             const additionalInfo = [];
+            
+            // 국가 정보
+            const countryNames = {
+                'empire': '제국',
+                'vlandia': '블란디아',
+                'battania': '바타니아',
+                'sturgia': '스투르기아',
+                'khuzait': '쿠자이트',
+                'aserai': '아세라이'
+            };
+            
+            const countryEmoji = {
+                'empire': '🏛️',
+                'vlandia': '🛡️',
+                'battania': '🏹',
+                'sturgia': '❄️',
+                'khuzait': '🐎',
+                'aserai': '☀️'
+            };
+            
+            // 병력 이름 한글화
+            const unitNames = {
+                'shield_infantry': '방패보병',
+                'spear_infantry': '창보병',
+                'polearm_infantry': '폴암병',
+                'archer': '궁병',
+                'crossbow': '석궁병',
+                'cavalry': '기병',
+                'spear_cavalry': '창기병',
+                'horse_archer': '궁기병',
+                'infantry': '보병',
+                'skirmisher': '투척병'
+            };
+            
             if (participant.country) {
-                const countryEmoji = {
-                    'empire': '🏛️',
-                    'vlandia': '🛡️',
-                    'battania': '🏹',
-                    'sturgia': '❄️',
-                    'khuzait': '🐎',
-                    'aserai': '☀️'
-                };
-                additionalInfo.push(`${countryEmoji[participant.country] || '🏳️'}`);
+                const countryDisplay = `${countryEmoji[participant.country] || ''}${countryNames[participant.country] || participant.country}`;
+                additionalInfo.push(countryDisplay);
             }
-            if (participant.tier) additionalInfo.push(`${participant.tier}`);
-            if (participant.unit) additionalInfo.push(`${participant.unit}`);
+            if (participant.tier) additionalInfo.push(participant.tier);
+            if (participant.unit) {
+                const unitDisplay = unitNames[participant.unit] || participant.unit;
+                additionalInfo.push(unitDisplay);
+            }
             
             if (additionalInfo.length > 0) {
-                info += ` |${additionalInfo.join('|')}`;
+                info += ` | ${additionalInfo.join(' | ')}`;
             }
+            
+            // 전적 정보가 없는 경우 기본값 표시
+            info += `\nK/R: 0.00 | W/R: 0% | T/R: 0`;
             
             return info;
         } catch (error) {
             console.error('참여자 정보 조회 오류:', error);
-            return participant.username || '알 수 없음';
+            return participant.nickname || participant.username || '알 수 없음';
         }
     };
     
@@ -336,37 +402,43 @@ partySchema.methods.createDiscordEmbed = async function(client) {
             team.slice(0, maxDisplay).map(p => formatParticipant(p))
         );
         
-        let result = '```\n' + formatted.join('\n');
+        let result = '```\n' + formatted.join('\n\n');
         if (team.length > maxDisplay) {
-            result += `\n... 외 ${team.length - maxDisplay}명`;
+            result += `\n\n... 외 ${team.length - maxDisplay}명`;
         }
         result += '\n```';
         
         return result;
     };
     
-    // 임베드 생성
-    const embed = CustomEmbedBuilder.createBasicEmbed({
-        title: `${typeData.emoji} ${this.title}`,
-        color: typeData.color,
-        fields: [
-            {
-                name: '📋 파티 정보',
-                value: `**타입:** ${this.type}\n**상태:** ${statusDisplay[this.status]}\n**주최자:** <@${this.hostId}>`,
-                inline: true
-            },
-            {
-                name: '⏰ 일정',
-                value: this.startTime 
-                    ? `<t:${Math.floor(new Date(this.startTime).getTime() / 1000)}:F>`
-                    : '시간 미정',
-                inline: true
-            },
-            {
-                name: '👥 참여자',
-                value: `전체: ${this.participants.length}명\n1팀: ${team1.length}명 | 2팀: ${team2.length}명`,
-                inline: true
-            },
+    // 타입에 따라 다른 팀 구성 표시
+    const isTeamBasedType = this.type === '모의전' || this.type === '훈련';
+    
+    // 기본 필드 설정
+    const fields = [
+        {
+            name: '📋 파티 정보',
+            value: `**타입:** ${this.type}\n**상태:** ${statusDisplay[this.status]}\n**주최자:** <@${this.hostId}>`,
+            inline: true
+        },
+        {
+            name: '⏰ 일정',
+            value: this.startTime 
+                ? `<t:${Math.floor(new Date(this.startTime).getTime() / 1000)}:D>\n<t:${Math.floor(new Date(this.startTime).getTime() / 1000)}:t>`
+                : '시간 미정',
+            inline: true
+        }
+    ];
+    
+    // 팀 기반 파티 (모의전, 훈련)
+    if (isTeamBasedType) {
+        fields.push({
+            name: '👥 참여자',
+            value: `전체: ${this.participants.length}명\n1팀: ${team1.length}명 | 2팀: ${team2.length}명`,
+            inline: true
+        });
+        
+        fields.push(
             {
                 name: `⚔️ 1팀 (${team1.length}명)`,
                 value: await formatTeam(team1),
@@ -377,7 +449,28 @@ partySchema.methods.createDiscordEmbed = async function(client) {
                 value: await formatTeam(team2),
                 inline: false
             }
-        ],
+        );
+    } else {
+        // 일반 파티 (정규전 및 기타)
+        const activeParticipants = [...team1, ...team2];
+        fields.push({
+            name: '👥 참여자',
+            value: `참여: ${activeParticipants.length}명 | 대기: ${waitlist.length}명`,
+            inline: true
+        });
+        
+        fields.push({
+            name: `🎮 참여자 (${activeParticipants.length}명)`,
+            value: await formatTeam(activeParticipants, 8),
+            inline: false
+        });
+    }
+    
+    // 임베드 생성
+    const embed = CustomEmbedBuilder.createBasicEmbed({
+        title: `${typeData.emoji} ${this.title}`,
+        color: typeData.color,
+        fields: fields,
         footer: {
             text: `파티 ID: ${this.partyId} | ${this.requirements || '참가 제한 없음'}`,
             iconURL: 'https://i.imgur.com/Sd8qK9c.gif'

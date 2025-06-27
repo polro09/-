@@ -1457,9 +1457,7 @@
             const winRate = totalGames > 0 
                 ? ((stats.wins / stats.totalGames) * 100).toFixed(1) 
                 : 0;
-            const kdRatio = stats.totalDeaths > 0 
-                ? (stats.totalKills / stats.totalDeaths).toFixed(2) 
-                : (stats.totalKills || 0).toFixed(2);
+            const avgKills = stats.avgKills || 0;
 
             const isHost = participant.userId === partyData.hostId;
             const isMe = currentUser && participant.userId === currentUser.id;
@@ -1479,7 +1477,7 @@
                         ${isMe ? '<span style="color: #5865F2; font-size: 12px;"> (나)</span>' : ''}
                     </div>
                     <div class="participant-stats">
-                        K/D: ${kdRatio}<br>
+                        K/R: ${avgKills.toFixed(1)}<br>
                         W/R: ${winRate} %<br>
                         T/R: ${totalGames}
                     </div>
