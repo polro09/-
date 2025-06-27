@@ -59,6 +59,76 @@ router.get('/user', (req, res) => {
     });
 });
 
+// 사용자 통계 조회
+router.get('/user/stats', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.status(401).json({ error: '로그인이 필요합니다.' });
+        }
+        
+        const user = await User.findOne({ discordId: req.session.user.id });
+        
+        if (!user || !user.gameStats) {
+            return res.json({
+                wins: 0,
+                losses: 0,
+                totalKills: 0,
+                avgKills: 0,
+                rankedGames: 0,
+                practiceGames: 0,
+                winRate: 0
+            });
+        }
+        
+        res.json(user.gameStats);
+        
+    } catch (error) {
+        logger.error(`사용자 통계 조회 오류: ${error.message}`, 'api');
+        res.status(500).json({ error: '통계를 불러올 수 없습니다.' });
+    }
+});
+
+// 닉네임 변경
+router.put('/user/nickname', requireAuth, async (req, res) => {
+    try {
+        const { nickname } = req.body;
+        
+        // 유효성 검사
+        if (!nickname || nickname.trim().length === 0) {
+            return res.status(400).json({ success: false, error: '닉네임을 입력해주세요.' });
+        }
+        
+        if (nickname.length > 20) {
+            return res.status(400).json({ success: false, error: '닉네임은 20자 이내여야 합니다.' });
+        }
+        
+        // 부적절한 단어 필터링 (필요시 추가)
+        const bannedWords = ['admin', 'administrator', 'moderator', 'aimdot'];
+        const lowerNickname = nickname.toLowerCase();
+        if (bannedWords.some(word => lowerNickname.includes(word))) {
+            return res.status(400).json({ success: false, error: '사용할 수 없는 닉네임입니다.' });
+        }
+        
+        // MongoDB 연결 확인 및 업데이트
+        const mongoose = require('mongoose');
+        if (mongoose.connection.readyState === 1) {
+            await User.findOneAndUpdate(
+                { discordId: req.session.user.id },
+                { nickname: nickname.trim() }
+            );
+        }
+        
+        // 세션 업데이트
+        req.session.user.nickname = nickname.trim();
+        
+        res.json({ success: true, nickname: nickname.trim(), message: '닉네임이 변경되었습니다.' });
+        
+    } catch (error) {
+        logger.error('닉네임 변경 오류:', error);
+        res.status(500).json({ success: false, error: '닉네임 변경 중 오류가 발생했습니다.' });
+    }
+});
+
 // 사용자 길드 목록
 router.get('/guilds', requireAuth, (req, res) => {
     const userGuilds = req.session.user.guilds || [];
@@ -111,47 +181,6 @@ router.get('/guilds/:guildId/channels', requireAuth, async (req, res) => {
     } catch (error) {
         logger.error(`채널 목록 조회 오류: ${error.message}`, 'api');
         res.status(500).json({ error: '채널 목록을 불러올 수 없습니다.' });
-    }
-});
-
-// 닉네임 변경
-router.put('/user/nickname', requireAuth, async (req, res) => {
-    try {
-        const { nickname } = req.body;
-        
-        // 유효성 검사
-        if (!nickname || nickname.trim().length === 0) {
-            return res.status(400).json({ success: false, error: '닉네임을 입력해주세요.' });
-        }
-        
-        if (nickname.length > 20) {
-            return res.status(400).json({ success: false, error: '닉네임은 20자 이내여야 합니다.' });
-        }
-        
-        // 부적절한 단어 필터링 (필요시 추가)
-        const bannedWords = ['admin', 'administrator', 'moderator', 'aimdot'];
-        const lowerNickname = nickname.toLowerCase();
-        if (bannedWords.some(word => lowerNickname.includes(word))) {
-            return res.status(400).json({ success: false, error: '사용할 수 없는 닉네임입니다.' });
-        }
-        
-        // MongoDB 연결 확인 및 업데이트
-        const mongoose = require('mongoose');
-        if (mongoose.connection.readyState === 1) {
-            await User.findOneAndUpdate(
-                { discordId: req.session.user.id },
-                { nickname: nickname.trim() }
-            );
-        }
-        
-        // 세션 업데이트
-        req.session.user.nickname = nickname.trim();
-        
-        res.json({ success: true, message: '닉네임이 변경되었습니다.' });
-        
-    } catch (error) {
-        logger.error('닉네임 변경 오류:', error);
-        res.status(500).json({ success: false, error: '닉네임 변경 중 오류가 발생했습니다.' });
     }
 });
 
@@ -244,6 +273,20 @@ router.put('/servers/:guildId/modules/:module', requireAuth, async (req, res) =>
         logger.error('모듈 설정 업데이트 오류:', error);
         res.status(500).json({ error: '설정을 업데이트할 수 없습니다.' });
     }
+});
+
+// 봇 통계
+router.get('/stats', (req, res) => {
+    const client = req.client;
+    
+    res.json({
+        guilds: client.guilds.cache.size,
+        users: client.users.cache.size,
+        channels: client.channels.cache.size,
+        uptime: client.uptime,
+        memory: process.memoryUsage().heapUsed / 1024 / 1024,
+        ping: client.ws.ping
+    });
 });
 
 // 봇 초대 링크 생성

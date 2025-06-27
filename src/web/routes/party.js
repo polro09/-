@@ -43,6 +43,32 @@ router.get('/list', async (req, res) => {
             .limit(parseInt(limit))
             .lean();
             
+        // 참여자의 추가 정보 포함
+        for (const party of parties) {
+            if (party.participants && party.participants.length > 0) {
+                const participantIds = party.participants.map(p => p.userId);
+                const users = await User.find({ discordId: { $in: participantIds } }).lean();
+                
+                party.participants = party.participants.map(participant => {
+                    const user = users.find(u => u.discordId === participant.userId);
+                    if (user) {
+                        participant.nickname = participant.nickname || user.nickname || user.username;
+                        participant.avgKills = user.gameStats?.avgKills || 0;
+                        participant.winRate = user.gameStats?.winRate || 0;
+                        participant.killRank = user.gameStats?.killRank || 0;
+                        participant.teamRank = user.gameStats?.teamRank || 0;
+                    }
+                    return participant;
+                });
+            }
+            
+            // 호스트 닉네임도 업데이트
+            const hostUser = await User.findOne({ discordId: party.hostId }).lean();
+            if (hostUser) {
+                party.hostNickname = hostUser.nickname || party.hostName;
+            }
+        }
+            
         const total = await Party.countDocuments(query);
         
         res.json({
@@ -69,14 +95,24 @@ router.get('/:partyId', async (req, res) => {
             return res.status(404).json({ error: '파티를 찾을 수 없습니다.' });
         }
         
-        // 참여자 상세 정보 추가
+        // 참여자 상세 정보 추가 (nickname 포함)
         const participantIds = party.participants.map(p => p.userId);
         const users = await User.find({ discordId: { $in: participantIds } }).lean();
         
+        // 호스트 정보도 가져오기
+        const hostUser = await User.findOne({ discordId: party.hostId }).lean();
+        if (hostUser) {
+            party.hostNickname = hostUser.nickname || hostUser.username;
+        }
+        
         party.participants = party.participants.map(participant => {
             const user = users.find(u => u.discordId === participant.userId);
-            if (user && user.gameStats) {
-                participant.stats = user.gameStats;
+            if (user) {
+                // 사용자의 nickname 추가
+                participant.nickname = user.nickname || participant.username;
+                if (user.gameStats) {
+                    participant.stats = user.gameStats;
+                }
             }
             return participant;
         });
@@ -99,12 +135,16 @@ router.post('/create', checkPermission('member'), async (req, res) => {
         
         const partyId = uuidv4().split('-')[0].toUpperCase();
         
+        // 사용자 nickname 가져오기
+        const user = await User.findOne({ discordId: req.session.user.id }).lean();
+        
         const newParty = new Party({
             partyId,
             guildId,
             channelId,
             hostId: req.session.user.id,
             hostName: req.session.user.username,
+            hostNickname: user?.nickname || req.session.user.username,
             title,
             description,
             type,
@@ -128,7 +168,7 @@ router.post('/create', checkPermission('member'), async (req, res) => {
 // 파티 참여/팀 변경
 router.post('/:partyId/join', checkPermission('member'), async (req, res) => {
     try {
-        const { team = 'waitlist', country, unit } = req.body;
+        const { team = 'waitlist', country, unit, tier } = req.body;
         const party = await Party.findOne({ partyId: req.params.partyId });
         
         if (!party) {
@@ -139,23 +179,34 @@ router.post('/:partyId/join', checkPermission('member'), async (req, res) => {
             return res.status(400).json({ error: '모집이 마감된 파티입니다.' });
         }
         
+        // 사용자의 nickname 정보도 가져오기
+        const user = await User.findOne({ discordId: req.session.user.id }).lean();
+        
         const userData = {
             userId: req.session.user.id,
             username: req.session.user.username,
+            nickname: user?.nickname || req.session.user.username,
             avatar: req.session.user.avatar,
+            discordId: req.session.user.id,
             team,
             country,
-            unit
+            unit,
+            tier: tier || '5t'
         };
         
         // 기존 참여자인지 확인
         const existingIndex = party.participants.findIndex(p => p.userId === userData.userId);
         
         if (existingIndex !== -1) {
-            // 팀 변경
-            party.participants[existingIndex] = { ...party.participants[existingIndex], ...userData };
+            // 팀 변경 - 기존 데이터를 유지하면서 업데이트
+            party.participants[existingIndex] = { 
+                ...party.participants[existingIndex], 
+                ...userData,
+                joinedAt: party.participants[existingIndex].joinedAt // 참여 시간은 유지
+            };
         } else {
             // 새로 참여
+            userData.joinedAt = new Date();
             party.participants.push(userData);
         }
         
@@ -165,7 +216,7 @@ router.post('/:partyId/join', checkPermission('member'), async (req, res) => {
         // 디스코드 메시지 업데이트
         await party.updateDiscordMessage(req.client);
         
-        logger.party(`파티 참여: ${req.params.partyId} - ${req.session.user.username} (${team})`);
+        logger.party(`파티 참여: ${req.params.partyId} - ${userData.nickname} (${team}) - 티어: ${tier}`);
         res.json({ success: true, party });
     } catch (error) {
         logger.error(`파티 참여 오류: ${error.message}`, 'party');
@@ -279,7 +330,127 @@ router.post('/:partyId/end', checkPermission('member'), async (req, res) => {
     }
 });
 
-// 디스코드 알림 함수 (개선된 버전)
+// 파티 전적 기입 (Sub Admin 이상)
+router.post('/:partyId/record', checkPermission('subadmin'), async (req, res) => {
+    try {
+        const { winner, participantKills } = req.body;
+        const party = await Party.findOne({ partyId: req.params.partyId });
+        
+        if (!party) {
+            return res.status(404).json({ error: '파티를 찾을 수 없습니다.' });
+        }
+        
+        if (party.status !== 'completed') {
+            return res.status(400).json({ error: '완료된 파티만 전적을 기입할 수 있습니다.' });
+        }
+        
+        if (party.type !== '정규전' && party.type !== '모의전') {
+            return res.status(400).json({ error: '정규전과 모의전만 전적 기입이 가능합니다.' });
+        }
+        
+        // 각 참여자의 통계 업데이트
+        for (const participant of party.participants) {
+            const user = await User.findOne({ discordId: participant.userId });
+            if (!user) continue;
+            
+            // gameStats 초기화
+            if (!user.gameStats) {
+                user.gameStats = {
+                    wins: 0,
+                    losses: 0,
+                    totalKills: 0,
+                    totalDeaths: 0,
+                    avgKills: 0,
+                    rankedGames: 0,
+                    practiceGames: 0,
+                    winRate: 0,
+                    killRank: 0,
+                    teamRank: 0
+                };
+            }
+            
+            const kills = participantKills[participant.userId] || 0;
+            
+            // 정규전 처리
+            if (party.type === '정규전') {
+                user.gameStats.rankedGames += 1;
+                
+                if (winner === 'win') {
+                    user.gameStats.wins += 1;
+                } else {
+                    user.gameStats.losses += 1;
+                }
+            } 
+            // 모의전 처리
+            else if (party.type === '모의전') {
+                user.gameStats.practiceGames += 1;
+                
+                // 모의전에서는 해당 팀이 이긴 경우만 승리로 계산
+                if ((winner === 'team1' && participant.team === 'team1') ||
+                    (winner === 'team2' && participant.team === 'team2')) {
+                    user.gameStats.wins += 1;
+                } else {
+                    user.gameStats.losses += 1;
+                }
+            }
+            
+            // 킬 수 업데이트
+            user.gameStats.totalKills += kills;
+            
+            // 평균 킬 계산
+            const totalGames = user.gameStats.wins + user.gameStats.losses;
+            if (totalGames > 0) {
+                user.gameStats.avgKills = user.gameStats.totalKills / totalGames;
+                user.gameStats.winRate = Math.round((user.gameStats.wins / totalGames) * 100);
+            }
+            
+            await user.save();
+        }
+        
+        // 파티에 전적 기록 표시
+        party.recordSaved = true;
+        party.recordSavedAt = new Date();
+        party.recordSavedBy = req.session.user.id;
+        party.matchResult = {
+            winner: winner,
+            participantKills: participantKills
+        };
+        
+        await party.save();
+        
+        logger.party(`파티 전적 기입: ${req.params.partyId} by ${req.session.user.username}`);
+        res.json({ success: true, message: '전적이 저장되었습니다.' });
+        
+    } catch (error) {
+        logger.error(`파티 전적 기입 오류: ${error.message}`, 'party');
+        res.status(500).json({ error: '전적 기입에 실패했습니다.' });
+    }
+});
+
+// 파티 삭제 (Sub Admin 이상)
+router.delete('/:partyId', checkPermission('subadmin'), async (req, res) => {
+    try {
+        const party = await Party.findOne({ partyId: req.params.partyId });
+        
+        if (!party) {
+            return res.status(404).json({ error: '파티를 찾을 수 없습니다.' });
+        }
+        
+        // 삭제 전 로그 기록
+        logger.party(`파티 삭제: ${req.params.partyId} - ${party.title} by ${req.session.user.username}`);
+        
+        // 파티 삭제
+        await Party.deleteOne({ partyId: req.params.partyId });
+        
+        res.json({ success: true, message: '파티가 삭제되었습니다.' });
+        
+    } catch (error) {
+        logger.error(`파티 삭제 오류: ${error.message}`, 'party');
+        res.status(500).json({ error: '파티 삭제에 실패했습니다.' });
+    }
+});
+
+// 디스코드 알림 함수
 async function notifyDiscord(client, party) {
     try {
         const channel = await client.channels.fetch(party.channelId);

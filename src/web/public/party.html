@@ -14,10 +14,280 @@
         }
 
         body {
-            background-color: #0a0a0a;
+            background-color: #000000;
             color: #F2F3F5;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
+        }
+
+        /* 좌측 사이드바 - 사용자 프로필 전용 */
+        .sidebar-left {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background-color: #000000;
+            border-right: 1px solid #1a1a1a;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .sidebar-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F2F3F5;
+        }
+
+        /* 사용자 프로필 섹션 */
+        .user-profile-section {
+            background-color: #0f0f0f;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .user-profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid #5865F2;
+        }
+
+        .user-profile-info {
+            flex: 1;
+        }
+
+        .user-profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-nickname-btn {
+            font-size: 14px;
+            color: #5865F2;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .edit-nickname-btn:hover {
+            color: #7289DA;
+        }
+
+        .user-profile-role {
+            font-size: 13px;
+            color: #949BA4;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            font-size: 13px;
+            color: #B5BAC1;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 16px;
+            margin-bottom: 16px;
+        }
+
+        .user-stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+
+        .user-stat-label {
+            color: #949BA4;
+        }
+
+        .user-stat-value {
+            color: #F2F3F5;
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .profile-btn {
+            padding: 10px 16px;
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .profile-btn:hover {
+            background-color: #2a2a2a;
+        }
+
+        .profile-btn.logout {
+            background-color: #ED4245;
+            color: #FFFFFF;
+        }
+
+        .profile-btn.logout:hover {
+            background-color: #C53030;
+        }
+
+        .login-section {
+            background-color: #0f0f0f;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid #1a1a1a;
+        }
+
+        .login-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 8px;
+        }
+
+        .login-desc {
+            font-size: 14px;
+            color: #949BA4;
+            margin-bottom: 20px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #5865F2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .login-btn:hover {
+            background-color: #4752C4;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        /* 우측 사이드바 - 메뉴 */
+        .sidebar-right {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #000000;
+            border-left: 1px solid #1a1a1a;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .menu-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #949BA4;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            margin-bottom: 4px;
+            color: #B5BAC1;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+        }
+
+        .nav-item.active {
+            background-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 메인 컨텐츠 영역 */
+        .main-content {
+            margin-left: 280px;
+            margin-right: 250px;
+            min-height: 100vh;
+            background-color: #0a0a0a;
             background-image: 
                 radial-gradient(circle at 20% 50%, rgba(88, 101, 242, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(88, 101, 242, 0.05) 0%, transparent 50%);
@@ -30,35 +300,20 @@
             border-bottom: 1px solid #1a1a1a;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 50;
         }
 
         .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 16px 24px;
+            padding: 16px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: #F2F3F5;
-        }
-
-        .logo img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-
-        .logo h1 {
-            font-size: 20px;
+        .page-title-header {
+            font-size: 24px;
             font-weight: 600;
+            color: #F2F3F5;
         }
 
         .nav-buttons {
@@ -68,9 +323,7 @@
 
         /* 컨테이너 */
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 24px;
+            padding: 40px;
         }
 
         /* 페이지 헤더 */
@@ -86,7 +339,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            color: transparent;
         }
 
         .page-subtitle {
@@ -94,12 +346,46 @@
             color: #B5BAC1;
         }
 
+        /* 버튼 스타일 */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background-color: #4752C4;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #2B2D31;
+            color: #F2F3F5;
+        }
+
+        .btn-secondary:hover {
+            background-color: #1E1F22;
+        }
+
         /* 필터 바 */
         .filter-bar {
             background-color: #0f0f0f;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
-            padding: 20px;
+            padding: 16px;
             margin-bottom: 32px;
             display: flex;
             justify-content: space-between;
@@ -117,12 +403,11 @@
             padding: 8px 16px;
             background-color: transparent;
             color: #B5BAC1;
-            border: none;
+            border: 1px solid #2a2a2a;
             border-radius: 8px;
             font-size: 14px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
         .filter-tab:hover {
@@ -133,26 +418,38 @@
         .filter-tab.active {
             background-color: #5865F2;
             color: #FFFFFF;
+            border-color: #5865F2;
         }
 
         /* 파티 그리드 */
         .party-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 24px;
             margin-bottom: 40px;
         }
 
-        /* 파티 카드 */
         .party-card {
             background-color: #0f0f0f;
             border: 1px solid #1a1a1a;
             border-radius: 12px;
-            padding: 24px;
+            padding: 20px;
             transition: all 0.3s;
-            cursor: pointer;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+        }
+
+        .party-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: #5865F2;
+            box-shadow: 0 8px 24px rgba(88, 101, 242, 0.2);
+        }
+
+        .party-card.completed.admin-hover:hover {
+            border-color: #5865F2;
+            border-width: 2px;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
         }
 
         .party-card::before {
@@ -161,20 +458,14 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 4px;
             background: linear-gradient(90deg, #5865F2 0%, #7289DA 100%);
-            transform: translateX(-100%);
-            transition: transform 0.3s;
-        }
-
-        .party-card:hover {
-            border-color: #5865F2;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .party-card:hover::before {
-            transform: translateX(0);
+            opacity: 1;
         }
 
         .party-header {
@@ -182,23 +473,6 @@
             justify-content: space-between;
             align-items: start;
             margin-bottom: 16px;
-        }
-
-        .party-title-section {
-            flex: 1;
-        }
-
-        .party-type-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            background-color: #1a1a1a;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #B5BAC1;
-            margin-bottom: 8px;
         }
 
         .party-title {
@@ -209,87 +483,200 @@
         }
 
         .party-host {
-            font-size: 14px;
+            font-size: 13px;
             color: #949BA4;
         }
 
-        .party-status {
-            padding: 6px 12px;
-            border-radius: 20px;
+        .party-type {
             font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
+            color: #949BA4;
+            margin-top: 4px;
+        }
+
+        .party-status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
         }
 
         .party-status.recruiting {
-            background-color: rgba(59, 165, 92, 0.2);
-            color: #3BA55C;
+            background-color: rgba(87, 242, 135, 0.1);
+            color: #57F287;
         }
 
         .party-status.in_progress {
-            background-color: rgba(250, 166, 26, 0.2);
-            color: #FAA61A;
+            background-color: rgba(254, 231, 92, 0.1);
+            color: #FEE75C;
         }
 
         .party-status.completed {
-            background-color: rgba(116, 127, 141, 0.2);
-            color: #747F8D;
+            background-color: rgba(88, 101, 242, 0.1);
+            color: #5865F2;
         }
 
         .party-info {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #B5BAC1;
         }
 
         .party-info-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #B5BAC1;
-        }
-
-        .party-info-item i {
-            color: #5865F2;
+            gap: 6px;
         }
 
         .party-teams {
             display: flex;
             gap: 12px;
-            padding-top: 20px;
-            border-top: 1px solid #1a1a1a;
+            justify-content: space-between;
         }
 
         .team-info {
             flex: 1;
             text-align: center;
+            background-color: #000000;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 8px;
+            min-height: auto;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .team-info.winner {
+            border-color: #57F287;
+            border-width: 2px;
+            box-shadow: 0 0 10px rgba(87, 242, 135, 0.3);
+        }
+
+        .team-info.loser {
+            border-color: #ED4245;
+            border-width: 2px;
+            box-shadow: 0 0 10px rgba(237, 66, 69, 0.3);
+        }
+
+        .team-result-badge {
+            position: absolute;
+            top: -12px;
+            right: 10px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            background-color: #0f0f0f;
+            border: 1px solid;
+        }
+
+        .team-result-badge.win {
+            color: #57F287;
+            border-color: #57F287;
+        }
+
+        .team-result-badge.lose {
+            color: #ED4245;
+            border-color: #ED4245;
         }
 
         .team-label {
             font-size: 12px;
             color: #949BA4;
             margin-bottom: 4px;
-            text-transform: uppercase;
         }
 
         .team-count {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 600;
-            color: #F2F3F5;
+            margin-bottom: 8px;
         }
 
         .team-count.team1 {
-            color: #5865F2;
+            color: #ED4245; /* 붉은색 */
         }
 
         .team-count.team2 {
-            color: #EB459E;
+            color: #5865F2; /* 푸른색 */
         }
 
         .team-count.waitlist {
-            color: #FAA61A;
+            color: #FEE75C;
+        }
+
+        .team-members {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #949BA4;
+            text-align: left;
+        }
+
+        .team-member-item {
+            margin: 4px 0;
+            padding: 6px 8px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .team-member-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .team-member-country-unit {
+            font-size: 11px;
+            color: #7289DA;
+            margin-bottom: 2px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .country-icon {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+        }
+
+        .team-member-name {
+            color: #F2F3F5;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .team-member-stats {
+            font-size: 10px;
+            color: #949BA4;
+            opacity: 0.8;
+            line-height: 1.2;
+        }
+
+        .team-member-kills {
+            font-size: 11px;
+            color: #FEE75C;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .team-members::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .team-members::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 2px;
+        }
+
+        .team-members::-webkit-scrollbar-thumb {
+            background: #4a4a4a;
+            border-radius: 2px;
+        }
+
+        .team-members::-webkit-scrollbar-thumb:hover {
+            background: #5a5a5a;
         }
 
         /* 빈 상태 */
@@ -300,13 +687,14 @@
 
         .empty-icon {
             font-size: 64px;
-            color: #2a2a2a;
+            color: #4A4D52;
             margin-bottom: 20px;
         }
 
         .empty-title {
             font-size: 24px;
             font-weight: 600;
+            color: #F2F3F5;
             margin-bottom: 8px;
         }
 
@@ -316,74 +704,28 @@
             margin-bottom: 24px;
         }
 
-        /* 버튼 */
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background-color: #5865F2;
-            color: #FFFFFF;
-        }
-
-        .btn-primary:hover {
-            background-color: #4752C4;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
-        }
-
-        .btn-secondary {
-            background-color: #1a1a1a;
-            color: #F2F3F5;
-        }
-
-        .btn-secondary:hover {
-            background-color: #2a2a2a;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
         /* 페이지네이션 */
         .pagination {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
+            margin-top: 40px;
         }
 
         .page-btn {
             padding: 8px 12px;
-            background-color: #0f0f0f;
-            border: 1px solid #1a1a1a;
-            border-radius: 8px;
+            background-color: #2B2D31;
             color: #B5BAC1;
+            border: none;
+            border-radius: 6px;
             font-size: 14px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .page-btn:hover {
-            border-color: #5865F2;
-            color: #F2F3F5;
-        }
-
-        .page-btn.active {
+        .page-btn:hover:not(:disabled) {
             background-color: #5865F2;
-            border-color: #5865F2;
             color: #FFFFFF;
         }
 
@@ -392,9 +734,9 @@
             cursor: not-allowed;
         }
 
-        .page-btn:disabled:hover {
-            border-color: #1a1a1a;
-            color: #B5BAC1;
+        .page-btn.active {
+            background-color: #5865F2;
+            color: #FFFFFF;
         }
 
         /* 로딩 */
@@ -404,14 +746,18 @@
             padding: 40px;
         }
 
+        .loading.show {
+            display: block;
+        }
+
         .spinner {
-            display: inline-block;
             width: 40px;
             height: 40px;
+            margin: 0 auto;
             border: 3px solid #1a1a1a;
             border-top-color: #5865F2;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
@@ -423,150 +769,669 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 16px 20px;
-            background-color: #000000;
+            background-color: #0f0f0f;
             border: 1px solid #1a1a1a;
             border-radius: 8px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.3s;
-            z-index: 1001;
-            pointer-events: none;
+            z-index: 1000;
         }
 
         .toast.show {
             transform: translateY(0);
             opacity: 1;
-            pointer-events: auto;
-        }
-
-        .toast.success {
-            border-color: #3BA55C;
-        }
-
-        .toast.error {
-            border-color: #ED4245;
         }
 
         .toast-icon {
             font-size: 20px;
+            color: #57F287;
+        }
+
+        .toast.error .toast-icon {
+            color: #ED4245;
         }
 
         .toast-message {
             font-size: 14px;
+            color: #F2F3F5;
+        }
+
+        /* 모바일 토글 버튼 */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            color: #F2F3F5;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 101;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-toggle.left {
+            left: 20px;
+        }
+
+        .mobile-toggle.right {
+            right: 20px;
+        }
+
+        /* 닉네임 변경 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 16px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #000000;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #F2F3F5;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn.primary {
+            background-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        .modal-btn.primary:hover {
+            background-color: #4752C4;
+        }
+
+        .modal-btn.secondary {
+            background-color: #2B2D31;
+            color: #F2F3F5;
+        }
+
+        .modal-btn.secondary:hover {
+            background-color: #1E1F22;
         }
 
         /* 반응형 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 24px 16px;
+        @media (max-width: 1200px) {
+            .sidebar-right {
+                width: 220px;
+            }
+            
+            .main-content {
+                margin-right: 220px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar-left {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 101;
             }
 
-            .page-title {
-                font-size: 28px;
+            .sidebar-left.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-right {
+                transform: translateX(100%);
+                transition: transform 0.3s;
+                z-index: 101;
+            }
+
+            .sidebar-right.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .header-content {
+                padding-left: 60px;
+                padding-right: 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
             }
 
             .filter-bar {
-                flex-direction: column;
-                align-items: stretch;
+                padding: 12px;
+            }
+
+            .filter-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
             }
 
             .party-grid {
                 grid-template-columns: 1fr;
             }
 
-            .party-info {
-                grid-template-columns: 1fr;
+            .page-title {
+                font-size: 28px;
             }
+        }
 
-            .nav-buttons {
-                flex-direction: column;
-                width: 100%;
-            }
+        /* 전적 기입 모달 */
+        .record-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
 
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+        .record-modal-content {
+            background-color: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .record-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .record-modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #F2F3F5;
+        }
+
+        .record-modal-close {
+            font-size: 24px;
+            color: #949BA4;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .record-modal-close:hover {
+            color: #F2F3F5;
+        }
+
+        .record-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .record-tab {
+            padding: 10px 20px;
+            background-color: #1a1a1a;
+            color: #B5BAC1;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .record-tab.active {
+            background-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        .record-section {
+            margin-bottom: 24px;
+        }
+
+        .record-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 16px;
+        }
+
+        .winner-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .winner-option {
+            flex: 1;
+            padding: 16px;
+            background-color: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .winner-option:hover {
+            border-color: #5865F2;
+        }
+
+        .winner-option.selected {
+            background-color: #5865F2;
+            border-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        .winner-option.win {
+            border-color: #57F287;
+        }
+
+        .winner-option.win.selected {
+            background-color: #57F287;
+            border-color: #57F287;
+            color: #000000;
+        }
+
+        .winner-option.lose {
+            border-color: #ED4245;
+        }
+
+        .winner-option.lose.selected {
+            background-color: #ED4245;
+            border-color: #ED4245;
+            color: #FFFFFF;
+        }
+
+        .participants-list {
+            background-color: #000000;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .participant-record {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            margin-bottom: 8px;
+            background-color: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 6px;
+        }
+
+        .participant-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .participant-team-badge {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .participant-team-badge.team1 {
+            background-color: rgba(237, 66, 69, 0.2);
+            color: #ED4245;
+        }
+
+        .participant-team-badge.team2 {
+            background-color: rgba(88, 101, 242, 0.2);
+            color: #5865F2;
+        }
+
+        .participant-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #F2F3F5;
+        }
+
+        .kill-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kill-input-label {
+            font-size: 13px;
+            color: #949BA4;
+        }
+
+        .kill-input {
+            width: 80px;
+            padding: 8px 12px;
+            background-color: #000000;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            color: #F2F3F5;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .kill-input:focus {
+            outline: none;
+            border-color: #5865F2;
+        }
+
+        .record-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .record-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .record-btn.save {
+            background-color: #57F287;
+            color: #000000;
+        }
+
+        .record-btn.save:hover {
+            background-color: #4CC76E;
+        }
+
+        .record-btn.delete {
+            background-color: #ED4245;
+            color: #FFFFFF;
+        }
+
+        .record-btn.delete:hover {
+            background-color: #C53030;
+        }
+
+        .record-btn.cancel {
+            background-color: #2B2D31;
+            color: #F2F3F5;
+        }
+
+        .record-btn.cancel:hover {
+            background-color: #1E1F22;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <!-- 헤더 -->
-    <header class="header">
-        <div class="header-content">
-            <a href="/" class="logo">
-                <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
-                <h1>Aimdot.dev 파티 시스템</h1>
-            </a>
-            <div class="nav-buttons">
-                <a href="/party/create" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    파티 생성
+    <!-- 모바일 토글 버튼 -->
+    <button class="mobile-toggle left" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <button class="mobile-toggle right" onclick="toggleMenu()">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+
+    <!-- 좌측 사이드바 - 사용자 프로필 -->
+    <aside class="sidebar-left" id="sidebar-left">
+        <div class="sidebar-logo">
+            <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
+            <h2>Aimdot.dev</h2>
+        </div>
+
+        <!-- 로그인/프로필 섹션 -->
+        <div id="auth-section">
+            <!-- 로그인하지 않은 경우 -->
+            <div class="login-section" id="login-section">
+                <h3 class="login-title">로그인하세요</h3>
+                <p class="login-desc">Discord로 로그인하여 모든 기능을 이용하세요</p>
+                <button class="login-btn" onclick="window.location.href='/auth/discord'">
+                    <i class="fab fa-discord"></i>
+                    Discord로 로그인
+                </button>
+            </div>
+
+            <!-- 로그인한 경우 -->
+            <div class="user-profile-section" id="user-profile-section" style="display: none;">
+                <div class="user-profile-header">
+                    <img src="" alt="Avatar" class="user-profile-avatar" id="user-profile-avatar">
+                    <div class="user-profile-info">
+                        <div class="user-profile-name">
+                            <span id="user-profile-name">사용자</span>
+                            <i class="fas fa-edit edit-nickname-btn" onclick="openNicknameModal()"></i>
+                        </div>
+                        <div class="user-profile-role" id="user-profile-role">Guest</div>
+                    </div>
+                </div>
+                
+                <div class="user-stats">
+                    <div class="user-stat-item">
+                        <span class="user-stat-label">전적</span>
+                        <span class="user-stat-value" id="stat-record">0승 0패</span>
+                    </div>
+                    <div class="user-stat-item">
+                        <span class="user-stat-label">승률</span>
+                        <span class="user-stat-value" id="stat-winrate">0%</span>
+                    </div>
+                    <div class="user-stat-item">
+                        <span class="user-stat-label">평균 킬</span>
+                        <span class="user-stat-value" id="stat-avgkill">0</span>
+                    </div>
+                    <div class="user-stat-item">
+                        <span class="user-stat-label">정규전</span>
+                        <span class="user-stat-value" id="stat-ranked">0회</span>
+                    </div>
+                    <div class="user-stat-item">
+                        <span class="user-stat-label">모의전</span>
+                        <span class="user-stat-value" id="stat-practice">0회</span>
+                    </div>
+                    <div class="user-stat-item">
+                        <span class="user-stat-label">총 게임</span>
+                        <span class="user-stat-value" id="stat-total">0회</span>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <button class="profile-btn" onclick="viewFullProfile()">
+                        <i class="fas fa-user"></i>
+                        프로필 보기
+                    </button>
+                    <a href="/auth/logout" class="profile-btn logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        로그아웃
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 우측 사이드바 - 메뉴 -->
+    <aside class="sidebar-right" id="sidebar-right">
+        <div class="menu-header">
+            <i class="fas fa-bars"></i>
+            <span>메뉴</span>
+        </div>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-title">기능</div>
+                <a href="/" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>홈</span>
+                </a>
+                <a href="/dashboard" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>대시보드</span>
                 </a>
             </div>
-        </div>
-    </header>
 
-    <!-- 메인 컨테이너 -->
-    <div class="container">
-        <!-- 페이지 헤더 -->
-        <div class="page-header">
-            <h1 class="page-title">파티 모집</h1>
-            <p class="page-subtitle">함께 플레이할 파티를 찾아보세요</p>
-        </div>
-
-        <!-- 필터 바 -->
-        <div class="filter-bar">
-            <div class="filter-tabs">
-                <button class="filter-tab active" data-status="recruiting">
-                    <i class="fas fa-bullhorn"></i> 모집 중
-                </button>
-                <button class="filter-tab" data-status="in_progress">
-                    <i class="fas fa-play"></i> 진행 중
-                </button>
-                <button class="filter-tab" data-status="completed">
-                    <i class="fas fa-check"></i> 완료됨
-                </button>
-                <button class="filter-tab" data-status="all">
-                    <i class="fas fa-list"></i> 전체
-                </button>
+            <div class="nav-section">
+                <div class="nav-title">파티</div>
+                <a href="#ranking" class="nav-item" data-page="ranking">
+                    <i class="fas fa-trophy"></i>
+                    <span>랭킹</span>
+                </a>
+                <a href="#record-search" class="nav-item" data-page="record-search">
+                    <i class="fas fa-search"></i>
+                    <span>전적 검색</span>
+                </a>
             </div>
-            <button class="btn btn-secondary" onclick="refreshParties()">
-                <i class="fas fa-sync-alt"></i>
-                새로고침
-            </button>
-        </div>
+        </nav>
+    </aside>
 
-        <!-- 로딩 -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-        </div>
-
-        <!-- 파티 그리드 -->
-        <div class="party-grid" id="partyGrid">
-            <!-- 파티 카드들이 여기에 동적으로 생성됩니다 -->
-        </div>
-
-        <!-- 빈 상태 -->
-        <div class="empty-state" id="emptyState" style="display: none;">
-            <div class="empty-icon">
-                <i class="fas fa-users-slash"></i>
+    <!-- 메인 컨텐츠 -->
+    <div class="main-content">
+        <!-- 헤더 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="page-title-header">파티 시스템</h1>
+                <div class="nav-buttons">
+                    <a href="/party/create" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        파티 생성
+                    </a>
+                </div>
             </div>
-            <h2 class="empty-title">파티가 없습니다</h2>
-            <p class="empty-desc">현재 모집 중인 파티가 없습니다. 직접 파티를 만들어보세요!</p>
-            <a href="/party/create" class="btn btn-primary">
-                <i class="fas fa-plus"></i>
-                파티 생성하기
-            </a>
-        </div>
+        </header>
 
-        <!-- 페이지네이션 -->
-        <div class="pagination" id="pagination">
-            <!-- 페이지 버튼들이 여기에 동적으로 생성됩니다 -->
+        <!-- 컨테이너 -->
+        <div class="container">
+            <!-- 페이지 헤더 -->
+            <div class="page-header">
+                <h1 class="page-title">파티 모집</h1>
+                <p class="page-subtitle">함께 플레이할 파티를 찾아보세요</p>
+            </div>
+
+            <!-- 필터 바 -->
+            <div class="filter-bar">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-status="recruiting">
+                        <i class="fas fa-bullhorn"></i> 모집 중
+                    </button>
+                    <button class="filter-tab" data-status="completed">
+                        <i class="fas fa-check"></i> 완료됨
+                    </button>
+                    <button class="filter-tab" data-status="all">
+                        <i class="fas fa-list"></i> 전체
+                    </button>
+                </div>
+                <div class="filter-actions" style="display: flex; gap: 12px;">
+                    <a href="/party/create" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        파티 생성
+                    </a>
+                    <button class="btn btn-secondary" onclick="refreshParties()">
+                        <i class="fas fa-sync-alt"></i>
+                        새로고침
+                    </button>
+                </div>
+            </div>
+
+            <!-- 로딩 -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+            </div>
+
+            <!-- 파티 그리드 -->
+            <div class="party-grid" id="partyGrid">
+                <!-- 파티 카드들이 여기에 동적으로 생성됩니다 -->
+            </div>
+
+            <!-- 빈 상태 -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-users-slash"></i>
+                </div>
+                <h2 class="empty-title">파티가 없습니다</h2>
+                <p class="empty-desc">현재 모집 중인 파티가 없습니다. 직접 파티를 만들어보세요!</p>
+                <a href="/party/create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    파티 생성하기
+                </a>
+            </div>
+
+            <!-- 페이지네이션 -->
+            <div class="pagination" id="pagination">
+                <!-- 페이지 버튼들이 여기에 동적으로 생성됩니다 -->
+            </div>
         </div>
     </div>
 
@@ -576,16 +1441,94 @@
         <span class="toast-message"></span>
     </div>
 
+    <!-- 닉네임 변경 모달 -->
+    <div class="modal" id="nickname-modal">
+        <div class="modal-content">
+            <h3 class="modal-header">닉네임 변경</h3>
+            <input type="text" class="modal-input" id="nickname-input" placeholder="새 닉네임을 입력하세요" maxlength="32">
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeNicknameModal()">취소</button>
+                <button class="modal-btn primary" onclick="saveNickname()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 전적 기입 모달 -->
+    <div class="record-modal" id="record-modal">
+        <div class="record-modal-content">
+            <div class="record-modal-header">
+                <h2 class="record-modal-title">파티 전적 관리</h2>
+                <button class="record-modal-close" onclick="closeRecordModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="record-tabs">
+                <button class="record-tab active" onclick="switchTab('record')">전적 기입</button>
+                <button class="record-tab" onclick="switchTab('delete')">파티 삭제</button>
+            </div>
+
+            <!-- 전적 기입 탭 -->
+            <div class="tab-content active" id="record-tab">
+                <div class="record-section">
+                    <div class="record-section-title" id="party-info-title">파티 정보</div>
+                    <div id="party-info-display"></div>
+                </div>
+
+                <div class="record-section" id="winner-section">
+                    <div class="record-section-title">승리 결과</div>
+                    <div class="winner-selector" id="winner-selector">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+
+                <div class="record-section">
+                    <div class="record-section-title">참여자 킬 수 입력</div>
+                    <div id="participants-record-list">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+
+                <div class="record-actions">
+                    <button class="record-btn cancel" onclick="closeRecordModal()">취소</button>
+                    <button class="record-btn save" onclick="savePartyRecord()">
+                        <i class="fas fa-save"></i> 전적 저장
+                    </button>
+                </div>
+            </div>
+
+            <!-- 파티 삭제 탭 -->
+            <div class="tab-content" id="delete-tab">
+                <div class="record-section">
+                    <div class="record-section-title">파티 삭제 확인</div>
+                    <p style="color: #949BA4; margin-bottom: 16px;">
+                        이 파티를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+                    </p>
+                    <div id="delete-party-info"></div>
+                </div>
+
+                <div class="record-actions">
+                    <button class="record-btn cancel" onclick="closeRecordModal()">취소</button>
+                    <button class="record-btn delete" onclick="deleteParty()">
+                        <i class="fas fa-trash"></i> 파티 삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 전역 변수
         let currentStatus = 'recruiting';
         let currentPage = 1;
         const partiesPerPage = 12;
         let isLoading = false;
+        let userData = null;
 
         // 초기화
         document.addEventListener('DOMContentLoaded', () => {
             initializeEventListeners();
+            loadUserProfile();
             loadParties();
             
             // 30초마다 자동 새로고침 (모집 중인 파티만)
@@ -594,6 +1537,162 @@
                     loadParties(true); // silent refresh
                 }
             }, 30000);
+        });
+
+        // 사이드바 토글
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar-left');
+            sidebar.classList.toggle('open');
+        }
+
+        // 메뉴 토글 (우측)
+        function toggleMenu() {
+            const menu = document.getElementById('sidebar-right');
+            menu.classList.toggle('open');
+        }
+
+        // 외부 클릭으로 사이드바 닫기
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024) {
+                const leftSidebar = document.getElementById('sidebar-left');
+                const rightSidebar = document.getElementById('sidebar-right');
+                const toggleButtons = document.querySelectorAll('.mobile-toggle');
+                
+                // 좌측 사이드바 외부 클릭 체크
+                if (leftSidebar.classList.contains('open') && 
+                    !leftSidebar.contains(e.target) && 
+                    !Array.from(toggleButtons).some(btn => btn.contains(e.target))) {
+                    leftSidebar.classList.remove('open');
+                }
+                
+                // 우측 사이드바 외부 클릭 체크
+                if (rightSidebar.classList.contains('open') && 
+                    !rightSidebar.contains(e.target) && 
+                    !Array.from(toggleButtons).some(btn => btn.contains(e.target))) {
+                    rightSidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // 사용자 프로필 로드
+        async function loadUserProfile() {
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                
+                if (response.ok && data.user) {
+                    userData = data.user;
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('user-profile-section').style.display = 'block';
+                    
+                    // 프로필 정보 표시
+                    const avatarUrl = userData.avatar 
+                        ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
+                        : 'https://cdn.discordapp.com/embed/avatars/0.png';
+                    document.getElementById('user-profile-avatar').src = avatarUrl;
+                    document.getElementById('user-profile-name').textContent = userData.nickname || userData.username;
+                    document.getElementById('user-profile-role').textContent = getRoleName(userData.dashboardRole);
+                    
+                    // 통계 업데이트
+                    await updateUserStats();
+                }
+            } catch (error) {
+                console.error('프로필 로드 오류:', error);
+            }
+        }
+        
+        // 권한 이름 변환
+        function getRoleName(role) {
+            const roleNames = {
+                'owner': 'Owner',
+                'admin': 'Admin',
+                'subadmin': 'Sub Admin',
+                'member': 'Member',
+                'guest': 'Guest'
+            };
+            return roleNames[role] || 'Guest';
+        }
+
+        // 사용자 통계 업데이트
+        async function updateUserStats() {
+            try {
+                const response = await fetch('/api/user/stats');
+                if (response.ok) {
+                    const stats = await response.json();
+                    const totalGames = (stats.wins || 0) + (stats.losses || 0);
+                    const winRate = totalGames > 0 ? Math.round((stats.wins / totalGames) * 100) : 0;
+                    
+                    document.getElementById('stat-record').textContent = `${stats.wins || 0}승 ${stats.losses || 0}패`;
+                    document.getElementById('stat-winrate').textContent = `${winRate}%`;
+                    document.getElementById('stat-avgkill').textContent = (stats.avgKills || 0).toFixed(1);
+                    document.getElementById('stat-ranked').textContent = `${stats.rankedGames || 0}회`;
+                    document.getElementById('stat-practice').textContent = `${stats.practiceGames || 0}회`;
+                    document.getElementById('stat-total').textContent = `${totalGames}회`;
+                }
+            } catch (error) {
+                console.error('통계 로드 오류:', error);
+                // 오류 시 기본값 표시
+                document.getElementById('stat-record').textContent = '0승 0패';
+                document.getElementById('stat-winrate').textContent = '0%';
+                document.getElementById('stat-avgkill').textContent = '0';
+                document.getElementById('stat-ranked').textContent = '0회';
+                document.getElementById('stat-practice').textContent = '0회';
+                document.getElementById('stat-total').textContent = '0회';
+            }
+        }
+
+        // 닉네임 모달
+        function openNicknameModal() {
+            document.getElementById('nickname-modal').style.display = 'flex';
+            document.getElementById('nickname-input').value = userData?.nickname || userData?.username || '';
+            document.getElementById('nickname-input').focus();
+        }
+
+        function closeNicknameModal() {
+            document.getElementById('nickname-modal').style.display = 'none';
+        }
+
+        // 닉네임 저장
+        async function saveNickname() {
+            const nickname = document.getElementById('nickname-input').value.trim();
+            if (!nickname) {
+                showToast('닉네임을 입력해주세요', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/user/nickname', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nickname })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('user-profile-name').textContent = data.nickname;
+                    userData.nickname = data.nickname;
+                    closeNicknameModal();
+                    showToast('닉네임이 변경되었습니다');
+                } else {
+                    const error = await response.json();
+                    showToast(error.error || '닉네임 변경 실패', 'error');
+                }
+            } catch (error) {
+                showToast('닉네임 변경 중 오류가 발생했습니다', 'error');
+            }
+        }
+
+        // 프로필 전체 보기
+        function viewFullProfile() {
+            // TODO: 프로필 페이지로 이동 또는 모달 표시
+            showToast('프로필 기능은 준비 중입니다', 'info');
+        }
+
+        // 모달 외부 클릭으로 닫기
+        document.getElementById('nickname-modal')?.addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeNicknameModal();
+            }
         });
 
         // 이벤트 리스너 초기화
@@ -608,52 +1707,75 @@
                     loadParties();
                 });
             });
+            
+            // 네비게이션 클릭 이벤트
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (item.href && !item.href.includes('#')) return; // 실제 링크는 그대로 동작
+                    
+                    e.preventDefault();
+                    const page = item.dataset.page;
+                    if (page) {
+                        showToast(`${item.querySelector('span').textContent} 기능은 준비 중입니다`, 'info');
+                    }
+                });
+            });
         }
 
         // 파티 목록 로드
         async function loadParties(silent = false) {
             if (isLoading) return;
             isLoading = true;
-            
+
             if (!silent) {
-                showLoading();
-                hideEmptyState();
+                document.getElementById('loading').classList.add('show');
+                document.getElementById('partyGrid').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'none';
             }
 
             try {
-                const response = await fetch(`/party/api/list?status=${currentStatus}&page=${currentPage}&limit=${partiesPerPage}`);
-                const data = await response.json();
+                const params = new URLSearchParams({
+                    status: currentStatus === 'all' ? '' : currentStatus,
+                    page: currentPage,
+                    limit: partiesPerPage
+                });
 
-                if (response.ok) {
-                    displayParties(data.parties);
-                    displayPagination(data.pagination);
-                } else {
-                    throw new Error(data.error || '파티 목록을 불러올 수 없습니다');
+                const response = await fetch(`/party/api/list?${params}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+
+                const data = await response.json();
+                displayParties(data.parties || []);
+                displayPagination(data.pagination || {});
+
             } catch (error) {
                 console.error('파티 로드 오류:', error);
                 if (!silent) {
                     showToast('파티 목록을 불러올 수 없습니다', 'error');
-                    showEmptyState();
+                    document.getElementById('emptyState').style.display = 'block';
                 }
             } finally {
                 isLoading = false;
                 if (!silent) {
-                    hideLoading();
+                    document.getElementById('loading').classList.remove('show');
                 }
             }
         }
 
-        // 파티 카드 표시
+        // 파티 표시
         function displayParties(parties) {
             const grid = document.getElementById('partyGrid');
             grid.innerHTML = '';
+            grid.style.display = 'grid';
 
-            if (parties.length === 0) {
-                showEmptyState();
+            if (!parties || parties.length === 0) {
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('pagination').style.display = 'none';
                 return;
             }
 
+            document.getElementById('emptyState').style.display = 'none';
             parties.forEach(party => {
                 const card = createPartyCard(party);
                 grid.appendChild(card);
@@ -664,13 +1786,29 @@
         function createPartyCard(party) {
             const card = document.createElement('div');
             card.className = 'party-card';
-            card.onclick = () => window.location.href = `/party/${party.partyId}`;
+            
+            // 완료된 파티이고 관리자 권한이 있으면 특별한 클래스 추가
+            if (party.status === 'completed' && userData && 
+                ['owner', 'admin', 'subadmin'].includes(userData.dashboardRole)) {
+                card.className += ' completed admin-hover';
+                card.onclick = (e) => {
+                    e.stopPropagation();
+                    openRecordModal(party);
+                };
+            } else {
+                card.onclick = () => window.location.href = `/party/${party.partyId || party._id}`;
+            }
 
-            const team1Count = party.participants.filter(p => p.team === 'team1').length;
-            const team2Count = party.participants.filter(p => p.team === 'team2').length;
-            const waitlistCount = party.participants.filter(p => p.team === 'waitlist').length;
+            const statusTexts = {
+                recruiting: '모집 중',
+                completed: '완료됨'
+            };
 
             const typeEmojis = {
+                'custom_1vs1': '🎯',
+                'custom_2vs2': '👥',
+                'custom_3vs3': '🌟',
+                'ranked': '🏆',
                 '정규전': '⚔️',
                 '모의전': '🛡️',
                 '훈련': '🎯',
@@ -679,54 +1817,143 @@
                 '레이드': '🏜️'
             };
 
-            const statusColors = {
-                'recruiting': 'recruiting',
-                'in_progress': 'in_progress',
-                'completed': 'completed',
-                'cancelled': 'completed'
+            const typeNames = {
+                'custom_1vs1': '커스텀 1vs1',
+                'custom_2vs2': '커스텀 2vs2',
+                'custom_3vs3': '커스텀 3vs3',
+                'ranked': '랭크전',
+                '정규전': '정규전',
+                '모의전': '모의전',
+                '훈련': '훈련',
+                'PVP': 'PVP',
+                '검은발톱': '검은발톱',
+                '레이드': '레이드'
             };
 
-            const statusTexts = {
-                'recruiting': '모집 중',
-                'in_progress': '진행 중',
-                'completed': '완료',
-                'cancelled': '취소됨'
+            // 팀별 인원 계산
+            const team1Count = party.participants ? party.participants.filter(p => p.team === 'team1').length : 0;
+            const team2Count = party.participants ? party.participants.filter(p => p.team === 'team2').length : 0;
+            const waitlistCount = party.participants ? party.participants.filter(p => p.team === 'waitlist').length : 0;
+
+            // 국가 이미지 URL 정의
+            const countryImages = {
+                'empire': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[remade+upscaled].png',
+                'vlandia': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_v_[upscaled].png',
+                'battania': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[upscaled].png',
+                'sturgia': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/sturgia_3_[upscaled].png',
+                'khuzait': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/khuzait_2_[upscaled].png',
+                'aserai': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/aserai_2_%7Bupscaled].png'
+            };
+
+            const unitTypes = {
+                'infantry': '보병',
+                'archer': '궁수',
+                'cavalry': '기병',
+                'horse_archer': '궁기병',
+                '폴암보병': '폴암보병',
+                '방패보병': '방패보병',
+                '궁병': '궁병',
+                '석궁병': '석궁병',
+                '창병': '창병',
+                '궁기병': '궁기병',
+                '창기병': '창기병',
+                'shield_infantry': '방패보병',
+                'polearm_infantry': '폴암보병',
+                'archer': '궁병',
+                'crossbow': '석궁병',
+                'spearman': '창병',
+                'mounted_archer': '궁기병',
+                'lancer': '창기병'
+            };
+
+            // 참여자 목록 생성 함수 - 수정된 부분
+            const createMembersList = (members, teamName, party) => {
+                if (!members || members.length === 0) return '';
+                
+                return members.map(p => {
+                    const name = escapeHtml(p.nickname || p.username || '알 수 없음');
+                    const avgKills = p.avgKills !== undefined ? p.avgKills.toFixed(1) : '0';
+                    const killRank = p.killRank !== undefined ? p.killRank : 0;
+                    const winRate = p.winRate !== undefined ? p.winRate : 0;
+                    const teamRank = p.teamRank !== undefined ? p.teamRank : 0;
+                    
+                    // 국가 이미지, 티어, 병종 표시
+                    const countryImg = p.country && countryImages[p.country] ? 
+                        `<img src="${countryImages[p.country]}" alt="${p.country}" class="country-icon">` : '';
+                    const tier = p.tier || '5t'; // 기본값 5t
+                    const unitName = p.unit ? (unitTypes[p.unit] || p.unit) : '';
+                    
+                    let memberHtml = `
+                        <div class="team-member-item">
+                            <div class="team-member-name">${name}</div>
+                            <div class="team-member-country-unit">
+                                ${countryImg} ${tier} ${unitName}
+                            </div>
+                            <div class="team-member-stats">K/R: ${avgKills}</div>
+                            <div class="team-member-stats">W/R: ${winRate} %</div>
+                            <div class="team-member-stats">T/R: ${teamRank}</div>`;
+                    
+                    // 전적이 기록된 경우 킬 수 표시
+                    if (party.recordSaved && party.matchResult && party.matchResult.participantKills) {
+                        const kills = party.matchResult.participantKills[p.userId];
+                        if (kills !== undefined) {
+                            memberHtml += `<div class="team-member-kills">⚔️ 킬: ${kills}</div>`;
+                        }
+                    }
+                    
+                    memberHtml += `</div>`;
+                    return memberHtml;
+                }).join('');
             };
 
             card.innerHTML = `
                 <div class="party-header">
-                    <div class="party-title-section">
-                        <div class="party-type-badge">
-                            <span>${typeEmojis[party.type] || '🎮'}</span>
-                            <span>${party.type}</span>
-                        </div>
-                        <h3 class="party-title">${escapeHtml(party.title)}</h3>
-                        <p class="party-host">주최: ${escapeHtml(party.hostName || '알 수 없음')}</p>
+                    <div>
+                        <h3 class="party-title">
+                            ${typeEmojis[party.type] || '🎮'} ${escapeHtml(party.title)}
+                        </h3>
+                        <p class="party-host">주최: ${escapeHtml(party.hostNickname || party.hostName || '알 수 없음')}</p>
+                        <p class="party-type">${typeNames[party.type] || party.type || '커스텀'}</p>
                     </div>
-                    <span class="party-status ${statusColors[party.status]}">${statusTexts[party.status]}</span>
+                    <span class="party-status ${party.status}">
+                        ${statusTexts[party.status]}
+                    </span>
                 </div>
                 <div class="party-info">
                     <div class="party-info-item">
-                        <i class="fas fa-calendar"></i>
+                        <i class="fas fa-clock"></i>
                         <span>${party.startTime ? formatDate(party.startTime) : '시간 미정'}</span>
                     </div>
                     <div class="party-info-item">
                         <i class="fas fa-users"></i>
-                        <span>참여자 ${party.participants.length}명</span>
+                        <span>참여자 ${party.participants ? party.participants.length : 0}명</span>
                     </div>
                 </div>
                 <div class="party-teams">
-                    <div class="team-info">
+                    <div class="team-info ${getTeamClass('team1', party)}">
+                        ${getTeamResultBadge('team1', party)}
                         <div class="team-label">팀 1</div>
                         <div class="team-count team1">${team1Count}</div>
+                        <div class="team-members">
+                            ${party.participants ? createMembersList(party.participants.filter(p => p.team === 'team1'), 'team1', party) : ''}
+                        </div>
                     </div>
-                    <div class="team-info">
-                        <div class="team-label">팀 2</div>
-                        <div class="team-count team2">${team2Count}</div>
-                    </div>
+                    ${party.type !== '정규전' ? `
+                        <div class="team-info ${getTeamClass('team2', party)}">
+                            ${getTeamResultBadge('team2', party)}
+                            <div class="team-label">팀 2</div>
+                            <div class="team-count team2">${team2Count}</div>
+                            <div class="team-members">
+                                ${party.participants ? createMembersList(party.participants.filter(p => p.team === 'team2'), 'team2', party) : ''}
+                            </div>
+                        </div>
+                    ` : ''}
                     <div class="team-info">
                         <div class="team-label">대기</div>
                         <div class="team-count waitlist">${waitlistCount}</div>
+                        <div class="team-members">
+                            ${party.participants ? createMembersList(party.participants.filter(p => p.team === 'waitlist'), 'waitlist', party) : ''}
+                        </div>
                     </div>
                 </div>
             `;
@@ -774,7 +2001,6 @@
                     const dots = document.createElement('span');
                     dots.textContent = '...';
                     dots.style.color = '#949BA4';
-                    dots.style.padding = '0 8px';
                     container.appendChild(dots);
                 }
             }
@@ -793,87 +2019,336 @@
             container.appendChild(nextBtn);
         }
 
-        // 유틸리티 함수
-        function showLoading() {
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('partyGrid').style.display = 'none';
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('partyGrid').style.display = 'grid';
-        }
-
-        function showEmptyState() {
-            document.getElementById('emptyState').style.display = 'block';
-            document.getElementById('partyGrid').style.display = 'none';
-            document.getElementById('pagination').style.display = 'none';
-        }
-
-        function hideEmptyState() {
-            document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('pagination').style.display = 'flex';
-        }
-
+        // 새로고침
         function refreshParties() {
-            const refreshBtn = event.target.closest('.btn-secondary');
-            refreshBtn.disabled = true;
-            refreshBtn.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> 새로고침 중...';
-            
-            loadParties().finally(() => {
-                refreshBtn.disabled = false;
-                refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> 새로고침';
-                showToast('파티 목록을 새로고침했습니다', 'success');
-            });
+            loadParties();
+            showToast('파티 목록을 새로고침했습니다');
         }
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diff = date - now;
-            
-            // 오늘인 경우
-            if (date.toDateString() === now.toDateString()) {
-                return `오늘 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-            }
-            
-            // 내일인 경우
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            if (date.toDateString() === tomorrow.toDateString()) {
-                return `내일 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-            }
-            
-            // 이번 주인 경우
-            if (diff > 0 && diff < 7 * 24 * 60 * 60 * 1000) {
-                const days = ['일', '월', '화', '수', '목', '금', '토'];
-                return `${days[date.getDay()]}요일 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-            }
-            
-            // 그 외
-            return `${date.getMonth() + 1}/${date.getDate()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
+        // 토스트 알림
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const icon = toast.querySelector('.toast-icon');
-            const msg = toast.querySelector('.toast-message');
+            const messageEl = toast.querySelector('.toast-message');
 
             toast.className = `toast ${type}`;
-            icon.className = type === 'success' ? 'fas fa-check-circle toast-icon' : 'fas fa-exclamation-circle toast-icon';
-            msg.textContent = message;
+            icon.className = `fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'} toast-icon`;
+            messageEl.textContent = message;
 
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
         }
+
+        // 날짜 포맷
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = date - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            if (days > 0) {
+                return `${days}일 후`;
+            } else if (hours > 0) {
+                return `${hours}시간 후`;
+            } else if (diff > 0) {
+                return '곧 시작';
+            } else {
+                return '진행 중';
+            }
+        }
+
+        // HTML 이스케이프
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 팀 클래스 결정 함수
+        function getTeamClass(team, party) {
+            if (!party.recordSaved || !party.matchResult) return '';
+            
+            const winner = party.matchResult.winner;
+            
+            // 정규전의 경우
+            if (party.type === '정규전') {
+                // 정규전은 전체 팀이 승리 또는 패배
+                if (winner === 'win') {
+                    return 'winner';
+                } else if (winner === 'lose') {
+                    return 'loser';
+                }
+            }
+            // 모의전의 경우
+            else if (party.type === '모의전') {
+                if (winner === team) {
+                    return 'winner';
+                } else if (winner && winner !== team) {
+                    return 'loser';
+                }
+            }
+            
+            return '';
+        }
+
+        // 팀 결과 배지 생성 함수
+        function getTeamResultBadge(team, party) {
+            if (!party.recordSaved || !party.matchResult) return '';
+            
+            const winner = party.matchResult.winner;
+            
+            // 정규전의 경우
+            if (party.type === '정규전') {
+                if (winner === 'win') {
+                    return '<div class="team-result-badge win">승리</div>';
+                } else if (winner === 'lose') {
+                    return '<div class="team-result-badge lose">패배</div>';
+                }
+            }
+            // 모의전의 경우
+            else if (party.type === '모의전') {
+                if (winner === team) {
+                    return '<div class="team-result-badge win">승리</div>';
+                } else if (winner && winner !== team) {
+                    return '<div class="team-result-badge lose">패배</div>';
+                }
+            }
+            
+            return '';
+        }
+
+        // 전적 모달 관련 변수
+        let currentPartyForRecord = null;
+        let selectedWinner = null;
+
+        // 전적 모달 열기
+        function openRecordModal(party) {
+            currentPartyForRecord = party;
+            selectedWinner = null;
+            
+            // 파티 타입 확인 (정규전, 모의전만 가능)
+            if (party.type !== '정규전' && party.type !== '모의전') {
+                showToast('정규전과 모의전만 전적 기입이 가능합니다', 'error');
+                return;
+            }
+            
+            document.getElementById('record-modal').style.display = 'flex';
+            
+            // 파티 정보 표시
+            const partyInfoHtml = `
+                <div style="background-color: #000000; padding: 16px; border-radius: 8px; border: 1px solid #1a1a1a;">
+                    <div style="font-size: 18px; font-weight: 600; color: #F2F3F5; margin-bottom: 8px;">
+                        ${escapeHtml(party.title)}
+                    </div>
+                    <div style="font-size: 14px; color: #949BA4;">
+                        타입: ${party.type} | 주최자: ${escapeHtml(party.hostNickname || party.hostName)}
+                    </div>
+                </div>
+            `;
+            document.getElementById('party-info-display').innerHTML = partyInfoHtml;
+            document.getElementById('delete-party-info').innerHTML = partyInfoHtml;
+            
+            // 승리 선택 옵션 생성
+            const winnerSelector = document.getElementById('winner-selector');
+            if (party.type === '정규전') {
+                winnerSelector.innerHTML = `
+                    <div class="winner-option win" data-winner="win" onclick="selectWinner('win')">
+                        <i class="fas fa-trophy"></i> 승리
+                    </div>
+                    <div class="winner-option lose" data-winner="lose" onclick="selectWinner('lose')">
+                        <i class="fas fa-times"></i> 패배
+                    </div>
+                `;
+            } else if (party.type === '모의전') {
+                winnerSelector.innerHTML = `
+                    <div class="winner-option" data-winner="team1" onclick="selectWinner('team1')">
+                        <i class="fas fa-flag"></i> 1팀 승리
+                    </div>
+                    <div class="winner-option" data-winner="team2" onclick="selectWinner('team2')">
+                        <i class="fas fa-flag"></i> 2팀 승리
+                    </div>
+                `;
+            }
+            
+            // 참여자 목록 생성
+            generateParticipantsList(party);
+            
+            // 첫 번째 탭 활성화
+            switchTab('record');
+        }
+
+        // 전적 모달 닫기
+        function closeRecordModal() {
+            document.getElementById('record-modal').style.display = 'none';
+            currentPartyForRecord = null;
+            selectedWinner = null;
+        }
+
+        // 탭 전환
+        function switchTab(tabName) {
+            // 모든 탭과 컨텐츠 비활성화
+            document.querySelectorAll('.record-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 선택된 탭 활성화
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        // 승자 선택
+        function selectWinner(winner) {
+            selectedWinner = winner;
+            document.querySelectorAll('.winner-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-winner="${winner}"]`).classList.add('selected');
+        }
+
+        // 참여자 목록 생성
+        function generateParticipantsList(party) {
+            const listContainer = document.getElementById('participants-record-list');
+            listContainer.innerHTML = '';
+            
+            if (!party.participants || party.participants.length === 0) {
+                listContainer.innerHTML = '<p style="color: #949BA4;">참여자가 없습니다.</p>';
+                return;
+            }
+            
+            // 팀별로 그룹화
+            const team1 = party.participants.filter(p => p.team === 'team1');
+            const team2 = party.participants.filter(p => p.team === 'team2');
+            
+            // 팀1 참여자
+            if (team1.length > 0) {
+                const team1Container = document.createElement('div');
+                team1Container.className = 'participants-list';
+                team1Container.innerHTML = '<div style="font-size: 14px; font-weight: 600; color: #ED4245; margin-bottom: 12px;">1팀</div>';
+                
+                team1.forEach(participant => {
+                    team1Container.appendChild(createParticipantRecordItem(participant, 'team1'));
+                });
+                
+                listContainer.appendChild(team1Container);
+            }
+            
+            // 팀2 참여자
+            if (team2.length > 0) {
+                const team2Container = document.createElement('div');
+                team2Container.className = 'participants-list';
+                team2Container.innerHTML = '<div style="font-size: 14px; font-weight: 600; color: #5865F2; margin-bottom: 12px;">2팀</div>';
+                
+                team2.forEach(participant => {
+                    team2Container.appendChild(createParticipantRecordItem(participant, 'team2'));
+                });
+                
+                listContainer.appendChild(team2Container);
+            }
+        }
+
+        // 참여자 전적 입력 아이템 생성
+        function createParticipantRecordItem(participant, team) {
+            const div = document.createElement('div');
+            div.className = 'participant-record';
+            
+            div.innerHTML = `
+                <div class="participant-info">
+                    <span class="participant-team-badge ${team}">${team === 'team1' ? '1팀' : '2팀'}</span>
+                    <span class="participant-name">${escapeHtml(participant.nickname || participant.username)}</span>
+                </div>
+                <div class="kill-input-wrapper">
+                    <label class="kill-input-label">킬 수:</label>
+                    <input type="number" 
+                           class="kill-input" 
+                           min="0" 
+                           max="999" 
+                           value="0" 
+                           data-user-id="${participant.userId}"
+                           data-team="${team}">
+                </div>
+            `;
+            
+            return div;
+        }
+
+        // 전적 저장
+        async function savePartyRecord() {
+            if (!selectedWinner) {
+                showToast('승리 결과를 선택해주세요', 'error');
+                return;
+            }
+            
+            // 킬 수 데이터 수집
+            const killInputs = document.querySelectorAll('.kill-input');
+            const participantKills = {};
+            
+            killInputs.forEach(input => {
+                const userId = input.dataset.userId;
+                const kills = parseInt(input.value) || 0;
+                participantKills[userId] = kills;
+            });
+            
+            try {
+                const response = await fetch(`/party/api/${currentPartyForRecord.partyId}/record`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        winner: selectedWinner,
+                        participantKills: participantKills
+                    })
+                });
+                
+                if (response.ok) {
+                    showToast('전적이 성공적으로 저장되었습니다');
+                    closeRecordModal();
+                    loadParties(); // 목록 새로고침
+                } else {
+                    const error = await response.json();
+                    showToast(error.error || '전적 저장 실패', 'error');
+                }
+            } catch (error) {
+                console.error('전적 저장 오류:', error);
+                showToast('전적 저장 중 오류가 발생했습니다', 'error');
+            }
+        }
+
+        // 파티 삭제
+        async function deleteParty() {
+            if (!confirm('정말로 이 파티를 삭제하시겠습니까?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/party/api/${currentPartyForRecord.partyId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showToast('파티가 성공적으로 삭제되었습니다');
+                    closeRecordModal();
+                    loadParties(); // 목록 새로고침
+                } else {
+                    const error = await response.json();
+                    showToast(error.error || '파티 삭제 실패', 'error');
+                }
+            } catch (error) {
+                console.error('파티 삭제 오류:', error);
+                showToast('파티 삭제 중 오류가 발생했습니다', 'error');
+            }
+        }
+
+        // 모달 외부 클릭으로 닫기
+        document.getElementById('record-modal')?.addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeRecordModal();
+            }
+        });
     </script>
 </body>
 </html>

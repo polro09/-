@@ -70,6 +70,9 @@ const userSchema = new mongoose.Schema({
         avgKills: { type: Number, default: 0 },
         rankedGames: { type: Number, default: 0 },
         practiceGames: { type: Number, default: 0 },
+        winRate: { type: Number, default: 0 },
+        killRank: { type: Number, default: 0 },
+        teamRank: { type: Number, default: 0 },
         lastPlayed: Date,
         favoriteCountry: String,
         favoriteUnit: String

@@ -7,7 +7,9 @@ const participantSchema = new mongoose.Schema({
         required: true
     },
     username: String,
+    nickname: String,
     avatar: String,
+    discordId: String,
     team: {
         type: String,
         enum: ['team1', 'team2', 'waitlist'],
@@ -21,6 +23,10 @@ const participantSchema = new mongoose.Schema({
     unit: {
         type: String,
         default: null
+    },
+    tier: {
+        type: String,
+        default: 'Unranked'
     },
     stats: {
         wins: { type: Number, default: 0 },
@@ -54,6 +60,7 @@ const partySchema = new mongoose.Schema({
         required: true
     },
     hostName: String,
+    hostNickname: String,
     title: {
         type: String,
         required: true
@@ -76,6 +83,26 @@ const partySchema = new mongoose.Schema({
         default: 'recruiting'
     },
     participants: [participantSchema],
+    
+    // 전적 기록 관련 필드 추가
+    recordSaved: {
+        type: Boolean,
+        default: false
+    },
+    recordSavedAt: {
+        type: Date
+    },
+    recordSavedBy: {
+        type: String // Discord User ID
+    },
+    matchResult: {
+        winner: String, // 'win', 'lose', 'team1', 'team2'
+        participantKills: {
+            type: Map,
+            of: Number
+        }
+    },
+    
     result: {
         winner: {
             type: String,
@@ -86,6 +113,9 @@ const partySchema = new mongoose.Schema({
         team2Score: { type: Number, default: 0 },
         completedBy: String,
         completedAt: Date
+    },
+    notified: {
+        startReminder: { type: Boolean, default: false }
     },
     createdAt: {
         type: Date,
@@ -120,6 +150,22 @@ partySchema.methods.removeParticipant = async function(userId) {
     const index = this.participants.findIndex(p => p.userId === userId);
     if (index === -1) {
         return { success: false, message: '참여자를 찾을 수 없습니다.' };
+    }
+    
+    // 호스트가 나가는 경우 처리
+    if (this.hostId === userId) {
+        if (this.participants.length > 1) {
+            // 다음 참여자에게 호스트 권한 이양
+            const nextHost = this.participants.find(p => p.userId !== userId);
+            if (nextHost) {
+                this.hostId = nextHost.userId;
+                this.hostName = nextHost.username;
+                this.hostNickname = nextHost.nickname || nextHost.username;
+            }
+        } else {
+            // 마지막 참여자인 경우 파티 취소
+            this.status = 'cancelled';
+        }
     }
     
     this.participants.splice(index, 1);
@@ -201,7 +247,7 @@ partySchema.methods.createDiscordEmbed = async function(client) {
         }
     }
     
-    // 참여자 전적 정보 가져오기
+    // 참여자 전적 정보 가져오기 (수정된 포맷)
     const formatParticipant = async (participant) => {
         try {
             // Discord에서 길드 멤버 정보 가져오기
@@ -220,13 +266,62 @@ partySchema.methods.createDiscordEmbed = async function(client) {
                 const winRate = user.gameStats.totalGames > 0 
                     ? Math.round((user.gameStats.wins / user.gameStats.totalGames) * 100)
                     : 0;
-                const kdRatio = user.gameStats.totalDeaths > 0
-                    ? (user.gameStats.totalKills / user.gameStats.totalDeaths).toFixed(2)
-                    : user.gameStats.totalKills;
+                const totalGames = user.gameStats.totalGames || 0;
                 
-                return `${displayName} | 승률 ${winRate}% | K/D ${kdRatio}`;
+                // 국가 이모지
+                const countryEmoji = {
+                    'empire': '🏛️',
+                    'vlandia': '🛡️',
+                    'battania': '🏹',
+                    'sturgia': '❄️',
+                    'khuzait': '🐎',
+                    'aserai': '☀️'
+                };
+                
+                // 티어 표시
+                const tierDisplay = participant.tier || 'Unranked';
+                
+                // 여백을 줄인 포맷
+                let info = `${displayName}`;
+                
+                // 국가, 티어, 병종을 공백 없이 연결
+                const additionalInfo = [];
+                if (participant.country) additionalInfo.push(`${countryEmoji[participant.country] || '🏳️'}`);
+                if (participant.tier) additionalInfo.push(`${tierDisplay}`);
+                if (participant.unit) additionalInfo.push(`${participant.unit}`);
+                
+                if (additionalInfo.length > 0) {
+                    info += ` |${additionalInfo.join('|')}`;
+                }
+                
+                // W/R과 T/R 형식 수정 (% 앞에 공백 추가, game 제거)
+                info += ` | W/R: ${winRate} % | T/R: ${totalGames}`;
+                
+                return info;
             }
-            return displayName;
+            
+            // 전적 정보가 없는 경우
+            let info = displayName;
+            const additionalInfo = [];
+            if (participant.country) {
+                const countryEmoji = {
+                    'empire': '🏛️',
+                    'vlandia': '🛡️',
+                    'battania': '🏹',
+                    'sturgia': '❄️',
+                    'khuzait': '🐎',
+                    'aserai': '☀️'
+                };
+                additionalInfo.push(`${countryEmoji[participant.country] || '🏳️'}`);
+            }
+            if (participant.tier) additionalInfo.push(`${participant.tier}`);
+            if (participant.unit) additionalInfo.push(`${participant.unit}`);
+            
+            if (additionalInfo.length > 0) {
+                info += ` |${additionalInfo.join('|')}`;
+            }
+            
+            return info;
         } catch (error) {
             console.error('참여자 정보 조회 오류:', error);
             return participant.username || '알 수 없음';
@@ -263,68 +358,45 @@ partySchema.methods.createDiscordEmbed = async function(client) {
             {
                 name: '⏰ 일정',
                 value: this.startTime 
-                    ? `**시작:** ${new Date(this.startTime).toLocaleString('ko-KR')}`
-                    : '**시작:** 미정',
+                    ? `<t:${Math.floor(new Date(this.startTime).getTime() / 1000)}:F>`
+                    : '시간 미정',
                 inline: true
             },
             {
-                name: '📊 참여 현황',
-                value: `**총원:** ${this.participants.length}명\n**1팀:** ${team1.length}명 | **2팀:** ${team2.length}명\n**대기:** ${waitlist.length}명`,
+                name: '👥 참여자',
+                value: `전체: ${this.participants.length}명\n1팀: ${team1.length}명 | 2팀: ${team2.length}명`,
                 inline: true
+            },
+            {
+                name: `⚔️ 1팀 (${team1.length}명)`,
+                value: await formatTeam(team1),
+                inline: false
+            },
+            {
+                name: `🛡️ 2팀 (${team2.length}명)`,
+                value: await formatTeam(team2),
+                inline: false
             }
-        ]
+        ],
+        footer: {
+            text: `파티 ID: ${this.partyId} | ${this.requirements || '참가 제한 없음'}`,
+            iconURL: 'https://i.imgur.com/Sd8qK9c.gif'
+        }
     });
     
-    // 설명 추가
-    if (this.description) {
-        embed.setDescription(`📝 **설명**\n${this.description}`);
-    }
-    
-    // 참가 조건 추가
-    if (this.requirements) {
+    // 대기자가 있는 경우 추가
+    if (waitlist.length > 0) {
         embed.addFields({
-            name: '⚠️ 참가 조건',
-            value: this.requirements,
+            name: `⏳ 대기자 (${waitlist.length}명)`,
+            value: await formatTeam(waitlist),
             inline: false
         });
     }
     
-    // 팀 구성 표시
-    embed.addFields(
-        {
-            name: `⚔️ 1팀 (${team1.length}명)`,
-            value: await formatTeam(team1),
-            inline: true
-        },
-        {
-            name: `🛡️ 2팀 (${team2.length}명)`,
-            value: await formatTeam(team2),
-            inline: true
-        },
-        {
-            name: `⏳ 대기자 (${waitlist.length}명)`,
-            value: await formatTeam(waitlist),
-            inline: false
-        }
-    );
-    
-    // 푸터 설정
-    embed.setFooter({
-        text: `파티 ID: ${this.partyId} • ${new Date().toLocaleString('ko-KR')}`,
-        iconURL: 'https://i.imgur.com/Sd8qK9c.gif'
-    });
-    
-    // 썸네일 설정 (파티 타입별 이미지)
-    const thumbnails = {
-        '정규전': 'https://i.imgur.com/IOPA7gL.gif',
-        '모의전': 'https://i.imgur.com/IOPA7gL.gif',
-        '훈련': 'https://i.imgur.com/IOPA7gL.gif',
-        'PVP': 'https://i.imgur.com/IOPA7gL.gif',
-        '검은발톱': 'https://i.imgur.com/IOPA7gL.gif',
-        '레이드': 'https://i.imgur.com/IOPA7gL.gif'
-    };
-    
-    embed.setThumbnail(thumbnails[this.type] || 'https://i.imgur.com/IOPA7gL.gif');
+    // 설명이 있는 경우 추가
+    if (this.description) {
+        embed.setDescription(this.description);
+    }
     
     return embed;
 };

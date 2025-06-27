@@ -23,45 +23,276 @@
                 radial-gradient(circle at 80% 80%, rgba(88, 101, 242, 0.05) 0%, transparent 50%);
         }
 
-        /* 헤더 */
-        .header {
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #1a1a1a;
-            position: sticky;
+        /* 사이드바 공통 스타일 */
+        .sidebar-left, .sidebar-right {
+            position: fixed;
             top: 0;
+            height: 100vh;
+            background-color: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            overflow-y: auto;
             z-index: 100;
+            transition: transform 0.3s ease;
         }
 
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .sidebar-left {
+            left: 0;
+            width: 280px;
+            border-right: 1px solid #1a1a1a;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
+        .sidebar-right {
+            right: 0;
+            width: 250px;
+            border-left: 1px solid #1a1a1a;
+        }
+
+        /* 사이드바 로고 */
+        .sidebar-logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .sidebar-logo img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 600;
             color: #F2F3F5;
         }
 
-        .logo img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        /* 로그인 섹션 */
+        .login-section {
+            padding: 20px;
+            text-align: center;
         }
 
-        .logo h1 {
-            font-size: 20px;
+        .login-section h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .login-section p {
+            font-size: 14px;
+            color: #B5BAC1;
+            margin-bottom: 16px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #5865F2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .login-btn:hover {
+            background-color: #4752C4;
+        }
+
+        /* 사용자 프로필 섹션 */
+        .user-profile-section {
+            padding: 20px;
+            display: none;
+        }
+
+        .user-profile-header {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .user-profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid #5865F2;
+        }
+
+        .user-profile-info {
+            flex: 1;
+        }
+
+        .user-profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F2F3F5;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-nickname-btn {
+            font-size: 14px;
+            color: #5865F2;
+            cursor: pointer;
+        }
+
+        .edit-nickname-btn:hover {
+            color: #7289DA;
+        }
+
+        .user-profile-role {
+            font-size: 13px;
+            color: #949BA4;
+            text-transform: uppercase;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            font-size: 13px;
+            color: #B5BAC1;
+            border-top: 1px solid #1a1a1a;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 16px 0;
+            margin-bottom: 16px;
+        }
+
+        .user-stat-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .user-stat-label {
+            color: #949BA4;
+        }
+
+        .user-stat-value {
+            color: #F2F3F5;
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .profile-btn {
+            padding: 10px 16px;
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .profile-btn:hover {
+            background-color: #2a2a2a;
+        }
+
+        .profile-btn.logout {
+            background-color: #ED4245;
+            color: #FFFFFF;
+        }
+
+        .profile-btn.logout:hover {
+            background-color: #C53030;
+        }
+
+        /* 우측 사이드바 - 메뉴 */
+        .menu-header {
+            padding: 20px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
             font-weight: 600;
         }
 
-        /* 컨테이너 */
+        .nav-section {
+            padding: 20px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #949BA4;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            margin-bottom: 4px;
+            color: #B5BAC1;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+        }
+
+        .nav-item.active {
+            background-color: #5865F2;
+            color: #FFFFFF;
+        }
+
+        /* 메인 컨텐츠 */
+        .main-content {
+            margin-left: 280px;
+            margin-right: 250px;
+            min-height: 100vh;
+        }
+
+        /* 모바일 토글 버튼 */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            z-index: 101;
+            width: 40px;
+            height: 40px;
+            background-color: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            color: #F2F3F5;
+            font-size: 20px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-toggle.left {
+            left: 20px;
+        }
+
+        .mobile-toggle.right {
+            right: 20px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -198,6 +429,39 @@
             border: 1px solid #1a1a1a;
             border-radius: 12px;
             padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-section:hover {
+            border-color: #5865F2;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3);
+        }
+
+        .team-section.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .team-section.disabled:hover {
+            border-color: #1a1a1a;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .team-section.team1 {
+            border-color: #ED4245;
+        }
+
+        .team-section.team2 {
+            border-color: #5865F2;
+        }
+
+        .team-section.waitlist {
+            border-color: #FAA61A;
         }
 
         .team-header {
@@ -215,73 +479,51 @@
             gap: 8px;
         }
 
-        .team-title.team1 {
-            color: #5865F2;
-        }
-
-        .team-title.team2 {
-            color: #EB459E;
-        }
-
         .team-count {
+            background-color: #1a1a1a;
+            padding: 4px 12px;
+            border-radius: 12px;
             font-size: 14px;
-            color: #949BA4;
         }
 
-        .team-join-btn {
-            padding: 8px 16px;
-            background-color: #5865F2;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .team-join-btn:hover {
-            background-color: #4752C4;
-        }
-
-        .team-join-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* 참여자 목록 */
-        .participants-list {
+        .participant-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #949BA4;
+        }
+
         .participant-item {
-            background-color: #000000;
-            border: 1px solid #1a1a1a;
-            border-radius: 8px;
-            padding: 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            padding: 10px;
+            background-color: #000000;
+            border-radius: 8px;
+            border: 1px solid #1a1a1a;
             transition: all 0.2s;
         }
 
         .participant-item:hover {
-            border-color: #5865F2;
-            transform: translateX(4px);
+            border-color: #2a2a2a;
         }
 
         .participant-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 36px;
+            height: 36px;
             background-color: #5865F2;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            color: #FFFFFF;
+            font-size: 18px;
+            object-fit: cover;
         }
 
         .participant-info {
@@ -289,8 +531,7 @@
         }
 
         .participant-name {
-            font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             color: #F2F3F5;
             margin-bottom: 4px;
         }
@@ -298,217 +539,22 @@
         .participant-stats {
             font-size: 12px;
             color: #949BA4;
-            display: flex;
-            gap: 12px;
+            line-height: 1.3;
         }
 
-        .participant-tags {
+        .participant-meta {
             display: flex;
-            gap: 8px;
+            gap: 4px;
             align-items: center;
-        }
-
-        .country-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
-        }
-
-        .unit-tag {
-            padding: 2px 8px;
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            font-size: 11px;
-            color: #B5BAC1;
-        }
-
-        .participant-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .move-btn {
-            padding: 4px 8px;
-            background-color: #1a1a1a;
-            color: #B5BAC1;
-            border: none;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .move-btn:hover {
-            background-color: #2a2a2a;
-            color: #F2F3F5;
-        }
-
-        /* 대기자 섹션 */
-        .waitlist-section {
-            background-color: #0f0f0f;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .waitlist-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .waitlist-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #FAA61A;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* 참여 모달 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #0f0f0f;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 32px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #B5BAC1;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .modal-close:hover {
-            color: #F2F3F5;
-        }
-
-        /* 국가 선택 */
-        .country-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .country-option {
-            background-color: #000000;
-            border: 2px solid #1a1a1a;
-            border-radius: 8px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .country-option:hover {
-            border-color: #5865F2;
-            transform: translateY(-2px);
-        }
-
-        .country-option.selected {
-            background-color: #5865F2;
-            border-color: #5865F2;
-        }
-
-        .country-option img {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 8px;
-        }
-
-        .country-name {
             font-size: 14px;
-            font-weight: 500;
+            color: #B5BAC1;
         }
 
-        /* 병종 선택 */
-        .unit-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .unit-option {
-            padding: 12px;
-            background-color: #000000;
-            border: 1px solid #1a1a1a;
-            border-radius: 6px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-
-        .unit-option:hover {
-            border-color: #5865F2;
-        }
-
-        .unit-option.selected {
-            background-color: #5865F2;
-            border-color: #5865F2;
-            color: #FFFFFF;
-        }
-
-        /* 섹션 타이틀 */
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #F2F3F5;
-        }
-
-        .form-section {
-            margin-bottom: 24px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 24px;
-        }
-
-        /* 버튼 */
+        /* 버튼 스타일 */
         .btn {
-            padding: 12px 24px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -516,85 +562,195 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background-color: #5865F2;
-            color: #FFFFFF;
-        }
-
-        .btn-primary:hover {
-            background-color: #4752C4;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
-        }
-
-        .btn-secondary {
-            background-color: #1a1a1a;
-            color: #F2F3F5;
-        }
-
-        .btn-secondary:hover {
-            background-color: #2a2a2a;
-        }
-
-        .btn-danger {
-            background-color: #ED4245;
-            color: #FFFFFF;
-        }
-
-        .btn-danger:hover {
-            background-color: #C53030;
-        }
-
-        .btn-success {
-            background-color: #3BA55C;
-            color: #FFFFFF;
-        }
-
-        .btn-success:hover {
-            background-color: #2D7D46;
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none !important;
         }
 
-        /* 빈 상태 */
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #949BA4;
+        .btn-primary {
+            background-color: #5865F2;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #4752C4;
+        }
+
+        .btn-secondary {
+            background-color: #4E5058;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #3C3D42;
+        }
+
+        .btn-danger {
+            background-color: #ED4245;
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background-color: #C93A3E;
+        }
+
+        .btn-success {
+            background-color: #3BA55C;
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background-color: #2D7D46;
+        }
+
+        .btn-warning {
+            background-color: #FAA61A;
+            color: black;
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background-color: #E89E0C;
         }
 
         /* 로딩 */
         .loading {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
+            display: flex;
             justify-content: center;
             align-items: center;
+            height: 400px;
         }
 
         .spinner {
+            border: 3px solid #1a1a1a;
+            border-top: 3px solid #5865F2;
+            border-radius: 50%;
             width: 40px;
             height: 40px;
-            border: 3px solid #1a1a1a;
-            border-top-color: #5865F2;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: #0f0f0f;
+            margin: 10% auto;
+            padding: 24px;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #949BA4;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .close-modal:hover {
+            background-color: #1a1a1a;
+            color: #F2F3F5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #B5BAC1;
+        }
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+        }
+
+        .selection-item {
+            padding: 10px;
+            border: 2px solid #1a1a1a;
+            border-radius: 8px;
+            background-color: #000000;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .selection-item:hover {
+            border-color: #5865F2;
+            background-color: rgba(88, 101, 242, 0.1);
+        }
+
+        .selection-item.selected {
+            border-color: #5865F2;
+            background-color: rgba(88, 101, 242, 0.2);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #000000;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #F2F3F5;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #5865F2;
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
         }
 
         /* 토스트 */
@@ -602,17 +758,17 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 16px 20px;
-            background-color: #000000;
+            background-color: #0f0f0f;
             border: 1px solid #1a1a1a;
             border-radius: 8px;
+            padding: 16px;
             display: flex;
             align-items: center;
             gap: 12px;
+            z-index: 2000;
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.3s;
-            z-index: 1001;
         }
 
         .toast.show {
@@ -632,34 +788,70 @@
             font-size: 20px;
         }
 
+        .toast.success .toast-icon {
+            color: #3BA55C;
+        }
+
+        .toast.error .toast-icon {
+            color: #ED4245;
+        }
+
         .toast-message {
             font-size: 14px;
         }
 
         /* 반응형 */
+        @media (max-width: 1200px) {
+            .sidebar-left {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+                margin-right: 0;
+            }
+            
+            .sidebar-right {
+                transform: translateX(100%);
+            }
+        }
+
         @media (max-width: 768px) {
-            .container {
-                padding: 24px 16px;
+            .sidebar-left {
+                transform: translateX(-100%);
             }
 
-            .party-header {
-                padding: 24px 16px;
+            .sidebar-left.open {
+                transform: translateX(0);
             }
 
-            .party-title {
-                font-size: 24px;
+            .sidebar-right {
+                transform: translateX(100%);
             }
 
-            .party-info-grid {
-                grid-template-columns: 1fr;
+            .sidebar-right.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .mobile-toggle {
+                display: flex;
             }
 
             .teams-container {
                 grid-template-columns: 1fr;
             }
 
-            .country-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .party-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .party-title {
+                font-size: 24px;
             }
 
             .party-actions {
@@ -674,166 +866,342 @@
     </style>
 </head>
 <body>
-    <!-- 로딩 -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
+    <!-- 모바일 토글 버튼 -->
+    <button class="mobile-toggle left" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <button class="mobile-toggle right" onclick="toggleMenu()">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+
+    <!-- 좌측 사이드바 - 사용자 프로필 -->
+    <aside class="sidebar-left" id="sidebar-left">
+        <div class="sidebar-logo">
+            <img src="https://i.imgur.com/Sd8qK9c.gif" alt="Aimdot.dev">
+            <h2>Aimdot.dev</h2>
+        </div>
+
+        <!-- 로그인 섹션 -->
+        <div class="login-section" id="login-section">
+            <h3>시작하기</h3>
+            <p>Discord 계정으로 로그인하여 더 많은 기능을 이용하세요!</p>
+            <button class="login-btn" id="discord-login">
+                <i class="fab fa-discord"></i>
+                <span>Discord로 로그인</span>
+            </button>
+        </div>
+
+        <!-- 사용자 프로필 섹션 -->
+        <div class="user-profile-section" id="user-profile-section">
+            <div class="user-profile-header">
+                <img src="" alt="Avatar" class="user-profile-avatar" id="user-profile-avatar">
+                <div class="user-profile-info">
+                    <div class="user-profile-name">
+                        <span id="user-profile-name">사용자</span>
+                        <i class="fas fa-edit edit-nickname-btn" onclick="openNicknameModal()"></i>
+                    </div>
+                    <div class="user-profile-role" id="user-profile-role">Guest</div>
+                </div>
+            </div>
+            
+            <div class="user-stats">
+                <div class="user-stat-item">
+                    <span class="user-stat-label">전적</span>
+                    <span class="user-stat-value" id="stat-record">0승 0패</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">승률</span>
+                    <span class="user-stat-value" id="stat-winrate">0%</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">평균 킬</span>
+                    <span class="user-stat-value" id="stat-avgkills">0</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">정규전</span>
+                    <span class="user-stat-value" id="stat-ranked">0회</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">모의전</span>
+                    <span class="user-stat-value" id="stat-practice">0회</span>
+                </div>
+                <div class="user-stat-item">
+                    <span class="user-stat-label">총 게임</span>
+                    <span class="user-stat-value" id="stat-total">0회</span>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="profile-btn" onclick="viewFullProfile()">
+                    <i class="fas fa-user"></i>
+                    프로필 보기
+                </button>
+                <a href="/auth/logout" class="profile-btn logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    로그아웃
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 우측 사이드바 - 메뉴 -->
+    <aside class="sidebar-right" id="sidebar-right">
+        <div class="menu-header">
+            <i class="fas fa-bars"></i>
+            <span>메뉴</span>
+        </div>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-title">기능</div>
+                <a href="/" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>홈</span>
+                </a>
+                <a href="/party" class="nav-item active">
+                    <i class="fas fa-users"></i>
+                    <span>파티</span>
+                </a>
+                <a href="/dashboard" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>대시보드</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- 메인 컨텐츠 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 로딩 화면 -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+            </div>
+
+            <!-- 파티 헤더 -->
+            <div id="partyHeader" class="party-header" style="display: none;">
+                <!-- 동적으로 생성됨 -->
+            </div>
+
+            <!-- 팀 섹션 -->
+            <div id="teamsContainer" class="teams-container" style="display: none;">
+                <!-- 팀 1 -->
+                <div class="team-section team1" onclick="handleTeamClick('team1', event)">
+                    <div class="team-header">
+                        <h3 class="team-title">
+                            <i class="fas fa-flag"></i>
+                            팀 1
+                        </h3>
+                        <span class="team-count" id="team1Count">0명</span>
+                    </div>
+                    <div id="team1List" class="participant-list" style="display: none;"></div>
+                    <div id="team1Empty" class="empty-state">
+                        <i class="fas fa-users" style="font-size: 48px; margin-bottom: 12px; opacity: 0.3;"></i>
+                        <p>아직 참여자가 없습니다</p>
+                        <p style="font-size: 12px; color: #949BA4; margin-top: 8px;">클릭하여 참여하기</p>
+                    </div>
+                </div>
+
+                <!-- 팀 2 -->
+                <div class="team-section team2" id="team2Section" onclick="handleTeamClick('team2', event)">
+                    <div class="team-header">
+                        <h3 class="team-title">
+                            <i class="fas fa-flag"></i>
+                            팀 2
+                        </h3>
+                        <span class="team-count" id="team2Count">0명</span>
+                    </div>
+                    <div id="team2List" class="participant-list" style="display: none;"></div>
+                    <div id="team2Empty" class="empty-state">
+                        <i class="fas fa-users" style="font-size: 48px; margin-bottom: 12px; opacity: 0.3;"></i>
+                        <p>아직 참여자가 없습니다</p>
+                        <p style="font-size: 12px; color: #949BA4; margin-top: 8px;">클릭하여 참여하기</p>
+                    </div>
+                </div>
+
+                <!-- 대기자 -->
+                <div class="team-section waitlist" onclick="handleTeamClick('waitlist', event)">
+                    <div class="team-header">
+                        <h3 class="team-title">
+                            <i class="fas fa-clock"></i>
+                            대기자
+                        </h3>
+                        <span class="team-count" id="waitlistCount">0명</span>
+                    </div>
+                    <div id="waitlistList" class="participant-list" style="display: none;"></div>
+                    <div id="waitlistEmpty" class="empty-state">
+                        <i class="fas fa-clock" style="font-size: 48px; margin-bottom: 12px; opacity: 0.3;"></i>
+                        <p>대기자가 없습니다</p>
+                        <p style="font-size: 12px; color: #949BA4; margin-top: 8px;">클릭하여 대기 등록</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- 헤더 -->
-    <header class="header">
-        <div class="header-content">
-            <a href="/" class="logo">
-                <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
-                <h1>Aimdot.dev 파티 시스템</h1>
-            </a>
-            <a href="/party" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i>
-                파티 목록
-            </a>
-        </div>
-    </header>
-
-    <!-- 메인 컨테이너 -->
-    <div class="container">
-        <!-- 파티 헤더 -->
-        <div class="party-header" id="partyHeader">
-            <!-- 동적으로 생성됩니다 -->
-        </div>
-
-        <!-- 팀 섹션 -->
-        <div class="teams-container">
-            <div class="team-section">
-                <div class="team-header">
-                    <h3 class="team-title team1">
-                        <i class="fas fa-users"></i>
-                        1팀
-                    </h3>
-                    <span class="team-count" id="team1Count">0명</span>
-                </div>
-                <div class="participants-list" id="team1List">
-                    <!-- 참여자 목록이 동적으로 생성됩니다 -->
-                </div>
-                <div class="empty-state" id="team1Empty">
-                    참여자가 없습니다
-                </div>
+    <!-- 닉네임 변경 모달 -->
+    <div id="nickname-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">닉네임 변경</h3>
+                <button class="close-modal" onclick="closeNicknameModal()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-
-            <div class="team-section">
-                <div class="team-header">
-                    <h3 class="team-title team2">
-                        <i class="fas fa-users"></i>
-                        2팀
-                    </h3>
-                    <span class="team-count" id="team2Count">0명</span>
-                </div>
-                <div class="participants-list" id="team2List">
-                    <!-- 참여자 목록이 동적으로 생성됩니다 -->
-                </div>
-                <div class="empty-state" id="team2Empty">
-                    참여자가 없습니다
-                </div>
+            <div class="form-group">
+                <input type="text" id="nickname-input" class="form-input" placeholder="새 닉네임 입력" maxlength="20">
             </div>
-        </div>
-
-        <!-- 대기자 섹션 -->
-        <div class="waitlist-section">
-            <div class="waitlist-header">
-                <h3 class="waitlist-title">
-                    <i class="fas fa-clock"></i>
-                    대기자
-                </h3>
-                <span class="team-count" id="waitlistCount">0명</span>
-            </div>
-            <div class="participants-list" id="waitlistList">
-                <!-- 대기자 목록이 동적으로 생성됩니다 -->
-            </div>
-            <div class="empty-state" id="waitlistEmpty">
-                대기자가 없습니다
-            </div>
+            <button class="btn btn-primary" onclick="saveNickname()">저장</button>
         </div>
     </div>
 
     <!-- 참여 모달 -->
-    <div class="modal" id="joinModal">
+    <div id="joinModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">파티 참여</h2>
-                <button class="modal-close" onclick="closeJoinModal()">×</button>
+                <h3 class="modal-title">파티 참여</h3>
+                <button class="close-modal" onclick="closeJoinModal()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             
-            <div class="form-section">
-                <h3 class="section-title">국가 선택</h3>
-                <div class="country-grid" id="countryGrid">
-                    <div class="country-option" data-country="empire">
-                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[remade+upscaled].png" alt="제국">
-                        <div class="country-name">제국</div>
+            <div class="form-group">
+                <label class="form-label">국가 선택</label>
+                <div class="selection-grid" id="countrySelection">
+                    <div class="selection-item" data-country="empire" onclick="selectCountry('empire')">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[remade+upscaled].png" style="width: 32px; height: 32px;">
+                        <div>제국</div>
                     </div>
-                    <div class="country-option" data-country="vlandia">
-                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_v_[upscaled].png" alt="블란디아">
-                        <div class="country-name">블란디아</div>
+                    <div class="selection-item" data-country="vlandia" onclick="selectCountry('vlandia')">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_v_[upscaled].png" style="width: 32px; height: 32px;">
+                        <div>블란디아</div>
                     </div>
-                    <div class="country-option" data-country="battania">
-                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[upscaled].png" alt="바타니아">
-                        <div class="country-name">바타니아</div>
+                    <div class="selection-item" data-country="battania" onclick="selectCountry('battania')">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[upscaled].png" style="width: 32px; height: 32px;">
+                        <div>바타니아</div>
                     </div>
-                    <div class="country-option" data-country="sturgia">
-                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/sturgia_3_[upscaled].png" alt="스터지아">
-                        <div class="country-name">스터지아</div>
+                    <div class="selection-item" data-country="sturgia" onclick="selectCountry('sturgia')">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/sturgia_3_[upscaled].png" style="width: 32px; height: 32px;">
+                        <div>스터지아</div>
                     </div>
-                    <div class="country-option" data-country="khuzait">
-                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/khuzait_2_[upscaled].png" alt="쿠자이트">
-                        <div class="country-name">쿠자이트</div>
+                    <div class="selection-item" data-country="khuzait" onclick="selectCountry('khuzait')">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/khuzait_2_[upscaled].png" style="width: 32px; height: 32px;">
+                        <div>쿠자이트</div>
                     </div>
-                    <div class="country-option" data-country="aserai">
-                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/aserai_2_%7Bupscaled].png" alt="아세라이">
-                        <div class="country-name">아세라이</div>
+                    <div class="selection-item" data-country="aserai" onclick="selectCountry('aserai')">
+                        <img src="https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/aserai_2_%7Bupscaled].png" style="width: 32px; height: 32px;">
+                        <div>아세라이</div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-section">
-                <h3 class="section-title">병종 선택</h3>
-                <div class="unit-grid" id="unitGrid">
-                    <div class="unit-option" data-unit="폴암보병">폴암보병</div>
-                    <div class="unit-option" data-unit="방패보병">방패보병</div>
-                    <div class="unit-option" data-unit="궁병">궁병</div>
-                    <div class="unit-option" data-unit="석궁병">석궁병</div>
-                    <div class="unit-option" data-unit="창병">창병</div>
-                    <div class="unit-option" data-unit="궁기병">궁기병</div>
-                    <div class="unit-option" data-unit="창기병">창기병</div>
+            <div class="form-group">
+                <label class="form-label">병종 선택</label>
+                <div class="selection-grid" id="unitSelection">
+                    <div class="selection-item" data-unit="shield_infantry" onclick="selectUnit('shield_infantry')">
+                        🛡️ 방패보병
+                    </div>
+                    <div class="selection-item" data-unit="spear_infantry" onclick="selectUnit('spear_infantry')">
+                        🔱 창보병
+                    </div>
+                    <div class="selection-item" data-unit="polearm_infantry" onclick="selectUnit('polearm_infantry')">
+                        ⚔️ 폴암병
+                    </div>
+                    <div class="selection-item" data-unit="archer" onclick="selectUnit('archer')">
+                        🏹 궁병
+                    </div>
+                    <div class="selection-item" data-unit="crossbow" onclick="selectUnit('crossbow')">
+                        🎯 석궁병
+                    </div>
+                    <div class="selection-item" data-unit="spear_cavalry" onclick="selectUnit('spear_cavalry')">
+                        🐎 창기병
+                    </div>
+                    <div class="selection-item" data-unit="horse_archer" onclick="selectUnit('horse_archer')">
+                        🏇 궁기병
+                    </div>
                 </div>
             </div>
 
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeJoinModal()">취소</button>
-                <button class="btn btn-primary" id="confirmJoinBtn" onclick="confirmJoin()">참여하기</button>
+            <div class="form-group">
+                <label class="form-label">티어 선택</label>
+                <div class="selection-grid" id="tierSelection">
+                    <div class="selection-item" data-tier="5t" onclick="selectTier('5t')">
+                        5티어
+                    </div>
+                    <div class="selection-item" data-tier="6t" onclick="selectTier('6t')">
+                        6티어
+                    </div>
+                </div>
             </div>
+
+            <button class="btn btn-primary" id="confirmJoinBtn" onclick="confirmJoin()" disabled>
+                <i class="fas fa-check"></i>
+                참여하기
+            </button>
         </div>
     </div>
 
     <!-- 토스트 -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle toast-icon"></i>
+    <div id="toast" class="toast">
+        <i class="toast-icon"></i>
         <span class="toast-message"></span>
     </div>
 
     <script>
         // 전역 변수
         let partyData = null;
-        let currentUser = null;
+        let selectedTeam = null;
         let selectedCountry = null;
         let selectedUnit = null;
-        let selectedTeam = null;
+        let selectedTier = null;
+        let currentUser = null;
 
-        // 초기화
+        // 국가 및 병종 정보
+        const countryInfo = {
+            empire: { name: '제국', icon: 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[remade+upscaled].png' },
+            vlandia: { name: '블란디아', icon: 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_v_[upscaled].png' },
+            battania: { name: '바타니아', icon: 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[upscaled].png' },
+            sturgia: { name: '스터지아', icon: 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/sturgia_3_[upscaled].png' },
+            khuzait: { name: '쿠자이트', icon: 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/khuzait_2_[upscaled].png' },
+            aserai: { name: '아세라이', icon: 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/aserai_2_%7Bupscaled].png' }
+        };
+
+        const unitInfo = {
+            shield_infantry: '방패보병',
+            spear_infantry: '창보병',
+            polearm_infantry: '폴암병',
+            archer: '궁병',
+            crossbow: '석궁병',
+            spear_cavalry: '창기병',
+            horse_archer: '궁기병'
+        };
+
+        const typeEmojis = {
+            '정규전': '⚔️',
+            '모의전': '🛡️',
+            '훈련': '🎯',
+            'PVP': '🏆',
+            '검은발톱': '🦅',
+            '레이드': '🏜️'
+        };
+
+        const statusTexts = {
+            recruiting: '모집 중',
+            in_progress: '진행 중',
+            completed: '완료',
+            cancelled: '취소됨'
+        };
+
+        // 페이지 로드 시 실행
         document.addEventListener('DOMContentLoaded', async () => {
-            await checkAuth();
+            await getCurrentUser();
             await loadPartyDetails();
-            initializeEventListeners();
+            setupSidebar();
+            setupDiscordLogin();
         });
 
-        // 인증 확인
-        async function checkAuth() {
+        // 현재 사용자 정보 가져오기
+        async function getCurrentUser() {
             try {
                 const response = await fetch('/api/user');
                 const data = await response.json();
@@ -873,60 +1241,89 @@
 
         // 파티 상세 정보 표시
         function displayPartyDetails() {
-            const typeEmojis = {
-                '정규전': '⚔️',
-                '모의전': '🛡️',
-                '훈련': '🎯',
-                'PVP': '🏆',
-                '검은발톱': '🦅',
-                '레이드': '🏜️'
-            };
-
-            const statusTexts = {
-                'recruiting': '모집 중',
-                'in_progress': '진행 중',
-                'completed': '완료',
-                'cancelled': '취소됨'
-            };
-
             const isHost = currentUser && currentUser.id === partyData.hostId;
             const isParticipant = partyData.participants.some(p => p.userId === currentUser?.id);
+            const participant = partyData.participants.find(p => p.userId === currentUser?.id);
+
+            // 팀 박스 활성화/비활성화 (모집 중이 아닐 때만 비활성화)
+            const teamSections = document.querySelectorAll('.team-section');
+            teamSections.forEach(section => {
+                if (partyData.status !== 'recruiting') {
+                    section.classList.add('disabled');
+                } else {
+                    section.classList.remove('disabled');
+                }
+            });
 
             let actionButtons = '';
             if (partyData.status === 'recruiting') {
                 if (!isParticipant) {
-                    actionButtons = `
-                        <button class="btn btn-primary" onclick="openJoinModal('team1')">
-                            <i class="fas fa-user-plus"></i>
-                            1팀 참여
-                        </button>
-                        <button class="btn btn-primary" onclick="openJoinModal('team2')">
+                    // 정규전이 아닐 때만 2팀 버튼 표시
+                    const team2Button = partyData.type !== '정규전' ? `
+                        <button class="btn btn-primary" onclick="showJoinModal('team2')">
                             <i class="fas fa-user-plus"></i>
                             2팀 참여
                         </button>
-                        <button class="btn btn-secondary" onclick="openJoinModal('waitlist')">
+                    ` : '';
+                    
+                    actionButtons = `
+                        <button class="btn btn-primary" onclick="showJoinModal('team1')">
+                            <i class="fas fa-user-plus"></i>
+                            1팀 참여
+                        </button>
+                        ${team2Button}
+                        <button class="btn btn-secondary" onclick="showJoinModal('waitlist')">
                             <i class="fas fa-clock"></i>
                             대기자 등록
                         </button>
                     `;
                 } else {
+                    // 참여 중인 경우 팀 변경 버튼도 수정
+                    const changeTeam2Button = partyData.type !== '정규전' ? `
+                        <button class="btn btn-secondary" onclick="changeTeam('team2')">
+                            <i class="fas fa-exchange-alt"></i>
+                            2팀으로 변경
+                        </button>
+                    ` : '';
+                    
                     actionButtons = `
                         <button class="btn btn-danger" onclick="leaveParty()">
                             <i class="fas fa-sign-out-alt"></i>
                             파티 나가기
                         </button>
+                        ${participant.team !== 'team1' ? `
+                            <button class="btn btn-secondary" onclick="changeTeam('team1')">
+                                <i class="fas fa-exchange-alt"></i>
+                                1팀으로 변경
+                            </button>
+                        ` : ''}
+                        ${participant.team !== 'team2' && partyData.type !== '정규전' ? changeTeam2Button : ''}
+                        ${participant.team !== 'waitlist' ? `
+                            <button class="btn btn-secondary" onclick="changeTeam('waitlist')">
+                                <i class="fas fa-clock"></i>
+                                대기로 변경
+                            </button>
+                        ` : ''}
                     `;
                 }
                 
                 if (isHost) {
-                    actionButtons += `
+                    actionButtons = `
                         <button class="btn btn-secondary" onclick="editParty()">
                             <i class="fas fa-edit"></i>
                             수정
                         </button>
-                        <button class="btn btn-danger" onclick="endParty()">
+                        <button class="btn btn-success" onclick="completeParty()">
+                            <i class="fas fa-check"></i>
+                            파티 완료
+                        </button>
+                        <button class="btn btn-danger" onclick="leaveParty()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            파티 나가기
+                        </button>
+                        <button class="btn btn-danger" onclick="cancelParty()">
                             <i class="fas fa-times"></i>
-                            파티 종료
+                            파티 취소
                         </button>
                     `;
                 }
@@ -942,7 +1339,7 @@
                         <span class="party-type-icon">${typeEmojis[partyData.type] || '🎮'}</span>
                         ${escapeHtml(partyData.title)}
                     </h1>
-                    <p class="party-subtitle">주최: ${escapeHtml(partyData.hostName || '알 수 없음')}</p>
+                    <p class="party-subtitle">주최: ${escapeHtml(partyData.hostNickname || partyData.hostName || '알 수 없음')}</p>
                 </div>
 
                 <div class="party-info-grid">
@@ -1002,6 +1399,8 @@
             `;
 
             document.getElementById('partyHeader').innerHTML = headerHTML;
+            document.getElementById('partyHeader').style.display = 'block';
+            document.getElementById('teamsContainer').style.display = 'grid';
         }
 
         // 참여자 표시
@@ -1011,11 +1410,19 @@
             const waitlist = partyData.participants.filter(p => p.team === 'waitlist');
 
             displayTeamParticipants('team1', team1);
-            displayTeamParticipants('team2', team2);
+            
+            // 정규전이 아닐 때만 2팀 표시
+            if (partyData.type !== '정규전') {
+                displayTeamParticipants('team2', team2);
+                document.getElementById('team2Section').style.display = 'block';
+                document.getElementById('team2Count').textContent = `${team2.length}명`;
+            } else {
+                document.getElementById('team2Section').style.display = 'none';
+            }
+            
             displayTeamParticipants('waitlist', waitlist);
 
             document.getElementById('team1Count').textContent = `${team1.length}명`;
-            document.getElementById('team2Count').textContent = `${team2.length}명`;
             document.getElementById('waitlistCount').textContent = `${waitlist.length}명`;
         }
 
@@ -1045,96 +1452,135 @@
             const div = document.createElement('div');
             div.className = 'participant-item';
 
-            const countryIcons = {
-                'empire': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[remade+upscaled].png',
-                'vlandia': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_v_[upscaled].png',
-                'battania': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/emblem_[upscaled].png',
-                'sturgia': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/sturgia_3_[upscaled].png',
-                'khuzait': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/khuzait_2_[upscaled].png',
-                'aserai': 'https://mountandblade2bannerlord.wiki.fextralife.com/file/Mount-and-Blade-2-Bannerlord/aserai_2_%7Bupscaled].png'
-            };
-
             const stats = participant.stats || {};
-            const winRate = stats.totalGames > 0 
+            const totalGames = stats.totalGames || 0;
+            const winRate = totalGames > 0 
                 ? ((stats.wins / stats.totalGames) * 100).toFixed(1) 
                 : 0;
+            const kdRatio = stats.totalDeaths > 0 
+                ? (stats.totalKills / stats.totalDeaths).toFixed(2) 
+                : (stats.totalKills || 0).toFixed(2);
 
             const isHost = participant.userId === partyData.hostId;
             const isMe = currentUser && participant.userId === currentUser.id;
+            const displayName = participant.nickname || participant.username;
+
+            // 프로필 사진 URL 생성
+            const avatarUrl = participant.avatar 
+                ? `https://cdn.discordapp.com/avatars/${participant.userId}/${participant.avatar}.png`
+                : '/img/default-avatar.png';
 
             div.innerHTML = `
-                <div class="participant-avatar">${participant.username.charAt(0).toUpperCase()}</div>
+                <img src="${avatarUrl}" alt="${displayName}" class="participant-avatar" onerror="this.src='/img/default-avatar.png'">
                 <div class="participant-info">
                     <div class="participant-name">
-                        ${escapeHtml(participant.username)}
+                        ${escapeHtml(displayName)}
                         ${isHost ? '<span style="color: #FAA61A; font-size: 12px;"> (주최자)</span>' : ''}
                         ${isMe ? '<span style="color: #5865F2; font-size: 12px;"> (나)</span>' : ''}
                     </div>
                     <div class="participant-stats">
-                        <span>승률: ${winRate}%</span>
-                        <span>승: ${stats.wins || 0}</span>
-                        <span>패: ${stats.losses || 0}</span>
+                        K/D: ${kdRatio}<br>
+                        W/R: ${winRate} %<br>
+                        T/R: ${totalGames}
                     </div>
                 </div>
-                <div class="participant-tags">
-                    ${participant.country ? `<img src="${countryIcons[participant.country]}" alt="${participant.country}" class="country-icon">` : ''}
-                    ${participant.unit ? `<span class="unit-tag">${participant.unit}</span>` : ''}
+                <div class="participant-meta">
+                    ${participant.country && countryInfo[participant.country] ? 
+                        `<img src="${countryInfo[participant.country].icon}" alt="${countryInfo[participant.country].name}" style="width: 24px; height: 24px; border-radius: 4px;">` : ''}
+                    ${participant.tier ? `<span style="background-color: #1a1a1a; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin: 0 4px;">${participant.tier}</span>` : ''}
+                    ${participant.unit && unitInfo[participant.unit] ? 
+                        `<span>${unitInfo[participant.unit]}</span>` : ''}
                 </div>
             `;
 
             return div;
         }
 
-        // 이벤트 리스너 초기화
-        function initializeEventListeners() {
-            // 국가 선택
-            document.querySelectorAll('.country-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('.country-option').forEach(o => o.classList.remove('selected'));
-                    option.classList.add('selected');
-                    selectedCountry = option.dataset.country;
-                });
-            });
-
-            // 병종 선택
-            document.querySelectorAll('.unit-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('.unit-option').forEach(o => o.classList.remove('selected'));
-                    option.classList.add('selected');
-                    selectedUnit = option.dataset.unit;
-                });
-            });
-        }
-
-        // 참여 모달 열기
-        function openJoinModal(team) {
+        // 팀 박스 클릭 핸들러
+        function handleTeamClick(team, event) {
+            // 이벤트 전파 방지
+            if (event && event.target.closest('.participant-item')) return;
+            
+            // 로그인 체크
             if (!currentUser) {
                 showToast('로그인이 필요합니다', 'error');
                 setTimeout(() => {
-                    // 현재 URL을 returnUrl로 전달
                     window.location.href = '/auth/discord?returnUrl=' + encodeURIComponent(window.location.pathname);
                 }, 1500);
                 return;
             }
+            
+            // 파티 상태 체크
+            if (partyData.status !== 'recruiting') {
+                showToast('모집이 마감된 파티입니다', 'error');
+                return;
+            }
+            
+            // 참여 모달 열기 (팀 변경도 가능하므로 이미 참여 중이어도 모달 열기)
+            showJoinModal(team);
+        }
 
+        // 참여 모달 표시
+        function showJoinModal(team) {
             selectedTeam = team;
-            document.getElementById('joinModal').style.display = 'flex';
+            selectedCountry = null;
+            selectedUnit = null;
+            selectedTier = null;
+            
+            // 선택 초기화
+            document.querySelectorAll('.selection-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            document.getElementById('confirmJoinBtn').disabled = true;
+            document.getElementById('joinModal').style.display = 'block';
         }
 
         // 참여 모달 닫기
         function closeJoinModal() {
             document.getElementById('joinModal').style.display = 'none';
-            selectedCountry = null;
-            selectedUnit = null;
-            selectedTeam = null;
-            document.querySelectorAll('.country-option').forEach(o => o.classList.remove('selected'));
-            document.querySelectorAll('.unit-option').forEach(o => o.classList.remove('selected'));
         }
 
-        // 파티 참여 확인
+        // 국가 선택
+        function selectCountry(country) {
+            selectedCountry = country;
+            document.querySelectorAll('#countrySelection .selection-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector(`[data-country="${country}"]`).classList.add('selected');
+            checkJoinReady();
+        }
+
+        // 병종 선택
+        function selectUnit(unit) {
+            selectedUnit = unit;
+            document.querySelectorAll('#unitSelection .selection-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector(`[data-unit="${unit}"]`).classList.add('selected');
+            checkJoinReady();
+        }
+
+        // 티어 선택
+        function selectTier(tier) {
+            selectedTier = tier;
+            document.querySelectorAll('#tierSelection .selection-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector(`[data-tier="${tier}"]`).classList.add('selected');
+            checkJoinReady();
+        }
+
+        // 참여 가능 여부 확인
+        function checkJoinReady() {
+            const isReady = selectedCountry && selectedUnit && selectedTier;
+            document.getElementById('confirmJoinBtn').disabled = !isReady;
+        }
+
+        // 참여 확인
         async function confirmJoin() {
-            if (!selectedCountry || !selectedUnit) {
-                showToast('국가와 병종을 선택해주세요', 'error');
+            if (!selectedCountry || !selectedUnit || !selectedTier) {
+                showToast('국가, 병종, 티어를 모두 선택해주세요', 'error');
                 return;
             }
 
@@ -1151,7 +1597,8 @@
                     body: JSON.stringify({
                         team: selectedTeam,
                         country: selectedCountry,
-                        unit: selectedUnit
+                        unit: selectedUnit,
+                        tier: selectedTier
                     })
                 });
 
@@ -1169,7 +1616,7 @@
                 showToast(error.message || '파티 참여 중 오류가 발생했습니다', 'error');
             } finally {
                 joinBtn.disabled = false;
-                joinBtn.innerHTML = '참여하기';
+                joinBtn.innerHTML = '<i class="fas fa-check"></i> 참여하기';
             }
         }
 
@@ -1196,24 +1643,36 @@
             }
         }
 
-        // 파티 종료
-        async function endParty() {
-            const action = confirm('파티를 완료하시겠습니까? (취소하려면 "취소"를 누르세요)') ? 'complete' : 'cancel';
-            
-            let winner = null;
-            let team1Score = 0;
-            let team2Score = 0;
+        // 파티 완료
+        async function completeParty() {
+            try {
+                const response = await fetch(`/party/api/${partyData.partyId}/end`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'complete'
+                    })
+                });
 
-            if (action === 'complete') {
-                winner = prompt('승리 팀을 입력하세요 (team1, team2, draw):');
-                if (!['team1', 'team2', 'draw'].includes(winner)) {
-                    showToast('올바른 승리 팀을 입력해주세요', 'error');
-                    return;
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast('파티가 완료되었습니다', 'success');
+                    setTimeout(() => window.location.href = '/party', 1500);
+                } else {
+                    throw new Error(result.error || '파티 완료에 실패했습니다');
                 }
-
-                team1Score = parseInt(prompt('팀 1 점수:') || '0');
-                team2Score = parseInt(prompt('팀 2 점수:') || '0');
+            } catch (error) {
+                console.error('파티 완료 오류:', error);
+                showToast(error.message || '파티 완료 중 오류가 발생했습니다', 'error');
             }
+        }
+
+        // 파티 취소
+        async function cancelParty() {
+            if (!confirm('정말로 파티를 취소하시겠습니까?')) return;
 
             try {
                 const response = await fetch(`/party/api/${partyData.partyId}/end`, {
@@ -1222,25 +1681,191 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        action,
-                        winner,
-                        team1Score,
-                        team2Score
+                        action: 'cancel'
                     })
                 });
 
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    showToast(`파티가 ${action === 'complete' ? '완료' : '취소'}되었습니다`, 'success');
+                    showToast('파티가 취소되었습니다', 'success');
                     setTimeout(() => window.location.href = '/party', 1500);
                 } else {
-                    throw new Error(result.error || '파티 종료에 실패했습니다');
+                    throw new Error(result.error || '파티 취소에 실패했습니다');
                 }
             } catch (error) {
-                console.error('파티 종료 오류:', error);
-                showToast(error.message || '파티 종료 중 오류가 발생했습니다', 'error');
+                console.error('파티 취소 오류:', error);
+                showToast(error.message || '파티 취소 중 오류가 발생했습니다', 'error');
             }
+        }
+
+        // 파티 수정
+        function editParty() {
+            window.location.href = `/party/edit/${partyData.partyId}`;
+        }
+
+        // 팀 변경
+        async function changeTeam(newTeam) {
+            try {
+                const participant = partyData.participants.find(p => p.userId === currentUser?.id);
+                if (!participant) {
+                    showToast('참여 정보를 찾을 수 없습니다', 'error');
+                    return;
+                }
+
+                const response = await fetch(`/party/api/${partyData.partyId}/join`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        team: newTeam,
+                        country: participant.country,
+                        unit: participant.unit,
+                        tier: participant.tier
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showToast(`${newTeam === 'waitlist' ? '대기자로' : newTeam === 'team1' ? '1팀으로' : '2팀으로'} 변경되었습니다`, 'success');
+                    await loadPartyDetails();
+                } else {
+                    throw new Error(result.error || '팀 변경에 실패했습니다');
+                }
+            } catch (error) {
+                console.error('팀 변경 오류:', error);
+                showToast(error.message || '팀 변경 중 오류가 발생했습니다', 'error');
+            }
+        }
+
+        // 사이드바 설정
+        function setupSidebar() {
+            if (currentUser) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('user-profile-section').style.display = 'block';
+                
+                document.getElementById('user-profile-avatar').src = currentUser.avatar ? 
+                    `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png` : 
+                    '/img/default-avatar.png';
+                document.getElementById('user-profile-name').textContent = currentUser.nickname || currentUser.username;
+                document.getElementById('user-profile-role').textContent = getRoleName(currentUser.dashboardRole);
+                
+                // 통계 업데이트
+                const stats = currentUser.gameStats || {};
+                const totalGames = stats.wins + stats.losses;
+                const winRate = totalGames > 0 ? ((stats.wins / totalGames) * 100).toFixed(1) : 0;
+                
+                document.getElementById('stat-record').textContent = `${stats.wins}승 ${stats.losses}패`;
+                document.getElementById('stat-winrate').textContent = `${winRate}%`;
+                document.getElementById('stat-avgkills').textContent = stats.avgKills || 0;
+                document.getElementById('stat-ranked').textContent = `${stats.rankedGames || 0}회`;
+                document.getElementById('stat-practice').textContent = `${stats.practiceGames || 0}회`;
+                document.getElementById('stat-total').textContent = `${totalGames}회`;
+            } else {
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('user-profile-section').style.display = 'none';
+            }
+        }
+
+        // Discord 로그인 설정
+        async function setupDiscordLogin() {
+            const loginBtn = document.getElementById('discord-login');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', async () => {
+                    try {
+                        const response = await fetch('/api/oauth-url');
+                        const data = await response.json();
+                        if (data.url) {
+                            window.location.href = data.url;
+                        }
+                    } catch (error) {
+                        console.error('OAuth URL 가져오기 실패:', error);
+                        showToast('로그인 URL을 가져올 수 없습니다', 'error');
+                    }
+                });
+            }
+        }
+
+        // 권한 이름 변환
+        function getRoleName(role) {
+            const roleNames = {
+                'guest': '손님',
+                'member': '멤버',
+                'subadmin': '부관리자',
+                'admin': '관리자',
+                'owner': '소유자'
+            };
+            return roleNames[role] || '손님';
+        }
+
+        // 프로필 보기
+        function viewFullProfile() {
+            showToast('프로필 기능은 준비 중입니다', 'info');
+        }
+
+        // 닉네임 변경 모달
+        function openNicknameModal() {
+            const modal = document.getElementById('nickname-modal');
+            const input = document.getElementById('nickname-input');
+            input.value = currentUser.nickname || currentUser.username;
+            modal.style.display = 'block';
+            input.focus();
+        }
+
+        function closeNicknameModal() {
+            document.getElementById('nickname-modal').style.display = 'none';
+        }
+
+        async function saveNickname() {
+            const nickname = document.getElementById('nickname-input').value.trim();
+            
+            if (!nickname) {
+                showToast('닉네임을 입력해주세요', 'error');
+                return;
+            }
+            
+            if (nickname.length > 20) {
+                showToast('닉네임은 20자 이내로 입력해주세요', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/user/nickname', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nickname })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('닉네임 변경 실패');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentUser.nickname = nickname;
+                    document.getElementById('user-profile-name').textContent = nickname;
+                    closeNicknameModal();
+                    showToast('닉네임이 변경되었습니다', 'success');
+                } else {
+                    showToast(result.error || '닉네임 변경 실패', 'error');
+                }
+            } catch (error) {
+                showToast('닉네임 변경 중 오류가 발생했습니다', 'error');
+            }
+        }
+
+        // 사이드바 토글
+        function toggleSidebar() {
+            document.getElementById('sidebar-left').classList.toggle('open');
+        }
+
+        function toggleMenu() {
+            document.getElementById('sidebar-right').classList.toggle('open');
         }
 
         // 유틸리티 함수
