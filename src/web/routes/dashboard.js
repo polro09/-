@@ -5,7 +5,10 @@ const { config } = require('../../config/config');
 const User = require('../../models/User');
 const Permission = require('../../models/Permission');
 const BotStatus = require('../../models/BotStatus');
+const Guild = require('../../models/Guild');
 const logger = require('../../utils/logger');
+const { exec } = require('child_process');
+const os = require('os');
 
 // 권한 확인 미들웨어
 const checkPermission = (requiredLevel) => {
@@ -29,6 +32,7 @@ const checkPermission = (requiredLevel) => {
             }
             
             req.userPermissions = permissions;
+            req.user = user;
             next();
         } catch (error) {
             logger.error('권한 확인 오류:', error);
@@ -123,6 +127,133 @@ router.get('/statistics', checkPermission('member'), async (req, res) => {
     } catch (error) {
         logger.error('통계 조회 오류:', error);
         res.status(500).json({ error: '통계를 조회할 수 없습니다.' });
+    }
+});
+
+// 서버 목록 조회
+router.get('/servers', checkPermission('subadmin'), async (req, res) => {
+    try {
+        const client = req.client;
+        const userGuilds = [];
+        
+        // 봇이 있는 서버 중 사용자가 관리 권한을 가진 서버만
+        for (const [guildId, guild] of client.guilds.cache) {
+            const member = guild.members.cache.get(req.session.user.id);
+            if (member && member.permissions.has('MANAGE_GUILD')) {
+                const settings = await Guild.findOne({ guildId: guild.id });
+                
+                userGuilds.push({
+                    id: guild.id,
+                    name: guild.name,
+                    icon: guild.iconURL(),
+                    memberCount: guild.memberCount,
+                    owner: guild.ownerId === req.session.user.id,
+                    settings: settings ? {
+                        prefix: settings.prefix,
+                        language: settings.language,
+                        modules: settings.modules
+                    } : { 
+                        prefix: '!', 
+                        language: 'ko',
+                        modules: {}
+                    },
+                    botJoined: true
+                });
+            }
+        }
+        
+        res.json({ guilds: userGuilds });
+    } catch (error) {
+        logger.error('서버 목록 조회 오류:', error);
+        res.status(500).json({ error: '서버 목록을 조회할 수 없습니다.' });
+    }
+});
+
+// 서버 설정 조회
+router.get('/servers/:guildId', checkPermission('subadmin'), async (req, res) => {
+    try {
+        const { guildId } = req.params;
+        const client = req.client;
+        
+        const guild = client.guilds.cache.get(guildId);
+        if (!guild) {
+            return res.status(404).json({ error: '서버를 찾을 수 없습니다.' });
+        }
+        
+        // 권한 확인
+        const member = guild.members.cache.get(req.session.user.id);
+        if (!member || !member.permissions.has('MANAGE_GUILD')) {
+            return res.status(403).json({ error: '서버 관리 권한이 없습니다.' });
+        }
+        
+        const settings = await Guild.findOne({ guildId }) || {
+            guildId,
+            guildName: guild.name,
+            prefix: '!',
+            language: 'ko',
+            welcomeChannel: null,
+            welcomeMessage: null,
+            modules: {}
+        };
+        
+        res.json({
+            guild: {
+                id: guild.id,
+                name: guild.name,
+                icon: guild.iconURL(),
+                memberCount: guild.memberCount,
+                channels: guild.channels.cache.map(ch => ({
+                    id: ch.id,
+                    name: ch.name,
+                    type: ch.type
+                }))
+            },
+            settings
+        });
+    } catch (error) {
+        logger.error('서버 설정 조회 오류:', error);
+        res.status(500).json({ error: '서버 설정을 조회할 수 없습니다.' });
+    }
+});
+
+// 서버 설정 업데이트
+router.put('/servers/:guildId/settings', checkPermission('subadmin'), async (req, res) => {
+    try {
+        const { guildId } = req.params;
+        const updates = req.body;
+        
+        const client = req.client;
+        const guild = client.guilds.cache.get(guildId);
+        
+        if (!guild) {
+            return res.status(404).json({ error: '서버를 찾을 수 없습니다.' });
+        }
+        
+        // 권한 확인
+        const member = guild.members.cache.get(req.session.user.id);
+        if (!member || !member.permissions.has('MANAGE_GUILD')) {
+            return res.status(403).json({ error: '서버 관리 권한이 없습니다.' });
+        }
+        
+        // 설정 업데이트
+        const settings = await Guild.findOneAndUpdate(
+            { guildId },
+            { 
+                $set: {
+                    ...updates,
+                    guildName: guild.name,
+                    updatedAt: new Date()
+                }
+            },
+            { upsert: true, new: true }
+        );
+        
+        logger.info(`서버 설정 업데이트: ${guild.name} (${guildId})`);
+        
+        res.json({ success: true, settings });
+    } catch (error) {
+        logger.error('서버 설정 업데이트 오류:', error);
+        res.status(500).json({ error: '서버 설정을 업데이트할 수 없습니다.' });
     }
 });
 
@@ -229,6 +360,38 @@ router.post('/control/stop', checkPermission('admin'), async (req, res) => {
     } catch (error) {
         logger.error('봇 종료 오류:', error);
         res.status(500).json({ error: '봇 종료 중 오류가 발생했습니다.' });
+    }
+});
+
+// 닉네임 변경
+router.put('/nickname', checkPermission('member'), async (req, res) => {
+    try {
+        const { nickname } = req.body;
+        
+        if (!nickname || nickname.trim().length === 0) {
+            return res.status(400).json({ error: '닉네임을 입력해주세요.' });
+        }
+        
+        if (nickname.length > 20) {
+            return res.status(400).json({ error: '닉네임은 20자 이내로 입력해주세요.' });
+        }
+        
+        const user = await User.findOneAndUpdate(
+            { discordId: req.session.user.id },
+            { nickname: nickname.trim() },
+            { new: true }
+        );
+        
+        logger.info(`닉네임 변경: ${req.session.user.username} → ${nickname}`);
+        
+        res.json({ 
+            success: true, 
+            nickname: user.nickname,
+            message: '닉네임이 변경되었습니다.' 
+        });
+    } catch (error) {
+        logger.error('닉네임 변경 오류:', error);
+        res.status(500).json({ error: '닉네임 변경 중 오류가 발생했습니다.' });
     }
 });
 
@@ -363,7 +526,7 @@ router.get('/logs', checkPermission('subadmin'), async (req, res) => {
     }
 });
 
-// 권한 관리 페이지
+// 권한 관리 페이지 데이터
 router.get('/permissions', checkPermission('admin'), async (req, res) => {
     try {
         const users = await User.find({}, 'discordId username avatar dashboardRole lastLogin');
@@ -388,10 +551,20 @@ router.put('/permissions/user/:userId', checkPermission('admin'), async (req, re
             return res.status(400).json({ error: '유효하지 않은 권한입니다.' });
         }
         
-        // 소유자는 변경 불가
+        // 대상 사용자 확인
         const targetUser = await User.findOne({ discordId: userId });
+        if (!targetUser) {
+            return res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
+        }
+        
+        // 소유자는 변경 불가
         if (targetUser.dashboardRole === 'owner') {
             return res.status(403).json({ error: '소유자 권한은 변경할 수 없습니다.' });
+        }
+        
+        // 자기 자신의 권한은 변경 불가
+        if (userId === req.session.user.id) {
+            return res.status(403).json({ error: '자신의 권한은 변경할 수 없습니다.' });
         }
         
         // 권한 업데이트
@@ -400,12 +573,75 @@ router.put('/permissions/user/:userId', checkPermission('admin'), async (req, re
             { dashboardRole: role }
         );
         
-        logger.auth(`사용자 권한 변경: ${userId} → ${role}`, 'permission');
+        logger.info(`사용자 권한 변경: ${userId} → ${role}`);
         
         res.json({ success: true, message: '권한이 변경되었습니다.' });
     } catch (error) {
         logger.error('권한 변경 오류:', error);
         res.status(500).json({ error: '권한 변경 중 오류가 발생했습니다.' });
+    }
+});
+
+// 메뉴 권한 목록
+router.get('/permissions/menus', checkPermission('admin'), async (req, res) => {
+    try {
+        const MenuPermission = require('../../models/MenuPermission');
+        const menus = await MenuPermission.find({});
+        
+        res.json({
+            success: true,
+            menus: menus.map(menu => ({
+                id: menu.menuId,
+                name: menu.name,
+                minRole: menu.minRole,
+                description: menu.description,
+                updatedAt: menu.updatedAt
+            }))
+        });
+    } catch (error) {
+        logger.error('메뉴 권한 조회 오류:', error);
+        // MenuPermission 모델이 없는 경우 빈 배열 반환
+        res.json({
+            success: true,
+            menus: []
+        });
+    }
+});
+
+// 메뉴 권한 변경
+router.put('/permissions/menu/:menuId', checkPermission('admin'), async (req, res) => {
+    try {
+        const { menuId } = req.params;
+        const { minRole } = req.body;
+        
+        // 권한 유효성 확인
+        const validRoles = ['guest', 'member', 'subadmin', 'admin', 'owner'];
+        if (!validRoles.includes(minRole)) {
+            return res.status(400).json({ error: '유효하지 않은 권한입니다.' });
+        }
+        
+        const MenuPermission = require('../../models/MenuPermission');
+        
+        // 메뉴 권한 업데이트 또는 생성
+        const menu = await MenuPermission.findOneAndUpdate(
+            { menuId },
+            { 
+                menuId,
+                minRole,
+                updatedAt: new Date()
+            },
+            { upsert: true, new: true }
+        );
+        
+        logger.info(`메뉴 권한 변경: ${menuId} → ${minRole}`);
+        
+        res.json({ 
+            success: true, 
+            message: `메뉴 권한이 ${minRole}로 변경되었습니다.` 
+        });
+    } catch (error) {
+        logger.error('메뉴 권한 변경 오류:', error);
+        res.status(500).json({ error: '메뉴 권한 변경 중 오류가 발생했습니다.' });
     }
 });
 
