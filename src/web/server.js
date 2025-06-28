@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo');
 const path = require('path');
 const { config } = require('../config/config');
 const logger = require('../utils/logger');
+const { checkSession } = require('./middleware/checkSession');
 
 module.exports = async (client) => {
     const app = express();
@@ -68,22 +69,10 @@ module.exports = async (client) => {
     }
     
     // 세션 설정
-    app.use(session({
-        secret: config.sessionSecret || 'aimdot-dev-secret-key-2024',
-        resave: false,
-        saveUninitialized: false,
-        name: 'aimdot.sid', // 세션 쿠키 이름
-        store: sessionConfig.store, // MongoDB 스토어 (있는 경우)
-        cookie: {
-            maxAge: 24 * 60 * 60 * 1000, // 24시간
-            secure: false, // HTTPS 강제하지 않음 (cloudflared가 처리)
-            httpOnly: true,
-            sameSite: 'lax', // CSRF 보호
-            path: '/',
-            domain: undefined // 도메인 자동 설정
-        },
-        proxy: true // 프록시 뒤에 있음을 명시
-    }));
+    app.use(session(sessionConfig));
+    
+    // 세션 업데이트 미들웨어 추가
+    app.use(checkSession);
     
     // 세션 디버깅 미들웨어
     app.use((req, res, next) => {
@@ -117,6 +106,9 @@ module.exports = async (client) => {
     app.use('/api', require('./routes/api'));
     app.use('/dashboard/api', require('./routes/dashboard'));
     app.use('/party/api', require('./routes/party'));
+    
+    // 권한 관리 라우트 추가
+    app.use('/dashboard/api/permissions', require('./routes/permissions'));
     
     // 메인 페이지 (최초 방문 체크)
     app.get('/', (req, res) => {

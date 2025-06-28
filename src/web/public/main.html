@@ -772,7 +772,7 @@
                         <span id="user-profile-name">로딩 중...</span>
                         <i class="fas fa-edit edit-nickname-btn" onclick="openNicknameModal()"></i>
                     </div>
-                    <div class="user-profile-role" id="user-profile-role">손님</div>
+                    <div class="user-profile-role" id="user-profile-role">guest</div>
                 </div>
             </div>
             
@@ -1002,13 +1002,13 @@
         // 권한 이름 변환
         function getRoleName(role) {
             const roleNames = {
-                'guest': '손님',
-                'member': '멤버',
-                'subadmin': '부관리자',
-                'admin': '관리자',
-                'owner': '소유자'
+                'guest': 'Guest',
+                'member': 'Member',
+                'subadmin': 'Sub Admin',
+                'admin': 'Admin',
+                'owner': 'Owner'
             };
-            return roleNames[role] || '손님';
+            return roleNames[role] || 'guest';
         }
 
         // 프로필 전체 보기

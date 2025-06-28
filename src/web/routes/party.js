@@ -6,6 +6,7 @@ const User = require('../../models/User');
 const Permission = require('../../models/Permission');
 const logger = require('../../utils/logger');
 const { v4: uuidv4 } = require('uuid');
+const { checkSessionAPI } = require('../middleware/checkSession');
 
 // 권한 체크 미들웨어
 const checkPermission = (requiredLevel) => {
@@ -25,6 +26,9 @@ const checkPermission = (requiredLevel) => {
         next();
     };
 };
+
+// 모든 파티 라우트에 세션 확인 미들웨어 적용
+router.use(checkSessionAPI);
 
 // 파티 목록 조회
 router.get('/list', async (req, res) => {
@@ -179,6 +183,26 @@ router.post('/:partyId/join', checkPermission('member'), async (req, res) => {
             return res.status(400).json({ error: '모집이 마감된 파티입니다.' });
         }
         
+        // 권한 확인 - 세션의 최신 권한 사용
+        if (party.requirements) {
+            const roleValues = {
+                guest: 0,
+                member: 1,
+                subadmin: 2,
+                admin: 3,
+                owner: 4
+            };
+            
+            const userRoleValue = roleValues[req.session.user.dashboardRole] || 0;
+            const minRoleValue = roleValues[party.requirements] || 0;
+            
+            if (userRoleValue < minRoleValue) {
+                return res.status(403).json({ 
+                    error: `이 파티는 ${party.requirements} 이상의 권한이 필요합니다. 현재 권한: ${req.session.user.dashboardRole}` 
+                });
+            }
+        }
+        
         // 사용자의 nickname 정보도 가져오기
         const user = await User.findOne({ discordId: req.session.user.id }).lean();
         
@@ -213,8 +237,10 @@ router.post('/:partyId/join', checkPermission('member'), async (req, res) => {
         party.updatedAt = new Date();
         await party.save();
         
-        // 디스코드 메시지 업데이트
-        await party.updateDiscordMessage(req.client);
+        // 디스코드 메시지 업데이트 (실패해도 계속 진행)
+        party.updateDiscordMessage(req.client).catch(err => {
+            logger.debug(`Discord 메시지 업데이트 실패 (무시됨): ${err.message}`, 'party');
+        });
         
         logger.party(`파티 참여: ${req.params.partyId} - ${userData.nickname} (${team}) - 티어: ${tier}`);
         res.json({ success: true, party });
@@ -239,8 +265,10 @@ router.post('/:partyId/leave', checkPermission('member'), async (req, res) => {
             return res.status(400).json({ error: result.message });
         }
         
-        // 디스코드 메시지 업데이트
-        await party.updateDiscordMessage(req.client);
+        // 디스코드 메시지 업데이트 (실패해도 계속 진행)
+        party.updateDiscordMessage(req.client).catch(err => {
+            logger.debug(`Discord 메시지 업데이트 실패 (무시됨): ${err.message}`, 'party');
+        });
         
         logger.party(`파티 나가기: ${req.params.partyId} - ${req.session.user.username}`);
         res.json({ success: true });
@@ -273,8 +301,10 @@ router.put('/:partyId', checkPermission('member'), async (req, res) => {
         party.updatedAt = new Date();
         await party.save();
         
-        // 디스코드 메시지 업데이트
-        await party.updateDiscordMessage(req.client);
+        // 디스코드 메시지 업데이트 (실패해도 계속 진행)
+        party.updateDiscordMessage(req.client).catch(err => {
+            logger.debug(`Discord 메시지 업데이트 실패 (무시됨): ${err.message}`, 'party');
+        });
         
         logger.party(`파티 수정: ${req.params.partyId} by ${req.session.user.username}`);
         res.json({ success: true, party });
@@ -319,8 +349,10 @@ router.post('/:partyId/end', checkPermission('member'), async (req, res) => {
         
         await party.save();
         
-        // 디스코드 메시지 업데이트
-        await party.updateDiscordMessage(req.client);
+        // 디스코드 메시지 업데이트 (실패해도 계속 진행)
+        party.updateDiscordMessage(req.client).catch(err => {
+            logger.debug(`Discord 메시지 업데이트 실패 (무시됨): ${err.message}`, 'party');
+        });
         
         logger.party(`파티 ${action}: ${req.params.partyId} by ${req.session.user.username}`);
         res.json({ success: true });
@@ -466,7 +498,7 @@ async function notifyDiscord(client, party) {
                     .setLabel('파티 참여')
                     .setEmoji('🎮')
                     .setStyle(ButtonStyle.Link)
-                    .setURL(`${process.env.WEB_URL || 'http://localhost:3000'}/party/${party.partyId}`)
+                    .setURL(`${process.env.WEB_URL || 'https://aimdot.dev'}/party/${party.partyId}`)
             );
         
         // 모든 파티 타입에 @everyone 멘션
