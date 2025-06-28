@@ -11,6 +11,10 @@ router.get('/discord', async (req, res) => {
     try {
         const state = Math.random().toString(36).substring(7);
         
+        // 디버깅 정보
+        logger.info(`OAuth 시작 - Host: ${req.get('host')}, Protocol: ${req.protocol}`, 'auth');
+        logger.info(`Redirect URI: ${config.redirectUri}`, 'auth');
+        
         // 세션이 없으면 생성
         if (!req.session) {
             logger.error('세션이 초기화되지 않았습니다', 'auth');
@@ -20,8 +24,23 @@ router.get('/discord', async (req, res) => {
         req.session.oauth_state = state;
         req.session.oauth_timestamp = Date.now();
         
-        // 리턴 URL 저장 (어디에서 왔는지 기억)
-        const returnUrl = req.query.returnUrl || req.header('Referer') || '/dashboard';
+        // 리턴 URL 저장 (어디에서 왔는지 기억) - 도메인 처리
+        let returnUrl = req.query.returnUrl || req.header('Referer') || '/dashboard';
+        
+        // Referer가 있고 같은 도메인인 경우만 사용
+        if (req.header('Referer')) {
+            try {
+                const refererUrl = new URL(req.header('Referer'));
+                const currentHost = req.get('host');
+                // 같은 호스트인 경우만 Referer 사용
+                if (refererUrl.host === currentHost || (config.isProduction && refererUrl.host === 'aimdot.dev')) {
+                    returnUrl = refererUrl.pathname + refererUrl.search;
+                }
+            } catch (e) {
+                // URL 파싱 실패 시 기본값 사용
+            }
+        }
+        
         req.session.returnUrl = returnUrl;
         
         logger.info(`OAuth 시작 - State: ${state}, Return URL: ${returnUrl}`, 'auth');
@@ -47,6 +66,9 @@ router.get('/discord', async (req, res) => {
         });
         
         const authUrl = `https://discord.com/api/oauth2/authorize?${params}`;
+        
+        logger.info(`Discord로 리디렉션: ${authUrl}`, 'auth');
+        
         res.redirect(authUrl);
     } catch (error) {
         logger.error(`OAuth URL 생성 오류: ${error.message}`, 'auth');
@@ -73,7 +95,7 @@ router.get('/callback', async (req, res) => {
     }
     
     // State 검증
-    const sessionState = req.session.oauth_state;
+    const sessionState = req.session?.oauth_state;
     
     // State가 없는 경우 더 자세한 디버깅
     if (!sessionState) {
@@ -90,13 +112,25 @@ router.get('/callback', async (req, res) => {
         return res.status(400).send('잘못된 인증 요청입니다. 다시 시도해주세요.');
     }
     
-    // 리턴 URL 가져오기
-    const returnUrl = req.session.returnUrl || '/dashboard';
+    // 리턴 URL 가져오기 - 도메인 포함 처리
+    let returnUrl = req.session?.returnUrl || '/dashboard';
+    
+    // 상대 경로인 경우 도메인 추가 (간단한 방법)
+    if (returnUrl.startsWith('/')) {
+        // aimdot.dev로 접속한 경우 항상 https://aimdot.dev 사용
+        if (req.get('host').includes('aimdot.dev')) {
+            returnUrl = 'https://aimdot.dev' + returnUrl;
+        } else {
+            returnUrl = `${req.protocol}://${req.get('host')}${returnUrl}`;
+        }
+    }
     
     // State와 returnUrl 삭제
-    delete req.session.oauth_state;
-    delete req.session.oauth_timestamp;
-    delete req.session.returnUrl;
+    if (req.session) {
+        delete req.session.oauth_state;
+        delete req.session.oauth_timestamp;
+        delete req.session.returnUrl;
+    }
     
     try {
         // 액세스 토큰 획득
@@ -146,69 +180,37 @@ router.get('/callback', async (req, res) => {
             const permissions = BigInt(guild.permissions);
             return (permissions & BigInt(0x8)) === BigInt(0x8);
         });
-        logger.info(`관리 권한이 있는 서버: ${adminGuilds.map(g => g.name).slice(0, 5).join(', ')}${adminGuilds.length > 5 ? ` 외 ${adminGuilds.length - 5}개` : ''}`, 'auth');
+        logger.info(`관리 권한이 있는 서버: ${adminGuilds.map(g => g.name).slice(0, 5).join(', ')}${adminGuilds.length > 5 ? ' 외 ' + (adminGuilds.length - 5) + '개' : ''}`, 'auth');
         
-        // MongoDB 연결 확인 및 사용자 정보 업데이트
-        const mongoose = require('mongoose');
-        let dbUser = null;
-        let dashboardRole = 'member';
+        // 사용자 정보 DB에 저장/업데이트
+        let user = await User.findOne({ discordId: userData.id });
         
-        if (mongoose.connection.readyState === 1) {
-            try {
-                dbUser = await User.findOne({ discordId: userData.id });
-                
-                if (!dbUser) {
-                    // 첫 사용자는 owner
-                    const userCount = await User.countDocuments();
-                    if (userCount === 0) {
-                        dashboardRole = 'owner';
-                    } else if (config.developers && config.developers.includes(userData.id)) {
-                        // 개발자는 admin
-                        dashboardRole = 'admin';
-                    }
-                    
-                    dbUser = new User({
-                        discordId: userData.id,
-                        username: userData.username,
-                        discriminator: userData.discriminator || '0',
-                        avatar: userData.avatar,
-                        email: userData.email,
-                        dashboardRole: dashboardRole,
-                        guilds: guilds.map(guild => ({
-                            id: guild.id,
-                            name: guild.name,
-                            icon: guild.icon,
-                            owner: guild.owner,
-                            permissions: guild.permissions.toString() // BigInt를 String으로
-                        })).slice(0, 10) // 최대 10개만 저장
-                    });
-                    
-                    await dbUser.save();
-                    logger.success(`새 사용자 등록: ${userData.username} (역할: ${dashboardRole})`, 'auth');
-                } else {
-                    // 기존 사용자 정보 업데이트
-                    dbUser.username = userData.username;
-                    dbUser.discriminator = userData.discriminator || '0';
-                    dbUser.avatar = userData.avatar;
-                    dbUser.email = userData.email;
-                    dbUser.guilds = guilds.map(guild => ({
-                        id: guild.id,
-                        name: guild.name,
-                        icon: guild.icon,
-                        owner: guild.owner,
-                        permissions: guild.permissions.toString() // BigInt를 String으로
-                    })).slice(0, 10);
-                    
-                    await dbUser.updateLogin(); // 로그인 시간 업데이트
-                    dashboardRole = dbUser.dashboardRole;
-                    logger.info(`사용자 정보 업데이트: ${userData.username} (역할: ${dashboardRole})`, 'auth');
-                }
-            } catch (dbError) {
-                logger.error(`사용자 DB 작업 오류: ${dbError.message}`, 'auth');
-                // DB 오류가 있어도 세션은 계속 진행
-            }
+        let dashboardRole = 'guest'; // 기본값
+        
+        if (!user) {
+            // 신규 사용자
+            user = new User({
+                discordId: userData.id,
+                username: userData.username,
+                discriminator: userData.discriminator,
+                avatar: userData.avatar,
+                email: userData.email,
+                dashboardRole: 'guest',
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+            await user.save();
+            logger.info(`신규 사용자 등록: ${userData.username}`, 'auth');
         } else {
-            logger.warn('MongoDB 연결이 없어 세션에만 사용자 정보를 저장합니다', 'auth');
+            // 기존 사용자 업데이트
+            user.username = userData.username;
+            user.discriminator = userData.discriminator;
+            user.avatar = userData.avatar;
+            user.email = userData.email;
+            user.updatedAt = new Date();
+            dashboardRole = user.dashboardRole || 'guest';
+            await user.save();
+            logger.info(`기존 사용자 정보 업데이트: ${userData.username}`, 'auth');
         }
         
         // 세션에 사용자 정보 저장
@@ -218,8 +220,8 @@ router.get('/callback', async (req, res) => {
             discriminator: userData.discriminator,
             avatar: userData.avatar,
             email: userData.email,
-            nickname: dbUser?.nickname || userData.username,
-            gameStats: dbUser?.gameStats || {
+            nickname: user.nickname || userData.username,
+            gameStats: user.gameStats || {
                 wins: 0,
                 losses: 0,
                 totalKills: 0,
@@ -258,8 +260,22 @@ router.get('/callback', async (req, res) => {
         
         logger.success(`사용자 로그인 성공: ${userData.username}, 리다이렉트: ${returnUrl}`, 'auth');
         
-        // 원래 페이지로 리다이렉트
-        res.redirect(returnUrl);
+        // 원래 페이지로 리다이렉트 - 도메인 강제 적용
+        let finalRedirectUrl = returnUrl;
+        
+        // aimdot.dev로 접속한 경우 처리
+        const originalHost = req.get('host');
+        if (originalHost && originalHost.includes('aimdot.dev')) {
+            if (finalRedirectUrl.startsWith('/')) {
+                finalRedirectUrl = 'https://aimdot.dev' + finalRedirectUrl;
+            } else if (finalRedirectUrl.includes('localhost')) {
+                // localhost URL을 aimdot.dev로 변경
+                finalRedirectUrl = finalRedirectUrl.replace(/https?:\/\/localhost:\d+/, 'https://aimdot.dev');
+            }
+        }
+        
+        logger.info(`최종 리디렉션 URL: ${finalRedirectUrl}`, 'auth');
+        res.redirect(finalRedirectUrl);
         
     } catch (error) {
         logger.error(`OAuth 콜백 오류: ${error.message}`, 'auth');
@@ -282,8 +298,16 @@ router.get('/callback', async (req, res) => {
 
 // 로그아웃
 router.get('/logout', (req, res) => {
-    const username = req.session.user?.username;
-    const returnUrl = req.query.returnUrl || req.header('Referer') || '/';
+    const username = req.session?.user?.username;
+    let returnUrl = req.query.returnUrl || req.header('Referer') || '/';
+    
+    // 상대 경로인 경우 도메인 추가
+    if (returnUrl.startsWith('/')) {
+        const protocol = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+        const host = req.get('host');
+        const domain = config.isProduction ? 'https://aimdot.dev' : `${protocol}://${host}`;
+        returnUrl = domain + returnUrl;
+    }
     
     req.session.destroy((err) => {
         if (err) {
@@ -300,7 +324,9 @@ router.get('/check', (req, res) => {
     res.json({
         sessionId: req.sessionID,
         session: req.session,
-        user: req.session.user || null
+        user: req.session?.user || null,
+        redirectUri: config.redirectUri,
+        environment: process.env.NODE_ENV || 'development'
     });
 });
 

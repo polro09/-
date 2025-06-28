@@ -18,22 +18,52 @@ const requireAuth = (req, res, next) => {
 
 // OAuth URL 반환 (main.html에서 사용)
 router.get('/oauth-url', (req, res) => {
+    // 현재 호스트 확인
+    const protocol = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+    const host = req.get('host');
+    const baseUrl = `${protocol}://${host}`;
+    
+    // 상태값 생성
+    const state = Math.random().toString(36).substring(7);
+    
+    // 세션에 상태 저장
+    if (req.session) {
+        req.session.oauth_state = state;
+        req.session.save();
+    }
+    
     const params = new URLSearchParams({
         client_id: config.clientId,
-        redirect_uri: config.redirectUri,
+        redirect_uri: config.redirectUri, // 환경 변수에서 설정된 값 사용
         response_type: 'code',
-        scope: 'identify email guilds'
+        scope: 'identify email guilds',
+        state: state
     });
     
-    res.json({ url: `https://discord.com/api/oauth2/authorize?${params}` });
+    const url = `https://discord.com/api/oauth2/authorize?${params}`;
+    
+    logger.debug(`OAuth URL 생성 - Redirect URI: ${config.redirectUri}`, 'api');
+    
+    res.json({ 
+        url: url,
+        baseUrl: baseUrl,
+        redirectUri: config.redirectUri
+    });
 });
 
 // 사용자 정보
 router.get('/user', (req, res) => {
+    // 디버깅 로그
+    logger.debug(`/api/user 요청 - 세션 ID: ${req.sessionID}`, 'api');
+    logger.debug(`세션 데이터: ${JSON.stringify(req.session)}`, 'api');
+    
     // 로그인하지 않은 경우
     if (!req.session.user) {
+        logger.debug('세션에 사용자 정보 없음', 'api');
         return res.status(401).json({ error: '로그인이 필요합니다.', user: null });
     }
+    
+    logger.debug(`사용자 정보 반환: ${req.session.user.username}`, 'api');
     
     // 민감한 정보 제외하고 필요한 정보만 반환
     const { id, username, avatar, email, dashboardRole, guildCount, nickname, gameStats } = req.session.user;
@@ -275,6 +305,127 @@ router.put('/servers/:guildId/modules/:module', requireAuth, async (req, res) =>
     }
 });
 
+// 파티 관련 API
+// 파티 생성
+router.post('/party/create', requireAuth, async (req, res) => {
+    try {
+        const { name, maxMembers, isPublic, description } = req.body;
+        
+        // 유효성 검사
+        if (!name || name.trim().length === 0) {
+            return res.status(400).json({ success: false, error: '파티 이름을 입력해주세요.' });
+        }
+        
+        // 파티 생성
+        const party = new Party({
+            name: name.trim(),
+            creator: req.session.user.id,
+            maxMembers: maxMembers || 4,
+            isPublic: isPublic !== false,
+            description: description || '',
+            createdAt: new Date()
+        });
+        
+        await party.save();
+        
+        // 생성자를 파티원으로 추가
+        const member = new PartyMember({
+            partyId: party._id,
+            userId: req.session.user.id,
+            role: 'leader',
+            joinedAt: new Date()
+        });
+        
+        await member.save();
+        
+        res.json({
+            success: true,
+            party: {
+                id: party._id,
+                name: party.name,
+                code: party.code,
+                maxMembers: party.maxMembers,
+                currentMembers: 1
+            }
+        });
+        
+    } catch (error) {
+        logger.error(`파티 생성 오류: ${error.message}`, 'api');
+        res.status(500).json({ success: false, error: '파티 생성 중 오류가 발생했습니다.' });
+    }
+});
+
+// 공개 파티 목록 조회
+router.get('/party/list', async (req, res) => {
+    try {
+        const parties = await Party.find({ 
+            isPublic: true, 
+            status: 'active' 
+        }).populate('members').limit(20);
+        
+        const partyList = parties.map(party => ({
+            id: party._id,
+            name: party.name,
+            creator: party.creator,
+            maxMembers: party.maxMembers,
+            currentMembers: party.members?.length || 0,
+            description: party.description,
+            createdAt: party.createdAt
+        }));
+        
+        res.json({ success: true, parties: partyList });
+        
+    } catch (error) {
+        logger.error(`파티 목록 조회 오류: ${error.message}`, 'api');
+        res.status(500).json({ success: false, error: '파티 목록을 불러올 수 없습니다.' });
+    }
+});
+
+// 파티 참가
+router.post('/party/join/:partyId', requireAuth, async (req, res) => {
+    try {
+        const { partyId } = req.params;
+        
+        // 파티 확인
+        const party = await Party.findById(partyId);
+        if (!party) {
+            return res.status(404).json({ success: false, error: '파티를 찾을 수 없습니다.' });
+        }
+        
+        // 이미 참가중인지 확인
+        const existingMember = await PartyMember.findOne({
+            partyId: partyId,
+            userId: req.session.user.id
+        });
+        
+        if (existingMember) {
+            return res.status(400).json({ success: false, error: '이미 파티에 참가중입니다.' });
+        }
+        
+        // 파티원 수 확인
+        const memberCount = await PartyMember.countDocuments({ partyId: partyId });
+        if (memberCount >= party.maxMembers) {
+            return res.status(400).json({ success: false, error: '파티가 가득 찼습니다.' });
+        }
+        
+        // 파티원 추가
+        const member = new PartyMember({
+            partyId: partyId,
+            userId: req.session.user.id,
+            role: 'member',
+            joinedAt: new Date()
+        });
+        
+        await member.save();
+        
+        res.json({ success: true, message: '파티에 참가했습니다.' });
+        
+    } catch (error) {
+        logger.error(`파티 참가 오류: ${error.message}`, 'api');
+        res.status(500).json({ success: false, error: '파티 참가 중 오류가 발생했습니다.' });
+    }
+});
+
 // 봇 통계
 router.get('/stats', (req, res) => {
     const client = req.client;
@@ -299,6 +450,21 @@ router.get('/invite', (req, res) => {
     });
     
     res.json({ url: `https://discord.com/api/oauth2/authorize?${params}` });
+});
+
+// 환경 확인 API (디버깅용)
+router.get('/environment', (req, res) => {
+    res.json({
+        nodeEnv: process.env.NODE_ENV || 'development',
+        redirectUri: config.redirectUri,
+        domain: config.web.domain,
+        isProduction: config.isProduction,
+        sessionCookie: {
+            secure: req.session?.cookie?.secure,
+            domain: req.session?.cookie?.domain,
+            sameSite: req.session?.cookie?.sameSite
+        }
+    });
 });
 
 module.exports = router;

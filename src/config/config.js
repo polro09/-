@@ -11,18 +11,15 @@ const config = {
     web: {
         port: process.env.PORT || 3000,
         sessionSecret: process.env.SESSION_SECRET || 'aimdot-secret-key',
-        domain: process.env.DOMAIN || 'http://localhost:3000'
+        domain: process.env.DOMAIN || 'https://aimdot.dev'
     },
     
     // 간단한 포트 접근 (기존 코드 호환성)
     port: process.env.PORT || 3000,
     sessionSecret: process.env.SESSION_SECRET || 'aimdot-secret-key',
     
-    // OAuth2 설정 (프로덕션/개발 자동 전환)
-    redirectUri: process.env.REDIRECT_URI || 
-        (process.env.NODE_ENV === 'production' 
-            ? 'https://aimdot.dev/auth/callback' 
-            : 'http://localhost:3000/auth/callback'),
+    // OAuth2 설정 - 환경 변수 우선 사용
+    redirectUri: process.env.REDIRECT_URI || 'https://aimdot.dev/auth/callback',
     
     // 데이터베이스 설정
     database: {
@@ -62,5 +59,10 @@ if (!config.token) {
 if (!config.clientId || !config.clientSecret) {
     console.error('⚠️  Discord OAuth 설정이 없습니다. CLIENT_ID와 CLIENT_SECRET을 확인하세요.');
 }
+
+// 로그 출력
+console.log('📍 OAuth Redirect URI:', config.redirectUri);
+console.log('🌐 Domain:', config.web.domain);
+console.log('🚀 Environment:', process.env.NODE_ENV || 'development');
 
 module.exports = { config };

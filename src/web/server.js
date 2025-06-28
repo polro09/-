@@ -9,6 +9,21 @@ const logger = require('../utils/logger');
 module.exports = async (client) => {
     const app = express();
     
+    // 프록시 신뢰 설정 (Cloudflare 사용 시 필요)
+    app.set('trust proxy', 1);
+    
+    // CORS 설정 (필요한 경우)
+    app.use((req, res, next) => {
+        const origin = req.headers.origin;
+        if (origin && (origin.includes('aimdot.dev') || origin.includes('localhost'))) {
+            res.header('Access-Control-Allow-Origin', origin);
+            res.header('Access-Control-Allow-Credentials', 'true');
+            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        }
+        next();
+    });
+    
     // 미들웨어 설정
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
@@ -19,18 +34,18 @@ module.exports = async (client) => {
     // 세션 설정
     const sessionConfig = {
         secret: config.sessionSecret || 'aimdot-dev-secret-key-2024',
-        resave: true, // 세션 저장 강제
-        saveUninitialized: true, // 초기화되지 않은 세션도 저장
+        resave: false,
+        saveUninitialized: false,
         name: 'aimdot.sid', // 세션 쿠키 이름
         cookie: {
             maxAge: 24 * 60 * 60 * 1000, // 24시간
-            secure: false, // 개발 환경에서는 false
+            secure: false, // HTTPS 강제하지 않음 (cloudflared가 처리)
             httpOnly: true,
             sameSite: 'lax', // CSRF 보호
-            path: '/', // 명시적으로 경로 설정
-            domain: undefined // 도메인 설정 제거 (로컬호스트 호환성)
+            path: '/',
+            domain: undefined // 도메인 자동 설정
         },
-        proxy: process.env.NODE_ENV === 'production' // 프로덕션에서 프록시 사용
+        proxy: true // 프록시 뒤에 있음을 명시
     };
     
     // MongoDB 세션 스토어 설정 (사용 가능한 경우)
@@ -52,7 +67,23 @@ module.exports = async (client) => {
         logger.warn('세션 스토어 생성 실패 - 메모리 세션 사용', 'server');
     }
     
-    app.use(session(sessionConfig));
+    // 세션 설정
+    app.use(session({
+        secret: config.sessionSecret || 'aimdot-dev-secret-key-2024',
+        resave: false,
+        saveUninitialized: false,
+        name: 'aimdot.sid', // 세션 쿠키 이름
+        store: sessionConfig.store, // MongoDB 스토어 (있는 경우)
+        cookie: {
+            maxAge: 24 * 60 * 60 * 1000, // 24시간
+            secure: false, // HTTPS 강제하지 않음 (cloudflared가 처리)
+            httpOnly: true,
+            sameSite: 'lax', // CSRF 보호
+            path: '/',
+            domain: undefined // 도메인 자동 설정
+        },
+        proxy: true // 프록시 뒤에 있음을 명시
+    }));
     
     // 세션 디버깅 미들웨어
     app.use((req, res, next) => {
@@ -86,7 +117,6 @@ module.exports = async (client) => {
     app.use('/api', require('./routes/api'));
     app.use('/dashboard/api', require('./routes/dashboard'));
     app.use('/party/api', require('./routes/party'));
-    // app.use('/test', require('./routes/test')); // 테스트 라우트
     
     // 메인 페이지 (최초 방문 체크)
     app.get('/', (req, res) => {
@@ -123,7 +153,9 @@ module.exports = async (client) => {
     // 대시보드 페이지
     app.get('/dashboard', (req, res) => {
         if (!req.session.user) {
-            return res.redirect('/auth/discord');
+            // 현재 URL을 returnUrl로 전달
+            const currentUrl = '/dashboard';
+            return res.redirect(`/auth/discord?returnUrl=${encodeURIComponent(currentUrl)}`);
         }
         res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
     });
@@ -174,6 +206,7 @@ module.exports = async (client) => {
     app.listen(config.port, () => {
         logger.server(`🌐 웹 서버가 포트 ${config.port}에서 실행 중입니다.`);
         logger.server(`📍 로컬: http://localhost:${config.port}`);
+        logger.server(`🌍 프로덕션: ${config.web.domain}`);
         
         // 환경 변수 확인
         if (!config.clientSecret) {
