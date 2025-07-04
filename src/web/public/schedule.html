@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aimdot.dev - 게임 스케줄 관리</title>
+    <link rel="icon" href="https://i.imgur.com/Sd8qK9c.gif" type="image/gif">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 기본 스타일 리셋 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* CSS 변수 정의 */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-primary: #5865F2;
+            --accent-secondary: #4752C4;
+            --accent-hover: #7289DA;
+            --border-color: #2a2a2a;
+            --success-color: #3BA55D;
+            --error-color: #ED4245;
+            --warning-color: #FAA81A;
+            --calendar-available: #3BA55D;
+            --calendar-partial: #FAA81A;
+            --calendar-busy: #ED4245;
+        }
+
+        /* 전체 페이지 스타일 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 사이드바 공통 스타일 */
+        .sidebar-left, .sidebar-right {
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-left {
+            left: 0;
+            width: 280px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-right {
+            right: 0;
+            width: 250px;
+            border-left: 1px solid var(--border-color);
+        }
+
+        /* 사이드바 로고 */
+        .sidebar-logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-logo img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 사용자 프로필 섹션 */
+        .user-profile-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .user-profile-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+        }
+
+        .user-profile-info {
+            flex: 1;
+        }
+
+        .user-profile-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .user-profile-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* 메뉴 스타일 */
+        .menu-section {
+            padding: 20px;
+        }
+
+        .menu-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 5px;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item a:hover,
+        .menu-item a.active {
+            background-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        /* 메인 콘텐츠 */
+        .main-content {
+            margin-left: 280px;
+            margin-right: 250px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        /* 페이지 헤더 */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* 달력 섹션 */
+        .calendar-section {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .calendar-nav button:hover {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .calendar-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 달력 그리드 */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background-color: var(--border-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day-header {
+            background-color: var(--bg-tertiary);
+            padding: 15px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .calendar-day {
+            background-color: var(--bg-secondary);
+            min-height: 100px;
+            padding: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-day-number {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .calendar-day-availability {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-top: 5px;
+        }
+
+        .availability-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--calendar-available);
+        }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* 시간 선택 */
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .time-slot {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .time-slot:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .time-slot.selected {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .time-slot-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .time-slot-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* 버튼 스타일 */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-primary);
+        }
+
+        /* 범례 */
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        /* 멤버 리스트 */
+        .members-section {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .members-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .member-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .member-status {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* 토스트 알림 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-color: var(--success-color);
+        }
+
+        .toast.error {
+            border-color: var(--error-color);
+        }
+
+        .toast.info {
+            border-color: var(--accent-primary);
+        }
+
+        /* 모바일 토글 버튼 */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 101;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-toggle:hover {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .mobile-toggle.left {
+            left: 20px;
+        }
+
+        .mobile-toggle.right {
+            right: 20px;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1200px) {
+            .sidebar-left {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-right {
+                transform: translateX(100%);
+            }
+
+            .sidebar-left.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-right.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+                padding: 20px;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calendar-grid {
+                gap: 1px;
+            }
+
+            .calendar-day {
+                min-height: 80px;
+                padding: 8px;
+            }
+
+            .time-slots {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .legend {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 모바일 메뉴 토글 -->
+    <button class="mobile-toggle left" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <button class="mobile-toggle right" onclick="toggleMenu()">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+
+    <!-- 좌측 사이드바 - 사용자 프로필 -->
+    <aside class="sidebar-left" id="sidebar-left">
+        <div class="sidebar-logo">
+            <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
+            <h2>Aimdot.dev</h2>
+        </div>
+
+        <!-- 사용자 프로필 섹션 -->
+        <div class="user-profile-section">
+            <div class="user-profile-header">
+                <img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" class="user-profile-avatar" id="user-avatar">
+                <div class="user-profile-info">
+                    <div class="user-profile-name" id="user-name">Guest</div>
+                    <div class="user-profile-role">게스트</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 빠른 메뉴 -->
+        <div class="menu-section">
+            <h3>빠른 메뉴</h3>
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="/main">
+                        <i class="fas fa-home"></i>
+                        메인 페이지
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/schedule" class="active">
+                        <i class="fas fa-calendar-alt"></i>
+                        스케줄 관리
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/party">
+                        <i class="fas fa-users"></i>
+                        파티 관리
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- 우측 사이드바 - 메뉴 -->
+    <aside class="sidebar-right" id="sidebar-right">
+        <div class="menu-section">
+            <h3>멤버 목록</h3>
+            <div class="member-list" id="member-list">
+                <!-- 멤버 리스트가 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-content">
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <h1 class="page-title">게임 스케줄 관리</h1>
+            <p class="page-subtitle">멤버들의 월간 게임 가능 시간을 한눈에 확인하세요</p>
+        </div>
+
+        <!-- 달력 섹션 -->
+        <section class="calendar-section">
+            <div class="calendar-header">
+                <div class="calendar-nav">
+                    <button onclick="previousMonth()">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button onclick="currentMonth()">오늘</button>
+                </div>
+                <h2 class="calendar-title" id="calendar-title">2025년 1월</h2>
+                <div class="calendar-nav">
+                    <button onclick="nextMonth()">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- 요일 헤더 -->
+                <div class="calendar-day-header">일</div>
+                <div class="calendar-day-header">월</div>
+                <div class="calendar-day-header">화</div>
+                <div class="calendar-day-header">수</div>
+                <div class="calendar-day-header">목</div>
+                <div class="calendar-day-header">금</div>
+                <div class="calendar-day-header">토</div>
+                <!-- 날짜들이 여기에 동적으로 추가됩니다 -->
+            </div>
+
+            <!-- 범례 -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--calendar-available);"></div>
+                    <span>플레이 가능</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--calendar-partial);"></div>
+                    <span>일부 시간 가능</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--calendar-busy);"></div>
+                    <span>플레이 불가</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 멤버별 통계 -->
+        <section class="members-section">
+            <h2 class="members-title">이번 달 멤버 활동 현황</h2>
+            <div id="member-stats">
+                <!-- 멤버 통계가 여기에 동적으로 추가됩니다 -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 시간 선택 모달 -->
+    <div class="modal" id="time-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-date">날짜 선택</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="time-slots">
+                <div class="time-slot" data-time="morning" onclick="selectTimeSlot(this)">
+                    <div class="time-slot-label">오전</div>
+                    <div class="time-slot-description">06:00 - 12:00</div>
+                </div>
+                <div class="time-slot" data-time="afternoon" onclick="selectTimeSlot(this)">
+                    <div class="time-slot-label">오후</div>
+                    <div class="time-slot-description">12:00 - 18:00</div>
+                </div>
+                <div class="time-slot" data-time="evening" onclick="selectTimeSlot(this)">
+                    <div class="time-slot-label">저녁</div>
+                    <div class="time-slot-description">18:00 - 24:00</div>
+                </div>
+                <div class="time-slot" data-time="late-night" onclick="selectTimeSlot(this)">
+                    <div class="time-slot-label">새벽</div>
+                    <div class="time-slot-description">00:00 - 06:00</div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+                <button class="btn btn-primary" onclick="saveSchedule()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span id="toast-message">알림 메시지</span>
+    </div>
+
+    <script>
+        // 전역 변수
+        let currentDate = new Date();
+        let selectedDate = null;
+        let scheduleData = JSON.parse(localStorage.getItem('scheduleData')) || {};
+        let userData = JSON.parse(localStorage.getItem('userData')) || { id: 'guest', name: 'Guest', avatar: 'https://cdn.discordapp.com/embed/avatars/0.png' };
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserProfile();
+            renderCalendar();
+            loadMemberList();
+            checkUserSession();
+        });
+
+        // 사용자 세션 확인
+        async function checkUserSession() {
+            try {
+                const response = await fetch('/api/session');
+                const data = await response.json();
+                
+                if (data.user) {
+                    userData = {
+                        id: data.user.id,
+                        name: data.user.username,
+                        avatar: data.user.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'
+                    };
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    updateUserProfile();
+                }
+            } catch (error) {
+                console.error('세션 확인 실패:', error);
+            }
+        }
+
+        // 사용자 프로필 업데이트
+        function updateUserProfile() {
+            document.getElementById('user-name').textContent = userData.name;
+            document.getElementById('user-avatar').src = userData.avatar;
+        }
+
+        // 달력 렌더링
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // 달력 제목 업데이트
+            document.getElementById('calendar-title').textContent = `${year}년 ${month + 1}월`;
+            
+            // 달력 그리드 초기화
+            const grid = document.getElementById('calendar-grid');
+            // 요일 헤더는 유지하고 날짜만 제거
+            const dayHeaders = grid.querySelectorAll('.calendar-day-header');
+            grid.innerHTML = '';
+            dayHeaders.forEach(header => grid.appendChild(header));
+            
+            // 해당 월의 첫날과 마지막 날
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const firstDayOfWeek = firstDay.getDay();
+            const daysInMonth = lastDay.getDate();
+            
+            // 이전 달의 날짜들
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+                const dayElement = createDayElement(prevMonthLastDay - i, true);
+                grid.appendChild(dayElement);
+            }
+            
+            // 현재 달의 날짜들
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = createDayElement(day, false);
+                grid.appendChild(dayElement);
+            }
+            
+            // 다음 달의 날짜들
+            const remainingDays = 42 - (firstDayOfWeek + daysInMonth);
+            for (let day = 1; day <= remainingDays; day++) {
+                const dayElement = createDayElement(day, true);
+                grid.appendChild(dayElement);
+            }
+        }
+
+        // 날짜 요소 생성
+        function createDayElement(day, isOtherMonth) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            if (isOtherMonth) {
+                dayElement.classList.add('other-month');
+            }
+            
+            const dayNumber = document.createElement('div');
+            dayNumber.className = 'calendar-day-number';
+            dayNumber.textContent = day;
+            dayElement.appendChild(dayNumber);
+            
+            // 스케줄 데이터가 있으면 표시
+            const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`;
+            if (scheduleData[dateKey]) {
+                const availability = document.createElement('div');
+                availability.className = 'calendar-day-availability';
+                
+                // 각 멤버의 가능 여부를 점으로 표시
+                Object.keys(scheduleData[dateKey]).forEach(memberId => {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'availability-indicator';
+                    availability.appendChild(indicator);
+                });
+                
+                dayElement.appendChild(availability);
+            }
+            
+            // 클릭 이벤트
+            if (!isOtherMonth) {
+                dayElement.addEventListener('click', () => openTimeModal(day));
+            }
+            
+            return dayElement;
+        }
+
+        // 시간 선택 모달 열기
+        function openTimeModal(day) {
+            selectedDate = day;
+            const modal = document.getElementById('time-modal');
+            const modalDate = document.getElementById('modal-date');
+            modalDate.textContent = `${currentDate.getFullYear()}년 ${currentDate.getMonth() + 1}월 ${day}일`;
+            
+            // 기존 선택 초기화
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+            
+            // 기존 스케줄 데이터가 있으면 선택 상태로 표시
+            const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`;
+            if (scheduleData[dateKey] && scheduleData[dateKey][userData.id]) {
+                const userSchedule = scheduleData[dateKey][userData.id];
+                userSchedule.times.forEach(time => {
+                    const slot = document.querySelector(`.time-slot[data-time="${time}"]`);
+                    if (slot) slot.classList.add('selected');
+                });
+            }
+            
+            modal.classList.add('show');
+        }
+
+        // 시간 슬롯 선택
+        function selectTimeSlot(element) {
+            element.classList.toggle('selected');
+        }
+
+        // 스케줄 저장
+        async function saveSchedule() {
+            const selectedSlots = document.querySelectorAll('.time-slot.selected');
+            const times = Array.from(selectedSlots).map(slot => slot.dataset.time);
+            
+            const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${selectedDate}`;
+            
+            try {
+                const response = await fetch('/api/schedule/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        date: dateKey,
+                        times: times
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // 로컬 데이터 업데이트
+                    if (!scheduleData[dateKey]) {
+                        scheduleData[dateKey] = {};
+                    }
+                    
+                    if (times.length > 0) {
+                        scheduleData[dateKey][userData.id] = {
+                            name: userData.name,
+                            times: times
+                        };
+                    } else {
+                        delete scheduleData[dateKey][userData.id];
+                    }
+                    
+                    localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+                    
+                    closeModal();
+                    renderCalendar();
+                    showToast('스케줄이 저장되었습니다!', 'success');
+                } else {
+                    showToast(result.error || '스케줄 저장에 실패했습니다.', 'error');
+                }
+            } catch (error) {
+                console.error('스케줄 저장 오류:', error);
+                showToast('스케줄 저장 중 오류가 발생했습니다.', 'error');
+            }
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            const modal = document.getElementById('time-modal');
+            modal.classList.remove('show');
+        }
+
+        // 이전 달로 이동
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        // 다음 달로 이동
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        // 오늘로 이동
+        function currentMonth() {
+            currentDate = new Date();
+            renderCalendar();
+        }
+
+        // 멤버 리스트 로드
+        function loadMemberList() {
+            // 임시 멤버 데이터 (실제로는 API에서 가져와야 함)
+            const members = [
+                { id: '1', name: '플레이어1', avatar: 'https://cdn.discordapp.com/embed/avatars/1.png', status: '온라인' },
+                { id: '2', name: '플레이어2', avatar: 'https://cdn.discordapp.com/embed/avatars/2.png', status: '자리비움' },
+                { id: '3', name: '플레이어3', avatar: 'https://cdn.discordapp.com/embed/avatars/3.png', status: '오프라인' }
+            ];
+            
+            const memberList = document.getElementById('member-list');
+            memberList.innerHTML = '';
+            
+            members.forEach(member => {
+                const memberItem = document.createElement('div');
+                memberItem.className = 'member-item';
+                memberItem.innerHTML = `
+                    <img src="${member.avatar}" alt="${member.name}" class="member-avatar">
+                    <div class="member-info">
+                        <div class="member-name">${member.name}</div>
+                        <div class="member-status">${member.status}</div>
+                    </div>
+                `;
+                memberList.appendChild(memberItem);
+            });
+        }
+
+        // 토스트 알림 표시
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = toast.querySelector('.toast-icon');
+            
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            
+            if (type === 'success') {
+                toastIcon.className = 'toast-icon fas fa-check-circle';
+            } else if (type === 'error') {
+                toastIcon.className = 'toast-icon fas fa-exclamation-circle';
+            } else {
+                toastIcon.className = 'toast-icon fas fa-info-circle';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 사이드바 토글
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar-left');
+            sidebar.classList.toggle('open');
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('sidebar-right');
+            menu.classList.toggle('open');
+        }
+
+        // 모달 외부 클릭 시 닫기
+        document.getElementById('time-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('time-modal')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

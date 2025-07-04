@@ -75,6 +75,21 @@ router.get('/user', checkSessionAPI, (req, res) => {
     });
 });
 
+// 세션 확인 엔드포인트
+router.get('/session', (req, res) => {
+    if (req.session.user) {
+        res.json({
+            user: {
+                id: req.session.user.id,
+                username: req.session.user.username,
+                avatar: req.session.user.avatar
+            }
+        });
+    } else {
+        res.json({ user: null });
+    }
+});
+
 // 사용자 통계 조회
 router.get('/user/stats', checkSessionAPI, async (req, res) => {
     try {
@@ -113,104 +128,81 @@ router.put('/user/nickname', checkSessionAPI, async (req, res) => {
         }
         
         if (nickname.length > 20) {
-            return res.status(400).json({ success: false, error: '닉네임은 20자 이내여야 합니다.' });
+            return res.status(400).json({ success: false, error: '닉네임은 20자 이내로 입력해주세요.' });
         }
         
-        // 부적절한 단어 필터링 (필요시 추가)
-        const bannedWords = ['admin', 'administrator', 'moderator', 'aimdot'];
-        const lowerNickname = nickname.toLowerCase();
-        if (bannedWords.some(word => lowerNickname.includes(word))) {
-            return res.status(400).json({ success: false, error: '사용할 수 없는 닉네임입니다.' });
-        }
-        
-        // DB 업데이트
+        // 사용자 업데이트
         const user = await User.findOneAndUpdate(
             { discordId: userId },
-            { nickname: nickname.trim() },
+            { 
+                nickname: nickname.trim(),
+                updatedAt: new Date()
+            },
             { new: true }
         );
         
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                error: '사용자를 찾을 수 없습니다.'
-            });
+            return res.status(404).json({ success: false, error: '사용자를 찾을 수 없습니다.' });
         }
         
         // 세션 업데이트
         req.session.user.nickname = nickname.trim();
         
-        logger.info(`닉네임 변경: ${user.username} → ${nickname}`, 'user');
+        logger.info(`닉네임 변경: ${userId} -> ${nickname.trim()}`, 'api');
         
-        res.json({ 
-            success: true, 
-            nickname: nickname.trim(), 
-            message: '닉네임이 변경되었습니다.' 
+        res.json({
+            success: true,
+            nickname: nickname.trim(),
+            message: '닉네임이 변경되었습니다.'
         });
         
     } catch (error) {
-        logger.error('닉네임 변경 오류:', error);
+        logger.error(`닉네임 변경 오류: ${error.message}`, 'api');
         res.status(500).json({ success: false, error: '닉네임 변경 중 오류가 발생했습니다.' });
     }
 });
 
-// 사용자 길드 목록
-router.get('/guilds', requireAuth, (req, res) => {
-    const userGuilds = req.session.user.guilds || [];
-    
-    // 관리 권한이 있는 서버만 필터링
-    const adminGuilds = userGuilds.filter(guild => {
-        const permissions = BigInt(guild.permissions);
-        return (permissions & BigInt(0x8)) === BigInt(0x8) || // Administrator
-               (permissions & BigInt(0x20)) === BigInt(0x20);   // Manage Guild
-    });
-    
-    res.json({ 
-        guilds: adminGuilds.map(guild => ({
-            id: guild.id,
-            name: guild.name,
-            icon: guild.icon,
-            owner: guild.owner
-        }))
-    });
-});
-
-// 특정 길드의 채널 목록
-router.get('/guilds/:guildId/channels', requireAuth, async (req, res) => {
-    const { guildId } = req.params;
-    
+// 관리자 권한 서버 목록
+router.get('/servers', requireAuth, async (req, res) => {
     try {
-        // 사용자가 해당 길드에 권한이 있는지 확인
-        const userGuild = req.session.user.guilds.find(g => g.id === guildId);
-        if (!userGuild) {
-            return res.status(403).json({ error: '해당 서버에 대한 권한이 없습니다.' });
+        const guilds = req.session.user.guilds || [];
+        
+        // 관리자 권한이 있는 서버만 필터링
+        const adminGuilds = guilds.filter(guild => {
+            const permissions = BigInt(guild.permissions);
+            // 관리자(0x8) 또는 서버 관리(0x20) 권한 체크
+            return (permissions & BigInt(0x8)) === BigInt(0x8) || 
+                   (permissions & BigInt(0x20)) === BigInt(0x20);
+        });
+        
+        // 봇이 있는 서버 확인
+        const guildsWithBot = [];
+        for (const guild of adminGuilds) {
+            const botGuild = req.client.guilds.cache.get(guild.id);
+            
+            guildsWithBot.push({
+                id: guild.id,
+                name: guild.name,
+                icon: guild.icon,
+                owner: guild.owner,
+                hasBot: !!botGuild,
+                memberCount: botGuild ? botGuild.memberCount : 0
+            });
         }
         
-        // 봇이 해당 길드에 있는지 확인
-        const guild = req.client.guilds.cache.get(guildId);
-        if (!guild) {
-            return res.status(404).json({ error: '봇이 해당 서버에 없습니다.' });
-        }
+        res.json({
+            success: true,
+            guilds: guildsWithBot
+        });
         
-        // 텍스트 채널만 필터링
-        const textChannels = guild.channels.cache
-            .filter(channel => channel.type === 0) // 0 = GUILD_TEXT
-            .map(channel => ({
-                id: channel.id,
-                name: channel.name,
-                position: channel.position
-            }))
-            .sort((a, b) => a.position - b.position);
-        
-        res.json({ channels: textChannels });
     } catch (error) {
-        logger.error(`채널 목록 조회 오류: ${error.message}`, 'api');
-        res.status(500).json({ error: '채널 목록을 불러올 수 없습니다.' });
+        logger.error(`서버 목록 조회 오류: ${error.message}`, 'api');
+        res.status(500).json({ error: '서버 목록을 불러올 수 없습니다.' });
     }
 });
 
-// 서버 설정 조회
-router.get('/servers/:guildId/settings', requireAuth, async (req, res) => {
+// 서버 상세 정보
+router.get('/servers/:guildId', requireAuth, async (req, res) => {
     const { guildId } = req.params;
     
     try {
@@ -225,44 +217,44 @@ router.get('/servers/:guildId/settings', requireAuth, async (req, res) => {
             return res.status(403).json({ error: '서버 관리 권한이 필요합니다.' });
         }
         
-        // 서버 설정 조회
-        let guildData = await Guild.findOne({ guildId });
-        
-        if (!guildData) {
-            // 기본 설정 생성
-            const guild = req.client.guilds.cache.get(guildId);
-            if (!guild) {
-                return res.status(404).json({ error: '서버를 찾을 수 없습니다.' });
-            }
-            
-            guildData = new Guild({
-                guildId: guild.id,
-                guildName: guild.name,
-                settings: {
-                    prefix: '!',
-                    language: 'ko',
-                    modules: {
-                        party: true,
-                        moderation: true,
-                        welcome: false
-                    }
-                }
+        // Discord 서버 정보
+        const guild = req.client.guilds.cache.get(guildId);
+        if (!guild) {
+            return res.status(404).json({ 
+                error: '봇이 해당 서버에 없습니다.',
+                hasBot: false
             });
-            
-            await guildData.save();
         }
         
-        res.json({ 
-            guild: {
-                id: guildData.guildId,
-                name: guildData.guildName,
-                settings: guildData.settings
-            }
+        // DB에서 서버 설정 가져오기
+        const guildData = await Guild.findOne({ guildId }) || {};
+        
+        res.json({
+            id: guild.id,
+            name: guild.name,
+            icon: guild.iconURL(),
+            memberCount: guild.memberCount,
+            createdAt: guild.createdAt,
+            roles: guild.roles.cache.map(role => ({
+                id: role.id,
+                name: role.name,
+                color: role.hexColor,
+                position: role.position
+            })).sort((a, b) => b.position - a.position),
+            channels: guild.channels.cache
+                .filter(ch => ch.type === 0 || ch.type === 5) // 텍스트 채널만
+                .map(ch => ({
+                    id: ch.id,
+                    name: ch.name,
+                    type: ch.type
+                })),
+            settings: guildData.settings || {},
+            hasBot: true
         });
         
     } catch (error) {
-        logger.error(`서버 설정 조회 오류: ${error.message}`, 'api');
-        res.status(500).json({ error: '서버 설정을 불러올 수 없습니다.' });
+        logger.error(`서버 상세 정보 조회 오류: ${error.message}`, 'api');
+        res.status(500).json({ error: '서버 정보를 불러올 수 없습니다.' });
     }
 });
 
@@ -451,9 +443,10 @@ router.get('/party/list', async (req, res) => {
 });
 
 // 파티 참가
-router.post('/party/join/:partyId', requireAuth, async (req, res) => {
+router.post('/party/:partyId/join', requireAuth, async (req, res) => {
     try {
         const { partyId } = req.params;
+        const userId = req.session.user.id;
         
         // 파티 확인
         const party = await Party.findById(partyId);
@@ -461,26 +454,26 @@ router.post('/party/join/:partyId', requireAuth, async (req, res) => {
             return res.status(404).json({ success: false, error: '파티를 찾을 수 없습니다.' });
         }
         
-        // 이미 참가 중인지 확인
-        const existingMember = await PartyMember.findOne({
-            partyId: party._id,
-            userId: req.session.user.id
-        });
-        
-        if (existingMember) {
-            return res.status(400).json({ success: false, error: '이미 파티에 참가 중입니다.' });
+        if (party.status !== 'active') {
+            return res.status(400).json({ success: false, error: '활성 상태가 아닌 파티입니다.' });
         }
         
-        // 인원 확인
-        const currentMembers = await PartyMember.countDocuments({ partyId: party._id });
-        if (currentMembers >= party.maxMembers) {
+        // 이미 참가했는지 확인
+        const existingMember = await PartyMember.findOne({ partyId, userId });
+        if (existingMember) {
+            return res.status(400).json({ success: false, error: '이미 참가한 파티입니다.' });
+        }
+        
+        // 인원 수 확인
+        const memberCount = await PartyMember.countDocuments({ partyId });
+        if (memberCount >= party.maxMembers) {
             return res.status(400).json({ success: false, error: '파티가 가득 찼습니다.' });
         }
         
-        // 파티 참가
+        // 파티원 추가
         const member = new PartyMember({
-            partyId: party._id,
-            userId: req.session.user.id,
+            partyId,
+            userId,
             role: 'member',
             joinedAt: new Date()
         });
@@ -493,6 +486,139 @@ router.post('/party/join/:partyId', requireAuth, async (req, res) => {
         logger.error(`파티 참가 오류: ${error.message}`, 'api');
         res.status(500).json({ success: false, error: '파티 참가 중 오류가 발생했습니다.' });
     }
+});
+
+// 파티 나가기
+router.post('/party/:partyId/leave', requireAuth, async (req, res) => {
+    try {
+        const { partyId } = req.params;
+        const userId = req.session.user.id;
+        
+        // 파티원 확인
+        const member = await PartyMember.findOne({ partyId, userId });
+        if (!member) {
+            return res.status(404).json({ success: false, error: '파티원이 아닙니다.' });
+        }
+        
+        // 리더인 경우 처리
+        if (member.role === 'leader') {
+            // 다른 멤버가 있는지 확인
+            const otherMembers = await PartyMember.find({ 
+                partyId, 
+                userId: { $ne: userId } 
+            });
+            
+            if (otherMembers.length > 0) {
+                // 다음 멤버를 리더로 지정
+                otherMembers[0].role = 'leader';
+                await otherMembers[0].save();
+            } else {
+                // 파티 비활성화
+                await Party.findByIdAndUpdate(partyId, { status: 'inactive' });
+            }
+        }
+        
+        // 파티원 삭제
+        await member.remove();
+        
+        res.json({ success: true, message: '파티에서 나갔습니다.' });
+        
+    } catch (error) {
+        logger.error(`파티 나가기 오류: ${error.message}`, 'api');
+        res.status(500).json({ success: false, error: '파티 나가기 중 오류가 발생했습니다.' });
+    }
+});
+
+// 내 파티 목록
+router.get('/party/my', requireAuth, async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        
+        // 내가 속한 파티 찾기
+        const myPartyMembers = await PartyMember.find({ userId });
+        const partyIds = myPartyMembers.map(m => m.partyId);
+        
+        const parties = await Party.find({ 
+            _id: { $in: partyIds },
+            status: 'active'
+        });
+        
+        const myParties = await Promise.all(parties.map(async (party) => {
+            const memberCount = await PartyMember.countDocuments({ partyId: party._id });
+            const myRole = myPartyMembers.find(m => m.partyId.equals(party._id))?.role || 'member';
+            
+            return {
+                id: party._id,
+                name: party.name,
+                code: party.code,
+                maxMembers: party.maxMembers,
+                currentMembers: memberCount,
+                myRole: myRole,
+                isLeader: myRole === 'leader',
+                createdAt: party.createdAt
+            };
+        }));
+        
+        res.json({ success: true, parties: myParties });
+        
+    } catch (error) {
+        logger.error(`내 파티 목록 조회 오류: ${error.message}`, 'api');
+        res.status(500).json({ success: false, error: '파티 목록을 불러올 수 없습니다.' });
+    }
+});
+
+// 파티 상세 정보
+router.get('/party/:partyId', async (req, res) => {
+    try {
+        const { partyId } = req.params;
+        
+        const party = await Party.findById(partyId);
+        if (!party) {
+            return res.status(404).json({ success: false, error: '파티를 찾을 수 없습니다.' });
+        }
+        
+        // 파티원 정보 가져오기
+        const members = await PartyMember.find({ partyId });
+        const memberDetails = await Promise.all(members.map(async (member) => {
+            const user = await User.findOne({ discordId: member.userId });
+            return {
+                userId: member.userId,
+                username: user?.username || 'Unknown',
+                avatar: user?.avatar,
+                role: member.role,
+                joinedAt: member.joinedAt
+            };
+        }));
+        
+        res.json({
+            success: true,
+            party: {
+                id: party._id,
+                name: party.name,
+                code: party.code,
+                description: party.description,
+                creator: party.creator,
+                maxMembers: party.maxMembers,
+                isPublic: party.isPublic,
+                status: party.status,
+                createdAt: party.createdAt,
+                members: memberDetails
+            }
+        });
+        
+    } catch (error) {
+        logger.error(`파티 상세 정보 조회 오류: ${error.message}`, 'api');
+        res.status(500).json({ success: false, error: '파티 정보를 불러올 수 없습니다.' });
+    }
+});
+
+// 테스트 엔드포인트
+router.get('/test', (req, res) => {
+    res.json({ 
+        message: 'API is working!',
+        session: req.session,
+        timestamp: new Date()
+    });
 });
 
 module.exports = router;

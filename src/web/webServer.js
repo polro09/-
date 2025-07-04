@@ -80,7 +80,8 @@ class WebServer {
         // API 라우트
         this.app.use('/auth', require('./routes/auth'));
         this.app.use('/api', require('./routes/api'));
-        this.app.use('/dashboard/api/permissions', require('./routes/permissions')); // permissions를 먼저 등록
+        this.app.use('/api/schedule', require('./routes/schedule')); // 스케줄 API 추가
+        this.app.use('/dashboard/api/permissions', require('./routes/permissions'));
         this.app.use('/dashboard/api', require('./routes/dashboard'));
         this.app.use('/party/api', require('./routes/party'));
         
@@ -98,6 +99,11 @@ class WebServer {
         this.app.get('/main', (req, res) => {
             req.session.hasVisited = true;
             res.sendFile(path.join(__dirname, 'public', 'main.html'));
+        });
+        
+        // 스케줄 페이지 라우트 (로그인 불필요)
+        this.app.get('/schedule', (req, res) => {
+            res.sendFile(path.join(__dirname, 'public', 'schedule.html'));
         });
         
         // 파티 페이지 라우트 (로그인 불필요)
