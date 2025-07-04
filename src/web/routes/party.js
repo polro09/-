@@ -7,6 +7,7 @@ const Permission = require('../../models/Permission');
 const logger = require('../../utils/logger');
 const { v4: uuidv4 } = require('uuid');
 const { checkSessionAPI } = require('../middleware/checkSession');
+const { config } = require('../../config/config');
 
 // 권한 체크 미들웨어
 const checkPermission = (requiredLevel) => {
@@ -498,7 +499,7 @@ async function notifyDiscord(client, party) {
                     .setLabel('파티 참여')
                     .setEmoji('🎮')
                     .setStyle(ButtonStyle.Link)
-                    .setURL(`${process.env.WEB_URL || 'https://aimdot.dev'}/party/${party.partyId}`)
+                    .setURL(`${config.websiteUrl}/party/${party.partyId}`)
             );
         
         // 모든 파티 타입에 @everyone 멘션

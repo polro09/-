@@ -22,8 +22,8 @@ module.exports = {
             }
             
             if (action === 'join') {
-                // 웹사이트로 리다이렉트
-                const joinUrl = `${process.env.WEBSITE_URL || 'http://localhost:3000'}/party/${partyId}`;
+                // 웹사이트로 리다이렉트 - config.websiteUrl 사용
+                const joinUrl = `${config.websiteUrl}/party/${partyId}`;
                 
                 await interaction.reply({ 
                     content: `🎮 파티에 참여하려면 아래 링크를 클릭하세요!\n${joinUrl}`, 
@@ -61,7 +61,8 @@ module.exports = {
                     infoEmbed.addFields({ name: '📌 준비물', value: party.preparations, inline: false });
                 }
                 
-                const viewUrl = `${process.env.WEBSITE_URL || 'http://localhost:3000'}/party/${partyId}`;
+                // config.websiteUrl 사용
+                const viewUrl = `${config.websiteUrl}/party/${partyId}`;
                 infoEmbed.addFields({ 
                     name: '🔗 파티 페이지', 
                     value: `[여기를 클릭하여 참여하기](${viewUrl})`, 

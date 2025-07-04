@@ -14,6 +14,9 @@ const config = {
         domain: process.env.DOMAIN || 'https://aimdot.dev'
     },
     
+    // 웹사이트 URL 통합 설정 (새로 추가)
+    websiteUrl: process.env.WEBSITE_URL || process.env.WEB_URL || 'https://aimdot.dev',
+    
     // 간단한 포트 접근 (기존 코드 호환성)
     port: process.env.PORT || 3000,
     sessionSecret: process.env.SESSION_SECRET || 'aimdot-secret-key',
@@ -46,6 +49,9 @@ const config = {
         }
     },
     
+    // 웹사이트 URL 통합 설정
+    websiteUrl: process.env.WEBSITE_URL || process.env.WEB_URL || 'https://aimdot.dev',
+    
     // 환경 설정
     isDevelopment: process.env.NODE_ENV !== 'production',
     isProduction: process.env.NODE_ENV === 'production'
@@ -63,6 +69,7 @@ if (!config.clientId || !config.clientSecret) {
 // 로그 출력
 console.log('📍 OAuth Redirect URI:', config.redirectUri);
 console.log('🌐 Domain:', config.web.domain);
+console.log('🌐 Website URL:', config.websiteUrl);
 console.log('🚀 Environment:', process.env.NODE_ENV || 'development');
 
 module.exports = { config };

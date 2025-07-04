@@ -2,6 +2,7 @@
 const CustomEmbedBuilder = require('../../utils/embedBuilder');
 const Party = require('../../models/Party');
 const logger = require('../../utils/logger');
+const { config } = require('../../config/config');
 
 module.exports = {
     customId: 'party_info',
@@ -62,7 +63,7 @@ module.exports = {
                     },
                     {
                         name: '🌐 웹 링크',
-                        value: `[파티 페이지로 이동](${process.env.WEB_URL || 'http://localhost:3000'}/party/${party.partyId})`,
+                        value: `[파티 페이지로 이동](${config.websiteUrl}/party/${party.partyId})`,
                         inline: false
                     }
                 ]

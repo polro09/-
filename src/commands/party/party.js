@@ -3,6 +3,7 @@ const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = re
 const CustomEmbedBuilder = require('../../utils/embedBuilder');
 const Party = require('../../models/Party');
 const logger = require('../../utils/logger');
+const { config } = require('../../config/config');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -58,7 +59,7 @@ module.exports = {
             });
 
             // 버튼 생성 (Link 버튼으로 변경)
-            const webUrl = process.env.WEB_URL || 'http://localhost:3000';
+            const webUrl = config.websiteUrl;
             const row = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
@@ -71,16 +72,6 @@ module.exports = {
                         .setEmoji('📋')
                         .setStyle(ButtonStyle.Link)
                         .setURL(`${webUrl}/party`),
-                    new ButtonBuilder()
-                        .setCustomId('party_myparty')
-                        .setLabel('내 파티')
-                        .setEmoji('👤')
-                        .setStyle(ButtonStyle.Secondary),
-                    new ButtonBuilder()
-                        .setCustomId('party_stats')
-                        .setLabel('내 전적')
-                        .setEmoji('📊')
-                        .setStyle(ButtonStyle.Secondary)
                 );
 
             await interaction.reply({ 

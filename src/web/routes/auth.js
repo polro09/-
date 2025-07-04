@@ -5,6 +5,7 @@ const axios = require('axios');
 const { config } = require('../../config/config');
 const User = require('../../models/User');
 const logger = require('../../utils/logger');
+const RoleSync = require('../../utils/roleSync'); // 추가
 
 // OAuth URL 생성
 router.get('/discord', async (req, res) => {
@@ -182,10 +183,26 @@ router.get('/callback', async (req, res) => {
         });
         logger.info(`관리 권한이 있는 서버: ${adminGuilds.map(g => g.name).slice(0, 5).join(', ')}${adminGuilds.length > 5 ? ' 외 ' + (adminGuilds.length - 5) + '개' : ''}`, 'auth');
         
+        // 역할 동기화 수행 (추가된 부분)
+        let dashboardRole = 'guest'; // 기본값
+        let autoRoleSyncResult = null;
+        
+        // req.client가 있을 때만 역할 동기화 수행
+        if (req.client) {
+            const roleSync = new RoleSync(req.client);
+            const syncResult = await roleSync.syncUserRole(userData.id);
+            dashboardRole = syncResult.role || 'guest';
+            autoRoleSyncResult = syncResult;
+            
+            if (syncResult.updated || syncResult.isNew) {
+                logger.auth(`Discord 역할 동기화 완료: ${userData.username} → ${dashboardRole}`, 'info');
+            }
+        } else {
+            logger.warn('Discord 클라이언트가 없어 역할 동기화를 건너뜁니다', 'auth');
+        }
+        
         // 사용자 정보 DB에 저장/업데이트
         let user = await User.findOne({ discordId: userData.id });
-        
-        let dashboardRole = 'guest'; // 기본값
         
         if (!user) {
             // 신규 사용자
@@ -195,12 +212,12 @@ router.get('/callback', async (req, res) => {
                 discriminator: userData.discriminator,
                 avatar: userData.avatar,
                 email: userData.email,
-                dashboardRole: 'guest',
+                dashboardRole: dashboardRole, // 동기화된 역할 사용
                 createdAt: new Date(),
                 updatedAt: new Date()
             });
             await user.save();
-            logger.info(`신규 사용자 등록: ${userData.username}`, 'auth');
+            logger.info(`신규 사용자 등록: ${userData.username} (권한: ${dashboardRole})`, 'auth');
         } else {
             // 기존 사용자 업데이트
             user.username = userData.username;
@@ -208,7 +225,15 @@ router.get('/callback', async (req, res) => {
             user.avatar = userData.avatar;
             user.email = userData.email;
             user.updatedAt = new Date();
-            dashboardRole = user.dashboardRole || 'guest';
+            
+            // 역할 동기화가 수행되었고 업데이트가 필요한 경우만 변경
+            if (autoRoleSyncResult && autoRoleSyncResult.updated) {
+                user.dashboardRole = dashboardRole;
+                logger.info(`기존 사용자 권한 업데이트: ${userData.username} → ${dashboardRole}`, 'auth');
+            } else {
+                dashboardRole = user.dashboardRole || 'guest';
+            }
+            
             await user.save();
             logger.info(`기존 사용자 정보 업데이트: ${userData.username}`, 'auth');
         }
@@ -241,7 +266,8 @@ router.get('/callback', async (req, res) => {
                 permissions: guild.permissions
             })).slice(0, 10), // 최대 10개 서버만 저장
             dashboardRole: dashboardRole,
-            guildCount: guilds.length // 전체 서버 수는 별도로 저장
+            guildCount: guilds.length, // 전체 서버 수는 별도로 저장
+            autoRoleSync: autoRoleSyncResult // 자동 역할 동기화 결과 저장
         };
         
         // 세션 저장 확인
