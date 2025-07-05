@@ -10,3 +10,46 @@
 {"category":"error","level":"error","message":"처리되지 않은 프로미스 거부: category.toUpperCase is not a function","timestamp":"2025-06-24T04:17:23.486Z"}
 {"category":"error","level":"error","message":"처리되지 않은 프로미스 거부: category.toUpperCase is not a function","timestamp":"2025-06-24T04:17:42.756Z"}
 {"category":"error","level":"error","message":"처리되지 않은 프로미스 거부: category.toUpperCase is not a function","timestamp":"2025-06-24T04:20:02.928Z"}
+{"category":"error","level":"error","message":"로그 조회 오류:: Cannot read properties of null (reading 'id')","timestamp":"2025-06-24T04:29:47.326Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot find module '../../models/PartyMember'\nRequire stack:\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\routes\\api.js\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\server.js\n- D:\\Discord bot\\Aimdot.dev\\src\\index.js","timestamp":"2025-06-24T08:36:11.054Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot find module '../../models/PartyMember'\nRequire stack:\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\routes\\api.js\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\server.js\n- D:\\Discord bot\\Aimdot.dev\\src\\index.js","timestamp":"2025-06-24T08:37:24.202Z"}
+{"category":"error","level":"error","message":"처리되지 않은 예외: logger.party is not a function","timestamp":"2025-06-24T09:36:37.246Z"}
+{"category":"error","level":"error","message":"처리되지 않은 예외: logger.party is not a function","timestamp":"2025-06-24T09:37:15.247Z"}
+{"category":"auth","level":"error","message":"사용자 정보 저장 실패: Path \"discordId\" is not in schema, strict mode is `true`, and upsert is `true`.","timestamp":"2025-06-24T09:49:26.264Z"}
+{"category":"auth","level":"error","message":"OAuth 콜백 오류: User validation failed: userId: Path `userId` is required.","timestamp":"2025-06-24T09:57:00.413Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Identifier 'CustomEmbedBuilder' has already been declared","timestamp":"2025-06-25T02:56:07.557Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot overwrite `Party` model once compiled.","timestamp":"2025-06-25T03:13:00.965Z"}
+{"category":"server","level":"error","message":"웹 서버 오류: request aborted","timestamp":"2025-06-26T15:55:55.603Z"}
+{"category":"error","level":"error","message":"대시보드 로드 오류:: Cannot read properties of null (reading 'dashboardRole')","timestamp":"2025-06-27T11:01:52.320Z"}
+{"category":"error","level":"error","message":"로그 조회 오류:: Cannot read properties of null (reading 'id')","timestamp":"2025-06-27T11:08:07.580Z"}
+{"category":"server","level":"error","message":"웹 서버 오류: ENOENT: no such file or directory, stat 'D:\\Discord bot\\Aimdot.dev\\src\\web\\public\\permissions.html'","timestamp":"2025-06-27T11:21:46.381Z"}
+{"category":"error","level":"error","message":"로그 조회 오류:: Cannot read properties of null (reading 'id')","timestamp":"2025-06-27T11:23:38.569Z"}
+{"category":"auth","level":"error","message":"세션에 state가 없습니다. 세션 ID: Yn4OOWbFSflMTXnmTQx2XrT4UHDkJp49","timestamp":"2025-06-27T12:38:51.852Z"}
+{"category":"auth","level":"error","message":"인증 코드가 없습니다","timestamp":"2025-06-27T12:46:52.386Z"}
+{"category":"auth","level":"error","message":"세션에 state가 없습니다. 세션 ID: Yn4OOWbFSflMTXnmTQx2XrT4UHDkJp49","timestamp":"2025-06-27T13:01:15.212Z"}
+{"category":"auth","level":"error","message":"세션에 state가 없습니다. 세션 ID: Yn4OOWbFSflMTXnmTQx2XrT4UHDkJp49","timestamp":"2025-06-27T13:04:31.327Z"}
+{"category":"auth","level":"error","message":"세션에 state가 없습니다. 세션 ID: Yn4OOWbFSflMTXnmTQx2XrT4UHDkJp49","timestamp":"2025-06-27T13:07:24.703Z"}
+{"category":"auth","level":"error","message":"OAuth 콜백 오류: E11000 duplicate key error collection: aimdot.users index: userId_1 dup key: { userId: null }","timestamp":"2025-06-27T15:43:35.316Z"}
+{"category":"auth","level":"error","message":"세션에 state가 없습니다. 세션 ID: vWQBvpoXfJw_gmbrhQ8Rz008M8patPu0","timestamp":"2025-06-27T15:49:34.101Z"}
+{"category":"auth","level":"error","message":"OAuth 콜백 오류: Request failed with status code 400","timestamp":"2025-06-27T15:49:34.358Z"}
+{"category":"auth","level":"error","message":"Discord API 응답: {\"error\":\"invalid_grant\",\"error_description\":\"Invalid \\\"code\\\" in request.\"}","timestamp":"2025-06-27T15:49:34.359Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot find module '../../models/GuildSettings'\nRequire stack:\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\routes\\dashboard.js\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\server.js\n- D:\\Discord bot\\Aimdot.dev\\src\\index.js","timestamp":"2025-06-28T02:46:01.934Z"}
+{"category":"party","level":"error","message":"파티 상세 조회 오류: Cannot read properties of undefined (reading 'slice')","timestamp":"2025-06-28T03:29:42.197Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot overwrite `Party` model once compiled.","timestamp":"2025-06-28T03:56:00.714Z"}
+{"category":"party","level":"error","message":"Discord 알림 전송 오류: config is not defined","timestamp":"2025-06-28T04:29:40.751Z"}
+{"category":"server","level":"error","message":"웹 서버 오류: ENOENT: no such file or directory, stat 'D:\\Discord bot\\Aimdot.dev\\src\\web\\public\\servers.html'","timestamp":"2025-06-28T12:04:40.386Z"}
+{"category":"server","level":"error","message":"웹 서버 오류: request aborted","timestamp":"2025-07-04T06:06:00.307Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: app is not defined","timestamp":"2025-07-04T12:04:29.384Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot find module '../config/config'\nRequire stack:\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\routes\\api.js\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\server.js\n- D:\\Discord bot\\Aimdot.dev\\src\\index.js","timestamp":"2025-07-04T12:07:23.368Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Cannot find module '../config/config'\nRequire stack:\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\routes\\api.js\n- D:\\Discord bot\\Aimdot.dev\\src\\web\\server.js\n- D:\\Discord bot\\Aimdot.dev\\src\\index.js","timestamp":"2025-07-04T12:07:41.488Z"}
+{"category":"error","level":"error","message":"처리되지 않은 예외: listen EADDRINUSE: address already in use :::3000","timestamp":"2025-07-05T03:02:24.484Z"}
+{"category":"error","level":"error","message":"처리되지 않은 예외: listen EADDRINUSE: address already in use :::3000","timestamp":"2025-07-05T03:03:29.922Z"}
+{"category":"error","level":"error","message":"처리되지 않은 예외: listen EADDRINUSE: address already in use :::3000","timestamp":"2025-07-05T03:05:55.598Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: logger.web is not a function","timestamp":"2025-07-05T03:08:29.015Z"}
+{"category":"error","level":"error","message":"서버 오류:: Unexpected token 'M', \"MIICRgSB7E\"... is not valid JSON","timestamp":"2025-07-05T03:10:26.994Z"}
+{"category":"error","level":"error","message":"서버 오류:: Unexpected token 'M', \"MIICRgSB7E\"... is not valid JSON","timestamp":"2025-07-05T03:10:27.454Z"}
+{"category":"error","level":"error","message":"서버 오류:: Cannot create property 'lastModified' on string 'MIICRgSB7EticXNWNE8wYm5majMvMEUyRDJLRVVHR3VpdnJ1cW91bVl3WkxDVnVvOFY2dEEvRmxITnZDUFNRT0I3UjVvcGNVNFZoRDE2dS8wU1B0UWVMME1vTjAvaUFSMVNHd1FPS0x0QTVndms1SEd5YjNBL3pUR3Q3SUVmelVSQllhcXpPRVV1cytrL0NvK2RURC85RDRGbHh3TWlVNUFneUNJZlBwNzI3S2hiNGdJNzg5Y2RBTUtMTkNxaDBUdlQwczdlWGo1TGc0THpGd1E0M1N5bWsyeVZKR1pvWGVMRVQwVDdlbnpmZXBEdHdDb2M9BFhrYTdhTUs1NTU4U3lGa1pEQUhpd25qaktmcHJ1STVlbVMwdGdKaytUVmJtc1VCMVJkRE0wajVDMGF5RjNjWmwwRTcxOHQweU1FcnNlSzl4cFcxRWRjQT09BAzCfh5nEoxGJwzUTK8EgYDcyElUniIBUfVBl207TmhggvkUKjcZ7IyGjFDVpFncXBFWfoa2nHYMqpL7EMcgQQqV3WYWjrUaMQL5vM/Vb+3fqQDkMwZRtmX9oh+W1Ur7NcSDkxVVxgAp4wugNC8HKPEJjjFgmyP9TuST5wzDcAlhlBmZTDEYzLthrBB6wiYNDAQQ5NE2UJ5vd+crV/OnnHD3ZwRYZkliUTlwS21oVFpNdXNHVnNwZUhST0FYZU14aVEyWE5haXpwdWVtRWl0SitFRWtNUTh5UFcvWXZKUzIxYUhrbmNGUm90MmJyWTVES3pLK0tKYlhZSnc9PQ=='","timestamp":"2025-07-05T03:12:27.680Z"}
+{"category":"error","level":"error","message":"서버 오류:: ENOENT: no such file or directory, stat 'D:\\Discord bot\\Aimdot.dev\\src\\web\\public\\404.html'","timestamp":"2025-07-05T03:12:56.500Z"}
+{"category":"error","level":"error","message":"서버 오류:: ENOENT: no such file or directory, stat 'D:\\Discord bot\\Aimdot.dev\\src\\web\\public\\404.html'","timestamp":"2025-07-05T03:12:56.501Z"}
+{"category":"error","level":"error","message":"서버 오류:: ENOENT: no such file or directory, stat 'D:\\Discord bot\\Aimdot.dev\\src\\web\\public\\404.html'","timestamp":"2025-07-05T03:12:56.657Z"}
+{"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Identifier 'requirePageAccess' has already been declared","timestamp":"2025-07-05T03:51:01.521Z"}

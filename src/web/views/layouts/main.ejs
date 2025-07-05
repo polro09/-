@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= locals.title || 'Aimdot.dev' %></title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/gif" href="https://i.imgur.com/Sd8qK9c.gif">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 공통 스타일시트 -->
+    <link rel="stylesheet" href="/css/common.css">
+    
+    <%- locals.styles %>
+</head>
+<body>
+    <div class="container">
+        <%- include('../partials/sidebar-left') %>
+        
+        <main class="main-content">
+            <%- body %>
+        </main>
+        
+        <%- include('../partials/sidebar-right') %>
+    </div>
+    
+    <%- include('../partials/modals') %>
+    
+    <!-- JavaScript -->
+    <script type="module">
+        import { Toast } from '/js/components/toast.js';
+        import { Modal } from '/js/components/modal.js';
+        
+        // 전역으로 사용할 수 있도록 설정
+        window.Toast = Toast;
+        window.Modal = Modal;
+    </script>
+    
+    <%- locals.scripts %>
+</body>
+</html>

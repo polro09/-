@@ -1,0 +1,553 @@
+<%- contentFor('body') %>
+<div class="content-wrapper">
+    <div class="page-header">
+        <h1 class="page-title">대시보드</h1>
+        <p class="page-subtitle">봇 통계 및 서버 관리</p>
+    </div>
+    
+    <!-- 봇 통계 카드 -->
+    <div id="stats-container" class="stats-section"></div>
+    
+    <!-- 봇 상태 -->
+    <div class="bot-status-section">
+        <h2 class="section-header">봇 상태</h2>
+        <div class="bot-status-card">
+            <div class="status-info">
+                <div class="status-item">
+                    <span class="status-label">상태</span>
+                    <span class="status-value">
+                        <span class="status-dot" id="status-dot"></span>
+                        <span id="bot-status">확인 중...</span>
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">가동 시간</span>
+                    <span class="status-value" id="bot-uptime">-</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">메모리 사용량</span>
+                    <span class="status-value" id="bot-memory">-</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">응답 시간</span>
+                    <span class="status-value" id="bot-ping">-</span>
+                </div>
+            </div>
+            <div class="status-actions">
+                <button class="btn btn-success" id="btn-start" disabled>
+                    <i class="fas fa-play"></i> 시작
+                </button>
+                <button class="btn btn-danger" id="btn-stop">
+                    <i class="fas fa-stop"></i> 정지
+                </button>
+                <button class="btn btn-warning" id="btn-restart">
+                    <i class="fas fa-sync"></i> 재시작
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 빠른 액션 -->
+    <div class="quick-actions-section">
+        <h2 class="section-header">빠른 액션</h2>
+        <div class="action-cards">
+            <a href="/dashboard/servers" class="action-card">
+                <i class="fas fa-server action-icon"></i>
+                <h3>서버 관리</h3>
+                <p>서버별 봇 설정 관리</p>
+            </a>
+            <a href="/dashboard/permissions" class="action-card">
+                <i class="fas fa-user-shield action-icon"></i>
+                <h3>권한 관리</h3>
+                <p>사용자 권한 설정</p>
+            </a>
+            <a href="/dashboard/db-management" class="action-card">
+                <i class="fas fa-database action-icon"></i>
+                <h3>데이터베이스</h3>
+                <p>DB 직접 관리</p>
+            </a>
+            <a href="/commands" class="action-card">
+                <i class="fas fa-terminal action-icon"></i>
+                <h3>명령어</h3>
+                <p>명령어 목록 및 사용법</p>
+            </a>
+        </div>
+    </div>
+    
+    <!-- 최근 로그 -->
+    <div class="logs-section">
+        <h2 class="section-header">최근 로그</h2>
+        <div class="logs-container">
+            <div class="logs-header">
+                <div class="log-filters">
+                    <button class="log-filter active" data-level="all">전체</button>
+                    <button class="log-filter" data-level="error">오류</button>
+                    <button class="log-filter" data-level="warn">경고</button>
+                    <button class="log-filter" data-level="info">정보</button>
+                </div>
+                <button class="btn btn-sm" onclick="clearLogs()">
+                    <i class="fas fa-trash"></i> 로그 삭제
+                </button>
+            </div>
+            <div class="logs-list" id="logs-list">
+                <div class="log-item info">
+                    <span class="log-time">00:00:00</span>
+                    <span class="log-level">INFO</span>
+                    <span class="log-message">로그를 불러오는 중...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('scripts') %>
+<!-- 서버 데이터를 JavaScript로 전달 -->
+<script>
+window.dashboardData = {
+    stats: {
+        guilds: <%= locals.stats?.guilds || 0 %>,
+        users: <%= locals.stats?.users || 0 %>,
+        channels: <%= locals.stats?.channels || 0 %>,
+        commands: <%= locals.stats?.commands || 0 %>
+    }
+};
+</script>
+
+<script type="module">
+import { StatsCardGroup } from '/js/components/statsCard.js';
+
+// 통계 카드 초기화
+const statsGroup = new StatsCardGroup('#stats-container', [
+    {
+        title: '서버',
+        icon: 'fas fa-server',
+        value: window.dashboardData.stats.guilds,
+        suffix: '개',
+        description: '봇이 활동 중인 서버',
+        fetchUrl: '/api/stats/guilds',
+        updateInterval: 30000
+    },
+    {
+        title: '사용자',
+        icon: 'fas fa-users',
+        value: window.dashboardData.stats.users,
+        suffix: '명',
+        description: '총 사용자 수',
+        fetchUrl: '/api/stats/users',
+        updateInterval: 30000
+    },
+    {
+        title: '채널',
+        icon: 'fas fa-hashtag',
+        value: window.dashboardData.stats.channels,
+        suffix: '개',
+        description: '모니터링 중인 채널',
+        fetchUrl: '/api/stats/channels',
+        updateInterval: 30000
+    },
+    {
+        title: '명령어',
+        icon: 'fas fa-terminal',
+        value: window.dashboardData.stats.commands,
+        suffix: '개',
+        description: '사용 가능한 명령어',
+        animated: false
+    }
+]);
+
+// 봇 상태 업데이트
+async function updateBotStatus() {
+    try {
+        const response = await fetch('/api/bot/status');
+        const data = await response.json();
+        
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('bot-status');
+        const uptimeEl = document.getElementById('bot-uptime');
+        const memoryEl = document.getElementById('bot-memory');
+        const pingEl = document.getElementById('bot-ping');
+        
+        if (data.online) {
+            statusDot.className = 'status-dot online';
+            statusText.textContent = '온라인';
+            
+            // 가동 시간
+            const hours = Math.floor(data.uptime / 3600000);
+            const minutes = Math.floor((data.uptime % 3600000) / 60000);
+            uptimeEl.textContent = `${hours}시간 ${minutes}분`;
+            
+            // 메모리
+            const memoryMB = Math.round(data.memory.heapUsed / 1024 / 1024);
+            memoryEl.textContent = `${memoryMB} MB`;
+            
+            // 핑
+            pingEl.textContent = `${data.ping} ms`;
+            
+            // 버튼 상태
+            document.getElementById('btn-start').disabled = true;
+            document.getElementById('btn-stop').disabled = false;
+            document.getElementById('btn-restart').disabled = false;
+        } else {
+            statusDot.className = 'status-dot offline';
+            statusText.textContent = '오프라인';
+            uptimeEl.textContent = '-';
+            memoryEl.textContent = '-';
+            pingEl.textContent = '-';
+            
+            document.getElementById('btn-start').disabled = false;
+            document.getElementById('btn-stop').disabled = true;
+            document.getElementById('btn-restart').disabled = true;
+        }
+    } catch (error) {
+        console.error('봇 상태 업데이트 오류:', error);
+    }
+}
+
+// 로그 필터링
+document.querySelectorAll('.log-filter').forEach(filter => {
+    filter.addEventListener('click', (e) => {
+        document.querySelector('.log-filter.active').classList.remove('active');
+        e.target.classList.add('active');
+        updateLogs();
+    });
+});
+
+// 로그 업데이트
+async function updateLogs() {
+    const activeFilter = document.querySelector('.log-filter.active').dataset.level;
+    const url = activeFilter === 'all' ? '/api/logs' : `/api/logs?level=${activeFilter}`;
+    
+    try {
+        const response = await fetch(url);
+        const logs = await response.json();
+        
+        const logsList = document.getElementById('logs-list');
+        logsList.innerHTML = logs.map(log => `
+            <div class="log-item ${log.level.toLowerCase()}">
+                <span class="log-time">${new Date(log.timestamp).toLocaleTimeString()}</span>
+                <span class="log-level">${log.level}</span>
+                <span class="log-message">${log.message}</span>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('로그 업데이트 오류:', error);
+    }
+}
+
+// 로그 삭제
+window.clearLogs = async function() {
+    if (!confirm('모든 로그를 삭제하시겠습니까?')) return;
+    
+    try {
+        const response = await fetch('/api/logs', { method: 'DELETE' });
+        if (response.ok) {
+            window.toast.success('로그가 삭제되었습니다.');
+            updateLogs();
+        }
+    } catch (error) {
+        window.toast.error('로그 삭제 실패');
+    }
+};
+
+// 봇 제어
+document.getElementById('btn-stop').addEventListener('click', async () => {
+    if (!confirm('봇을 정지하시겠습니까?')) return;
+    
+    try {
+        const response = await fetch('/api/bot/stop', { method: 'POST' });
+        if (response.ok) {
+            window.toast.success('봇이 정지되었습니다.');
+            updateBotStatus();
+        }
+    } catch (error) {
+        window.toast.error('봇 정지 실패');
+    }
+});
+
+document.getElementById('btn-restart').addEventListener('click', async () => {
+    if (!confirm('봇을 재시작하시겠습니까?')) return;
+    
+    try {
+        const response = await fetch('/api/bot/restart', { method: 'POST' });
+        if (response.ok) {
+            window.toast.success('봇이 재시작됩니다.');
+            updateBotStatus();
+        }
+    } catch (error) {
+        window.toast.error('봇 재시작 실패');
+    }
+});
+
+// 초기화
+updateBotStatus();
+updateLogs();
+
+// 주기적 업데이트
+setInterval(updateBotStatus, 10000);
+setInterval(updateLogs, 30000);
+</script>
+
+<style>
+/* 페이지 헤더 */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* 섹션 헤더 */
+.section-header {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem 0;
+}
+
+/* 봇 상태 카드 */
+.bot-status-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.status-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    flex: 1;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.status-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.status-value {
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-muted);
+}
+
+.status-dot.online {
+    background: var(--success);
+    box-shadow: 0 0 0 3px rgba(59, 165, 92, 0.2);
+}
+
+.status-dot.offline {
+    background: var(--danger);
+    box-shadow: 0 0 0 3px rgba(237, 66, 69, 0.2);
+}
+
+.status-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* 액션 카드 */
+.action-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.action-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 24px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.action-card:hover {
+    background: var(--bg-tertiary);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.action-icon {
+    font-size: 2rem;
+    color: var(--accent-primary);
+    margin-bottom: 16px;
+}
+
+.action-card h3 {
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+}
+
+.action-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* 로그 섹션 */
+.logs-container {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.logs-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.log-filters {
+    display: flex;
+    gap: 8px;
+}
+
+.log-filter {
+    padding: 6px 16px;
+    background: var(--bg-tertiary);
+    border: none;
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.log-filter:hover {
+    background: var(--bg-quaternary);
+}
+
+.log-filter.active {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.logs-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.log-item {
+    padding: 12px 20px;
+    display: flex;
+    gap: 16px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.log-time {
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.log-level {
+    font-weight: 600;
+    width: 60px;
+}
+
+.log-item.error .log-level {
+    color: var(--danger);
+}
+
+.log-item.warn .log-level {
+    color: var(--warning);
+}
+
+.log-item.info .log-level {
+    color: var(--info);
+}
+
+.log-message {
+    flex: 1;
+    color: var(--text-secondary);
+}
+
+/* 버튼 스타일 */
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #339b4f;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #c73e41;
+}
+
+.btn-warning {
+    background: var(--warning);
+    color: white;
+}
+
+.btn-warning:hover:not(:disabled) {
+    background: #d99518;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .bot-status-card {
+        flex-direction: column;
+    }
+    
+    .status-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+    
+    .status-actions .btn {
+        flex: 1;
+    }
+}
+</style>

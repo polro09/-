@@ -1,0 +1,120 @@
+<div class="sidebar-left">
+    <div class="sidebar-header">
+        <a href="/" class="sidebar-title">
+            <img src="https://i.imgur.com/Sd8qK9c.gif" alt="Logo">
+            Aimdot.dev
+        </a>
+    </div>
+    
+    <% if (locals.user) { %>
+    <div class="sidebar-profile">
+        <img src="<%= user.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png' %>" 
+             alt="Avatar" 
+             class="profile-avatar">
+        <div class="profile-name"><%= user.username %></div>
+        <div class="profile-role"><%= user.dashboardRole || 'Member' %></div>
+    </div>
+    
+    <div class="sidebar-stats">
+        <div class="stat-item">
+            <span class="stat-label">접속</span>
+            <span class="stat-value">0승 0패</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">승률</span>
+            <span class="stat-value">0%</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">평균 킬</span>
+            <span class="stat-value">0.0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">평균진</span>
+            <span class="stat-value">0회</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">모의전</span>
+            <span class="stat-value">0회</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">총 게임</span>
+            <span class="stat-value">0회</span>
+        </div>
+    </div>
+    
+    <div class="sidebar-buttons">
+        <a href="/profile" class="btn-profile">
+            <i class="fas fa-user"></i> 프로필 보기
+        </a>
+        <a href="/auth/logout" class="btn-profile btn-logout">
+            <i class="fas fa-sign-out-alt"></i> 로그아웃
+        </a>
+    </div>
+    <% } else { %>
+    <div class="sidebar-profile">
+        <div class="profile-avatar" style="background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-user" style="font-size: 2rem; color: var(--text-muted);"></i>
+        </div>
+        <div class="profile-name">로그인이 필요합니다</div>
+        <a href="/auth/discord" class="btn btn-primary" style="margin-top: 1rem;">
+            <i class="fab fa-discord"></i> Discord로 로그인
+        </a>
+    </div>
+    <% } %>
+    
+    <nav class="sidebar-menu">
+        <div class="menu-section">
+            <div class="menu-title">기능</div>
+            <a href="/" class="menu-item <%= locals.currentPath === '/' ? 'active' : '' %>">
+                <i class="fas fa-home menu-icon"></i>
+                홈
+            </a>
+            <a href="/dashboard" class="menu-item <%= locals.currentPath === '/dashboard' ? 'active' : '' %>">
+                <i class="fas fa-th-large menu-icon"></i>
+                대시보드
+            </a>
+            <a href="/party" class="menu-item <%= locals.currentPath === '/party' ? 'active' : '' %>">
+                <i class="fas fa-users menu-icon"></i>
+                파티
+            </a>
+            <a href="/stats" class="menu-item">
+                <i class="fas fa-chart-bar menu-icon"></i>
+                스쿼드 자료
+            </a>
+        </div>
+        
+        <% if (locals.user) { %>
+        <div class="menu-section">
+            <div class="menu-title">서버 관리</div>
+            <a href="/dashboard/servers" class="menu-item">
+                <i class="fas fa-server menu-icon"></i>
+                서버 관리
+            </a>
+            <a href="/dashboard/settings" class="menu-item">
+                <i class="fas fa-cog menu-icon"></i>
+                봇 설정
+            </a>
+            <a href="/commands" class="menu-item">
+                <i class="fas fa-terminal menu-icon"></i>
+                명령어
+            </a>
+        </div>
+        <% } %>
+        
+        <div class="menu-section">
+            <div class="menu-title">관리자</div>
+            <a href="/dashboard/permissions" class="menu-item">
+                <i class="fas fa-user-shield menu-icon"></i>
+                권한 관리
+            </a>
+            <a href="/dashboard/db-management" class="menu-item">
+                <i class="fas fa-database menu-icon"></i>
+                DB 관리
+            </a>
+            <a href="/dashboard/system" class="menu-item">
+                <i class="fas fa-server menu-icon"></i>
+                시스템 설정
+            </a>
+        </div>
+    </nav>
+</div>

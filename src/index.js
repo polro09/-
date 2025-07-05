@@ -49,9 +49,12 @@ async function initializeBot() {
         
         logger.handler('모든 핸들러 로드 완료', 'info');
 
-        // 웹 서버 시작
+        // 웹 서버 시작 - WebServer 클래스 사용
         if (dbConnected) {
-            await require('./web/server')(client);
+            // 기존 server.js 대신 WebServer 클래스 사용
+            const WebServer = require('./web/webServer');
+            const webServer = new WebServer(client);
+            await webServer.start();
         } else {
             logger.server('데이터베이스 없이는 웹 대시보드를 사용할 수 없습니다.', 'warn');
         }

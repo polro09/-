@@ -1,0 +1,42 @@
+<!-- views/partials/modals.ejs -->
+<!-- 닉네임 변경 모달 -->
+<div class="modal" id="nickname-modal">
+    <div class="modal-content">
+        <h3 class="modal-header">닉네임 변경</h3>
+        <div class="modal-body">
+            <p style="color: #B5BAC1; margin-bottom: 16px;">새로운 닉네임을 입력하세요.</p>
+            <input type="text" 
+                   class="nickname-input" 
+                   id="nickname-input" 
+                   placeholder="닉네임 입력" 
+                   maxlength="20"
+                   value="<%= locals.user && locals.user.nickname ? locals.user.nickname : '' %>">
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn cancel" onclick="closeNicknameModal()">취소</button>
+            <button class="modal-btn confirm" onclick="saveNickname()">저장</button>
+        </div>
+    </div>
+</div>
+
+<!-- 확인 모달 -->
+<div class="modal" id="confirm-modal">
+    <div class="modal-content">
+        <h3 class="modal-header" id="modal-title">확인</h3>
+        <div class="modal-body" id="modal-body">
+            정말로 이 작업을 수행하시겠습니까?
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn cancel" id="modal-cancel">취소</button>
+            <button class="modal-btn confirm" id="modal-confirm">확인</button>
+        </div>
+    </div>
+</div>
+
+<!-- 로딩 모달 -->
+<div class="modal" id="loading-modal">
+    <div class="modal-content" style="text-align: center;">
+        <div class="spinner"></div>
+        <p id="loading-message" style="margin-top: 20px;">처리 중...</p>
+    </div>
+</div>

@@ -18,21 +18,25 @@
     "discord",
     "bot",
     "aimdot",
-    "modular"
+    "modular",
+    "ejs",
+    "dashboard"
   ],
   "author": "Aimdot Team",
   "license": "MIT",
-    "dependencies": {
-    "discord.js": "^14.14.1",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "connect-mongo": "^5.1.0",
-    "mongoose": "^8.0.3",
+  "dependencies": {
     "axios": "^1.6.2",
-    "dotenv": "^16.3.1",
-    "winston": "^3.11.0",
     "chalk": "^4.1.2",
-    "uuid": "^9.0.1"
+    "connect-mongo": "^5.1.0",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.10",
+    "express": "^4.18.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.17.3",
+    "mongoose": "^8.0.3",
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
@@ -45,10 +49,14 @@
       "logs/*",
       "*.log"
     ],
-    "ext": "js,json,html",
+    "ext": "js,json,html,ejs,css",
     "env": {
       "NODE_ENV": "development"
     },
-    "delay": "1000"
+    "delay": "1000",
+    "watch": [
+      "src/**/*",
+      ".env"
+    ]
   }
 }
