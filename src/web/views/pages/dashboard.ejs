@@ -1,553 +1,398 @@
-<%- contentFor('body') %>
-<div class="content-wrapper">
-    <div class="page-header">
-        <h1 class="page-title">대시보드</h1>
-        <p class="page-subtitle">봇 통계 및 서버 관리</p>
-    </div>
-    
-    <!-- 봇 통계 카드 -->
-    <div id="stats-container" class="stats-section"></div>
-    
-    <!-- 봇 상태 -->
-    <div class="bot-status-section">
-        <h2 class="section-header">봇 상태</h2>
-        <div class="bot-status-card">
-            <div class="status-info">
-                <div class="status-item">
-                    <span class="status-label">상태</span>
-                    <span class="status-value">
-                        <span class="status-dot" id="status-dot"></span>
-                        <span id="bot-status">확인 중...</span>
-                    </span>
+<!-- 2. src/web/views/pages/dashboard.ejs - contentFor 오류 해결 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : '대시보드 - Aimdot.dev' %></title>
+    <link rel="icon" type="image/gif" href="https://i.imgur.com/Sd8qK9c.gif">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 기본 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2196f3;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: #999999;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-card {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2196f3, #64b5f6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .card-description {
+            color: #999999;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #2196f3;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .card-action:hover {
+            background: #1976d2;
+        }
+
+        .stats-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2196f3;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #999999;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 20px 16px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 로딩 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: #999999;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #1a1a1a;
+            border-top: 4px solid #2196f3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <h1 class="page-title">대시보드</h1>
+            <p class="page-subtitle">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    환영합니다, <%= user.username %>님! 봇 관리 도구를 사용해보세요.
+                <% } else { %>
+                    봇 관리 및 설정을 위한 대시보드입니다.
+                <% } %>
+            </p>
+        </div>
+
+        <!-- 통계 섹션 -->
+        <section class="stats-section">
+            <h2 class="section-title">
+                <i class="fas fa-chart-bar"></i>
+                봇 통계
+            </h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number"><%= typeof stats !== 'undefined' ? stats.guilds || 0 : 0 %></div>
+                    <div class="stat-label">서버</div>
                 </div>
-                <div class="status-item">
-                    <span class="status-label">가동 시간</span>
-                    <span class="status-value" id="bot-uptime">-</span>
+                <div class="stat-card">
+                    <div class="stat-number"><%= typeof stats !== 'undefined' ? stats.users || 0 : 0 %></div>
+                    <div class="stat-label">사용자</div>
                 </div>
-                <div class="status-item">
-                    <span class="status-label">메모리 사용량</span>
-                    <span class="status-value" id="bot-memory">-</span>
+                <div class="stat-card">
+                    <div class="stat-number"><%= typeof stats !== 'undefined' ? stats.channels || 0 : 0 %></div>
+                    <div class="stat-label">채널</div>
                 </div>
-                <div class="status-item">
-                    <span class="status-label">응답 시간</span>
-                    <span class="status-value" id="bot-ping">-</span>
+                <div class="stat-card">
+                    <div class="stat-number"><%= typeof stats !== 'undefined' ? stats.commands || 0 : 0 %></div>
+                    <div class="stat-label">명령어</div>
                 </div>
             </div>
-            <div class="status-actions">
-                <button class="btn btn-success" id="btn-start" disabled>
-                    <i class="fas fa-play"></i> 시작
-                </button>
-                <button class="btn btn-danger" id="btn-stop">
-                    <i class="fas fa-stop"></i> 정지
-                </button>
-                <button class="btn btn-warning" id="btn-restart">
-                    <i class="fas fa-sync"></i> 재시작
-                </button>
+        </section>
+
+        <!-- 기능 카드 섹션 -->
+        <section class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="card-title">서버 관리</div>
+                </div>
+                <div class="card-description">
+                    Discord 서버 설정을 관리하고 봇의 권한을 설정할 수 있습니다.
+                </div>
+                <% if (typeof user !== 'undefined' && user && ['subadmin', 'admin', 'owner'].includes(user.dashboardRole)) { %>
+                <a href="/dashboard/servers" class="card-action">
+                    <i class="fas fa-arrow-right"></i>
+                    서버 관리
+                </a>
+                <% } else { %>
+                <span style="color: #999; font-size: 14px;">권한이 필요합니다</span>
+                <% } %>
             </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-title">파티 시스템</div>
+                </div>
+                <div class="card-description">
+                    게임 파티를 생성하고 관리할 수 있는 시스템입니다.
+                </div>
+                <a href="/party" class="card-action">
+                    <i class="fas fa-arrow-right"></i>
+                    파티 보기
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="card-title">권한 관리</div>
+                </div>
+                <div class="card-description">
+                    사용자 권한과 대시보드 접근 권한을 관리할 수 있습니다.
+                </div>
+                <% if (typeof user !== 'undefined' && user && ['admin', 'owner'].includes(user.dashboardRole)) { %>
+                <a href="/dashboard/permissions" class="card-action">
+                    <i class="fas fa-arrow-right"></i>
+                    권한 관리
+                </a>
+                <% } else { %>
+                <span style="color: #999; font-size: 14px;">관리자 권한이 필요합니다</span>
+                <% } %>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="card-title">데이터베이스</div>
+                </div>
+                <div class="card-description">
+                    데이터베이스 상태를 확인하고 관리할 수 있습니다.
+                </div>
+                <% if (typeof user !== 'undefined' && user && ['subadmin', 'admin', 'owner'].includes(user.dashboardRole)) { %>
+                <a href="/dashboard/db-management" class="card-action">
+                    <i class="fas fa-arrow-right"></i>
+                    DB 관리
+                </a>
+                <% } else { %>
+                <span style="color: #999; font-size: 14px;">권한이 필요합니다</span>
+                <% } %>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-title">상태 모니터링</div>
+                </div>
+                <div class="card-description">
+                    봇의 실시간 상태와 성능을 모니터링할 수 있습니다.
+                </div>
+                <a href="/health" class="card-action">
+                    <i class="fas fa-arrow-right"></i>
+                    상태 확인
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="card-title">메인 페이지</div>
+                </div>
+                <div class="card-description">
+                    Aimdot.dev 메인 페이지로 돌아가서 전체 기능을 확인할 수 있습니다.
+                </div>
+                <a href="/" class="card-action">
+                    <i class="fas fa-arrow-right"></i>
+                    메인으로
+                </a>
+            </div>
+        </section>
+
+        <!-- 로딩 상태 -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>데이터를 불러오는 중...</p>
         </div>
     </div>
-    
-    <!-- 빠른 액션 -->
-    <div class="quick-actions-section">
-        <h2 class="section-header">빠른 액션</h2>
-        <div class="action-cards">
-            <a href="/dashboard/servers" class="action-card">
-                <i class="fas fa-server action-icon"></i>
-                <h3>서버 관리</h3>
-                <p>서버별 봇 설정 관리</p>
-            </a>
-            <a href="/dashboard/permissions" class="action-card">
-                <i class="fas fa-user-shield action-icon"></i>
-                <h3>권한 관리</h3>
-                <p>사용자 권한 설정</p>
-            </a>
-            <a href="/dashboard/db-management" class="action-card">
-                <i class="fas fa-database action-icon"></i>
-                <h3>데이터베이스</h3>
-                <p>DB 직접 관리</p>
-            </a>
-            <a href="/commands" class="action-card">
-                <i class="fas fa-terminal action-icon"></i>
-                <h3>명령어</h3>
-                <p>명령어 목록 및 사용법</p>
-            </a>
-        </div>
-    </div>
-    
-    <!-- 최근 로그 -->
-    <div class="logs-section">
-        <h2 class="section-header">최근 로그</h2>
-        <div class="logs-container">
-            <div class="logs-header">
-                <div class="log-filters">
-                    <button class="log-filter active" data-level="all">전체</button>
-                    <button class="log-filter" data-level="error">오류</button>
-                    <button class="log-filter" data-level="warn">경고</button>
-                    <button class="log-filter" data-level="info">정보</button>
-                </div>
-                <button class="btn btn-sm" onclick="clearLogs()">
-                    <i class="fas fa-trash"></i> 로그 삭제
-                </button>
-            </div>
-            <div class="logs-list" id="logs-list">
-                <div class="log-item info">
-                    <span class="log-time">00:00:00</span>
-                    <span class="log-level">INFO</span>
-                    <span class="log-message">로그를 불러오는 중...</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<%- contentFor('scripts') %>
-<!-- 서버 데이터를 JavaScript로 전달 -->
-<script>
-window.dashboardData = {
-    stats: {
-        guilds: <%= locals.stats?.guilds || 0 %>,
-        users: <%= locals.stats?.users || 0 %>,
-        channels: <%= locals.stats?.channels || 0 %>,
-        commands: <%= locals.stats?.commands || 0 %>
-    }
-};
-</script>
+    <!-- JavaScript -->
+    <script>
+        // 서버에서 전달된 데이터
+        window.dashboardData = {
+            user: <%- JSON.stringify(typeof user !== 'undefined' ? user : null) %>,
+            stats: <%- JSON.stringify(typeof stats !== 'undefined' ? stats : {}) %>,
+            currentPath: '<%= typeof currentPath !== 'undefined' ? currentPath : '/dashboard' %>'
+        };
 
-<script type="module">
-import { StatsCardGroup } from '/js/components/statsCard.js';
+        // DOM 로드 완료 시 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('대시보드 로드 완료');
+            console.log('사용자 정보:', window.dashboardData.user);
+            console.log('봇 통계:', window.dashboardData.stats);
 
-// 통계 카드 초기화
-const statsGroup = new StatsCardGroup('#stats-container', [
-    {
-        title: '서버',
-        icon: 'fas fa-server',
-        value: window.dashboardData.stats.guilds,
-        suffix: '개',
-        description: '봇이 활동 중인 서버',
-        fetchUrl: '/api/stats/guilds',
-        updateInterval: 30000
-    },
-    {
-        title: '사용자',
-        icon: 'fas fa-users',
-        value: window.dashboardData.stats.users,
-        suffix: '명',
-        description: '총 사용자 수',
-        fetchUrl: '/api/stats/users',
-        updateInterval: 30000
-    },
-    {
-        title: '채널',
-        icon: 'fas fa-hashtag',
-        value: window.dashboardData.stats.channels,
-        suffix: '개',
-        description: '모니터링 중인 채널',
-        fetchUrl: '/api/stats/channels',
-        updateInterval: 30000
-    },
-    {
-        title: '명령어',
-        icon: 'fas fa-terminal',
-        value: window.dashboardData.stats.commands,
-        suffix: '개',
-        description: '사용 가능한 명령어',
-        animated: false
-    }
-]);
+            // 권한별 기능 안내
+            if (window.dashboardData.user) {
+                const role = window.dashboardData.user.dashboardRole;
+                console.log(`사용자 권한: ${role}`);
+                
+                if (role === 'guest') {
+                    console.log('게스트 사용자 - 제한된 기능만 사용 가능');
+                } else if (role === 'member') {
+                    console.log('일반 사용자 - 기본 기능 사용 가능');
+                } else if (['subadmin', 'admin', 'owner'].includes(role)) {
+                    console.log('관리자 사용자 - 모든 기능 사용 가능');
+                }
+            }
+        });
 
-// 봇 상태 업데이트
-async function updateBotStatus() {
-    try {
-        const response = await fetch('/api/bot/status');
-        const data = await response.json();
-        
-        const statusDot = document.getElementById('status-dot');
-        const statusText = document.getElementById('bot-status');
-        const uptimeEl = document.getElementById('bot-uptime');
-        const memoryEl = document.getElementById('bot-memory');
-        const pingEl = document.getElementById('bot-ping');
-        
-        if (data.online) {
-            statusDot.className = 'status-dot online';
-            statusText.textContent = '온라인';
-            
-            // 가동 시간
-            const hours = Math.floor(data.uptime / 3600000);
-            const minutes = Math.floor((data.uptime % 3600000) / 60000);
-            uptimeEl.textContent = `${hours}시간 ${minutes}분`;
-            
-            // 메모리
-            const memoryMB = Math.round(data.memory.heapUsed / 1024 / 1024);
-            memoryEl.textContent = `${memoryMB} MB`;
-            
-            // 핑
-            pingEl.textContent = `${data.ping} ms`;
-            
-            // 버튼 상태
-            document.getElementById('btn-start').disabled = true;
-            document.getElementById('btn-stop').disabled = false;
-            document.getElementById('btn-restart').disabled = false;
-        } else {
-            statusDot.className = 'status-dot offline';
-            statusText.textContent = '오프라인';
-            uptimeEl.textContent = '-';
-            memoryEl.textContent = '-';
-            pingEl.textContent = '-';
-            
-            document.getElementById('btn-start').disabled = false;
-            document.getElementById('btn-stop').disabled = true;
-            document.getElementById('btn-restart').disabled = true;
-        }
-    } catch (error) {
-        console.error('봇 상태 업데이트 오류:', error);
-    }
-}
-
-// 로그 필터링
-document.querySelectorAll('.log-filter').forEach(filter => {
-    filter.addEventListener('click', (e) => {
-        document.querySelector('.log-filter.active').classList.remove('active');
-        e.target.classList.add('active');
-        updateLogs();
-    });
-});
-
-// 로그 업데이트
-async function updateLogs() {
-    const activeFilter = document.querySelector('.log-filter.active').dataset.level;
-    const url = activeFilter === 'all' ? '/api/logs' : `/api/logs?level=${activeFilter}`;
-    
-    try {
-        const response = await fetch(url);
-        const logs = await response.json();
-        
-        const logsList = document.getElementById('logs-list');
-        logsList.innerHTML = logs.map(log => `
-            <div class="log-item ${log.level.toLowerCase()}">
-                <span class="log-time">${new Date(log.timestamp).toLocaleTimeString()}</span>
-                <span class="log-level">${log.level}</span>
-                <span class="log-message">${log.message}</span>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error('로그 업데이트 오류:', error);
-    }
-}
-
-// 로그 삭제
-window.clearLogs = async function() {
-    if (!confirm('모든 로그를 삭제하시겠습니까?')) return;
-    
-    try {
-        const response = await fetch('/api/logs', { method: 'DELETE' });
-        if (response.ok) {
-            window.toast.success('로그가 삭제되었습니다.');
-            updateLogs();
-        }
-    } catch (error) {
-        window.toast.error('로그 삭제 실패');
-    }
-};
-
-// 봇 제어
-document.getElementById('btn-stop').addEventListener('click', async () => {
-    if (!confirm('봇을 정지하시겠습니까?')) return;
-    
-    try {
-        const response = await fetch('/api/bot/stop', { method: 'POST' });
-        if (response.ok) {
-            window.toast.success('봇이 정지되었습니다.');
-            updateBotStatus();
-        }
-    } catch (error) {
-        window.toast.error('봇 정지 실패');
-    }
-});
-
-document.getElementById('btn-restart').addEventListener('click', async () => {
-    if (!confirm('봇을 재시작하시겠습니까?')) return;
-    
-    try {
-        const response = await fetch('/api/bot/restart', { method: 'POST' });
-        if (response.ok) {
-            window.toast.success('봇이 재시작됩니다.');
-            updateBotStatus();
-        }
-    } catch (error) {
-        window.toast.error('봇 재시작 실패');
-    }
-});
-
-// 초기화
-updateBotStatus();
-updateLogs();
-
-// 주기적 업데이트
-setInterval(updateBotStatus, 10000);
-setInterval(updateLogs, 30000);
-</script>
-
-<style>
-/* 페이지 헤더 */
-.page-header {
-    margin-bottom: 2rem;
-}
-
-.page-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-}
-
-.page-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-/* 섹션 헤더 */
-.section-header {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin: 2rem 0 1rem 0;
-}
-
-/* 봇 상태 카드 */
-.bot-status-card {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 24px;
-}
-
-.status-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    flex: 1;
-}
-
-.status-item {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.status-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.status-value {
-    font-size: 1.1rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.status-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--text-muted);
-}
-
-.status-dot.online {
-    background: var(--success);
-    box-shadow: 0 0 0 3px rgba(59, 165, 92, 0.2);
-}
-
-.status-dot.offline {
-    background: var(--danger);
-    box-shadow: 0 0 0 3px rgba(237, 66, 69, 0.2);
-}
-
-.status-actions {
-    display: flex;
-    gap: 12px;
-}
-
-/* 액션 카드 */
-.action-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.action-card {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    padding: 24px;
-    text-decoration: none;
-    color: var(--text-primary);
-    transition: all 0.3s ease;
-    display: block;
-}
-
-.action-card:hover {
-    background: var(--bg-tertiary);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.action-icon {
-    font-size: 2rem;
-    color: var(--accent-primary);
-    margin-bottom: 16px;
-}
-
-.action-card h3 {
-    font-size: 1.1rem;
-    margin: 0 0 8px 0;
-}
-
-.action-card p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin: 0;
-}
-
-/* 로그 섹션 */
-.logs-container {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.logs-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.log-filters {
-    display: flex;
-    gap: 8px;
-}
-
-.log-filter {
-    padding: 6px 16px;
-    background: var(--bg-tertiary);
-    border: none;
-    border-radius: 20px;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.log-filter:hover {
-    background: var(--bg-quaternary);
-}
-
-.log-filter.active {
-    background: var(--accent-primary);
-    color: white;
-}
-
-.logs-list {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.log-item {
-    padding: 12px 20px;
-    display: flex;
-    gap: 16px;
-    font-size: 0.9rem;
-    border-bottom: 1px solid var(--border-color);
-    font-family: 'Consolas', 'Monaco', monospace;
-}
-
-.log-item:last-child {
-    border-bottom: none;
-}
-
-.log-time {
-    color: var(--text-muted);
-    white-space: nowrap;
-}
-
-.log-level {
-    font-weight: 600;
-    width: 60px;
-}
-
-.log-item.error .log-level {
-    color: var(--danger);
-}
-
-.log-item.warn .log-level {
-    color: var(--warning);
-}
-
-.log-item.info .log-level {
-    color: var(--info);
-}
-
-.log-message {
-    flex: 1;
-    color: var(--text-secondary);
-}
-
-/* 버튼 스타일 */
-.btn-success {
-    background: var(--success);
-    color: white;
-}
-
-.btn-success:hover:not(:disabled) {
-    background: #339b4f;
-}
-
-.btn-danger {
-    background: var(--danger);
-    color: white;
-}
-
-.btn-danger:hover:not(:disabled) {
-    background: #c73e41;
-}
-
-.btn-warning {
-    background: var(--warning);
-    color: white;
-}
-
-.btn-warning:hover:not(:disabled) {
-    background: #d99518;
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.btn-sm {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-}
-
-/* 반응형 */
-@media (max-width: 768px) {
-    .bot-status-card {
-        flex-direction: column;
-    }
-    
-    .status-actions {
-        width: 100%;
-        justify-content: stretch;
-    }
-    
-    .status-actions .btn {
-        flex: 1;
-    }
-}
-</style>
+        // 에러 처리
+        window.addEventListener('error', function(e) {
+            console.error('대시보드 오류:', e.error);
+        });
+    </script>
+</body>
+</html>

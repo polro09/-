@@ -1,100 +1,165 @@
-<%- contentFor('body') %>
-<div class="error-container">
-    <div class="error-content">
+<!-- 1. src/web/views/pages/404.ejs - contentFor 오류 해결 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 페이지를 찾을 수 없음 - Aimdot.dev</title>
+    <link rel="icon" type="image/gif" href="https://i.imgur.com/Sd8qK9c.gif">
+    <style>
+        /* 기본 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            color: #f44336;
+            margin-bottom: 16px;
+            text-shadow: 0 0 20px rgba(244, 67, 54, 0.3);
+        }
+
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .error-description {
+            font-size: 1.1rem;
+            color: #999999;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1976d2;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: #f44336;
+            margin-bottom: 24px;
+        }
+
+        /* 애니메이션 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .error-code {
+            animation: pulse 2s infinite;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .error-container {
+                margin: 20px;
+                padding: 24px;
+            }
+
+            .error-code {
+                font-size: 4rem;
+            }
+
+            .error-title {
+                font-size: 1.5rem;
+            }
+
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">🔍</div>
         <h1 class="error-code">404</h1>
         <h2 class="error-title">페이지를 찾을 수 없습니다</h2>
         <p class="error-description">
-            요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.
+            요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.<br>
+            URL을 다시 확인하시거나 아래 버튼을 통해 이동해주세요.
         </p>
         <div class="error-actions">
             <a href="/" class="btn btn-primary">
                 <i class="fas fa-home"></i>
-                메인으로 돌아가기
+                메인 페이지
             </a>
-            <a href="/dashboard" class="btn btn-secondary">
-                <i class="fas fa-th-large"></i>
-                대시보드
-            </a>
-        </div>
-        <div class="error-image">
-            <img src="https://i.imgur.com/Sd8qK9c.gif" alt="404 Error" />
+            <button onclick="history.back()" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                뒤로 가기
+            </button>
         </div>
     </div>
-</div>
 
-<style>
-.error-container {
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-}
-
-.error-content {
-    text-align: center;
-    max-width: 600px;
-}
-
-.error-code {
-    font-size: 8rem;
-    font-weight: 700;
-    margin: 0;
-    background: linear-gradient(135deg, var(--accent-primary) 0%, #7289da 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1;
-}
-
-.error-title {
-    font-size: 2rem;
-    margin: 1rem 0;
-    color: var(--text-primary);
-}
-
-.error-description {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin-bottom: 2rem;
-    line-height: 1.6;
-}
-
-.error-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-}
-
-.error-image {
-    margin-top: 2rem;
-}
-
-.error-image img {
-    width: 200px;
-    height: auto;
-    opacity: 0.5;
-    border-radius: 12px;
-}
-
-@media (max-width: 768px) {
-    .error-code {
-        font-size: 5rem;
-    }
-    
-    .error-title {
-        font-size: 1.5rem;
-    }
-    
-    .error-actions {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .error-actions .btn {
-        width: 200px;
-    }
-}
-</style>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
