@@ -53,3 +53,13 @@
 {"category":"error","level":"error","message":"서버 오류:: ENOENT: no such file or directory, stat 'D:\\Discord bot\\Aimdot.dev\\src\\web\\public\\404.html'","timestamp":"2025-07-05T03:12:56.501Z"}
 {"category":"error","level":"error","message":"서버 오류:: ENOENT: no such file or directory, stat 'D:\\Discord bot\\Aimdot.dev\\src\\web\\public\\404.html'","timestamp":"2025-07-05T03:12:56.657Z"}
 {"category":"startup","level":"error","message":"봇 초기화 중 오류 발생: Identifier 'requirePageAccess' has already been declared","timestamp":"2025-07-05T03:51:01.521Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T04:05:24.504Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T04:42:39.191Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party-create\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T04:53:01.714Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party-create\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T09:01:03.758Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T09:42:26.419Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T10:46:08.484Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party-create\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T10:55:33.193Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T11:33:15.412Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party-create\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T12:03:11.906Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to decode param '/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh'","timestamp":"2025-07-05T22:58:13.535Z"}

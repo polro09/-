@@ -13759,3 +13759,595 @@
 {"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T03:52:44.613Z"}
 {"category":"auth","level":"info","message":"OAuth 시작 - State: 5k0sgh, Return URL: /","timestamp":"2025-07-05T03:52:44.613Z"}
 {"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=5k0sgh","timestamp":"2025-07-05T03:52:44.614Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: localhost:3000, Protocol: http","timestamp":"2025-07-05T03:57:46.650Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T03:57:46.650Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: y1kqj, Return URL: /","timestamp":"2025-07-05T03:57:46.650Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=y1kqj","timestamp":"2025-07-05T03:57:46.651Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-05T04:02:03.373Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-05T04:02:03.385Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-05T04:02:03.408Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-05T04:02:03.412Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-05T04:02:03.413Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:02:03.416Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:02:03.416Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-05T04:02:03.419Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-05T04:02:03.420Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-05T04:02:03.421Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-05T04:02:03.425Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-05T04:02:03.428Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-05T04:02:03.429Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-05T04:02:03.955Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-05T04:02:03.957Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-05T04:02:03.958Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-05T04:02:03.959Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-05T04:02:03.962Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-05T04:02:03.963Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-05T04:02:03.964Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-05T04:02:03.965Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-05T04:02:03.965Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-05T04:02:04.027Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-05T04:02:04.028Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-05T04:02:04.028Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-05T04:02:04.028Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-05T04:02:04.051Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-05T04:02:04.052Z"}
+{"category":"server","level":"info","message":"EJS 라우트 등록 완료","timestamp":"2025-07-05T04:02:04.052Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-05T04:02:04.062Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-05T04:02:04.064Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-05T04:02:04.064Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-05T04:02:04.064Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-05T04:02:04.065Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-05T04:02:05.541Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-05T04:02:05.541Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-05T04:02:05.542Z"}
+{"category":"bot","level":"info","message":"👥 838명의 사용자와 함께","timestamp":"2025-07-05T04:02:05.542Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-05T04:02:05.602Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-05T04:02:09.270Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-05T04:02:09.282Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-05T04:02:09.305Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-05T04:02:09.309Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-05T04:02:09.309Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:02:09.312Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:02:09.313Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-05T04:02:09.316Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-05T04:02:09.316Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-05T04:02:09.317Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-05T04:02:09.320Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-05T04:02:09.322Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-05T04:02:09.323Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-05T04:02:09.756Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-05T04:02:09.757Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-05T04:02:09.758Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-05T04:02:09.759Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-05T04:02:09.761Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-05T04:02:09.762Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-05T04:02:09.762Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-05T04:02:09.763Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-05T04:02:09.763Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-05T04:02:09.819Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-05T04:02:09.819Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-05T04:02:09.819Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-05T04:02:09.819Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-05T04:02:09.844Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-05T04:02:09.845Z"}
+{"category":"server","level":"info","message":"EJS 라우트 등록 완료","timestamp":"2025-07-05T04:02:09.845Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-05T04:02:09.855Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-05T04:02:09.858Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-05T04:02:09.858Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-05T04:02:09.858Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-05T04:02:09.858Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-05T04:02:11.151Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-05T04:02:11.151Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-05T04:02:11.152Z"}
+{"category":"bot","level":"info","message":"👥 838명의 사용자와 함께","timestamp":"2025-07-05T04:02:11.152Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-05T04:02:11.212Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-05T04:02:44.976Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-05T04:02:44.987Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-05T04:02:45.011Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-05T04:02:45.015Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-05T04:02:45.015Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:02:45.018Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:02:45.019Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-05T04:02:45.022Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-05T04:02:45.023Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-05T04:02:45.024Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-05T04:02:45.026Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-05T04:02:45.029Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-05T04:02:45.029Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-05T04:02:45.469Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-05T04:02:45.470Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-05T04:02:45.471Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-05T04:02:45.472Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-05T04:02:45.475Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-05T04:02:45.477Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-05T04:02:45.478Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-05T04:02:45.480Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-05T04:02:45.480Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-05T04:02:45.537Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-05T04:02:45.538Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-05T04:02:45.538Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-05T04:02:45.538Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-05T04:02:45.561Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-05T04:02:45.562Z"}
+{"category":"server","level":"info","message":"EJS 라우트 등록 완료","timestamp":"2025-07-05T04:02:45.562Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-05T04:02:45.572Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-05T04:02:45.575Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-05T04:02:45.575Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-05T04:02:45.575Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-05T04:02:45.575Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-05T04:02:47.158Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-05T04:02:47.159Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-05T04:02:47.159Z"}
+{"category":"bot","level":"info","message":"👥 838명의 사용자와 함께","timestamp":"2025-07-05T04:02:47.159Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-05T04:02:47.220Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-05T04:05:08.177Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-05T04:05:08.189Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-05T04:05:08.213Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-05T04:05:08.216Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-05T04:05:08.217Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:05:08.220Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:05:08.221Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-05T04:05:08.224Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-05T04:05:08.225Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-05T04:05:08.226Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-05T04:05:08.228Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-05T04:05:08.231Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-05T04:05:08.231Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-05T04:05:08.794Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-05T04:05:08.795Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-05T04:05:08.796Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-05T04:05:08.796Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-05T04:05:08.799Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-05T04:05:08.801Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-05T04:05:08.801Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-05T04:05:08.802Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-05T04:05:08.803Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-05T04:05:08.863Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-05T04:05:08.864Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-05T04:05:08.864Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-05T04:05:08.864Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-05T04:05:08.887Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-05T04:05:08.888Z"}
+{"category":"server","level":"info","message":"EJS 라우트 등록 완료","timestamp":"2025-07-05T04:05:08.888Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-05T04:05:08.898Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-05T04:05:08.900Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-05T04:05:08.900Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-05T04:05:08.901Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-05T04:05:08.901Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-05T04:05:10.423Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-05T04:05:10.423Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-05T04:05:10.423Z"}
+{"category":"bot","level":"info","message":"👥 838명의 사용자와 함께","timestamp":"2025-07-05T04:05:10.424Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-05T04:05:10.486Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T04:05:24.504Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: localhost:3000, Protocol: http","timestamp":"2025-07-05T04:05:32.430Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:05:32.430Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: h5ce6d, Return URL: /","timestamp":"2025-07-05T04:05:32.430Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=h5ce6d","timestamp":"2025-07-05T04:05:32.432Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-05T04:05:53.781Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-05T04:05:53.792Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-05T04:05:53.816Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-05T04:05:53.819Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-05T04:05:53.820Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:05:53.823Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:05:53.823Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-05T04:05:53.826Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-05T04:05:53.827Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-05T04:05:53.828Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-05T04:05:53.831Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-05T04:05:53.833Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-05T04:05:53.833Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-05T04:05:54.228Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-05T04:05:54.232Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-05T04:05:54.233Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-05T04:05:54.233Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-05T04:05:54.237Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-05T04:05:54.238Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-05T04:05:54.238Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-05T04:05:54.239Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-05T04:05:54.239Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-05T04:05:54.297Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-05T04:05:54.297Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-05T04:05:54.298Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-05T04:05:54.298Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-05T04:05:54.319Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-05T04:05:54.320Z"}
+{"category":"server","level":"info","message":"EJS 라우트 등록 완료","timestamp":"2025-07-05T04:05:54.320Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-05T04:05:54.329Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-05T04:05:54.331Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-05T04:05:54.332Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-05T04:05:54.332Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-05T04:05:54.332Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-05T04:05:55.686Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-05T04:05:55.689Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-05T04:05:55.691Z"}
+{"category":"bot","level":"info","message":"👥 838명의 사용자와 함께","timestamp":"2025-07-05T04:05:55.691Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-05T04:05:55.749Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:06:07.266Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:06:07.266Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: pmop7, Return URL: /","timestamp":"2025-07-05T04:06:07.266Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=pmop7","timestamp":"2025-07-05T04:06:07.268Z"}
+{"category":"auth","level":"info","message":"OAuth 콜백 수신 - State: pmop7","timestamp":"2025-07-05T04:06:11.435Z"}
+{"category":"auth","level":"info","message":"Discord 토큰 요청 중...","timestamp":"2025-07-05T04:06:11.436Z"}
+{"category":"auth","level":"info","message":"사용자 정보 획득: ad_origina1#0","timestamp":"2025-07-05T04:06:12.000Z"}
+{"category":"auth","level":"info","message":"관리 권한이 있는 서버: polro, ROK - region trade, ashpex, TM-Shop, 몰랑 만드는 중이양 외 12개","timestamp":"2025-07-05T04:06:12.746Z"}
+{"category":"auth","level":"info","message":"기존 사용자 정보 업데이트: ad_origina1","timestamp":"2025-07-05T04:06:12.752Z"}
+{"category":"auth","level":"info","message":"사용자 세션 저장 완료","timestamp":"2025-07-05T04:06:12.753Z"}
+{"category":"auth","level":"info","message":"사용자 로그인 성공: ad_origina1, 리다이렉트: https://aimdot.dev/","timestamp":"2025-07-05T04:06:12.753Z"}
+{"category":"auth","level":"info","message":"최종 리디렉션 URL: https://aimdot.dev/","timestamp":"2025-07-05T04:06:12.753Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:20:39.235Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:20:39.235Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: c63lnp, Return URL: /dashboard","timestamp":"2025-07-05T04:20:39.237Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=c63lnp","timestamp":"2025-07-05T04:20:39.238Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: m.sdt-ad.xyz, Protocol: http","timestamp":"2025-07-05T04:21:35.454Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:21:35.454Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: kzy6lc, Return URL: /dashboard/db-management","timestamp":"2025-07-05T04:21:35.454Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=kzy6lc","timestamp":"2025-07-05T04:21:35.455Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:21:39.239Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:21:39.240Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: jco23, Return URL: /dashboard","timestamp":"2025-07-05T04:21:39.240Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=jco23","timestamp":"2025-07-05T04:21:39.241Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:22:39.239Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:22:39.240Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: xub709, Return URL: /dashboard","timestamp":"2025-07-05T04:22:39.240Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=xub709","timestamp":"2025-07-05T04:22:39.241Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:23:39.268Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:23:39.269Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: zc1p2, Return URL: /dashboard","timestamp":"2025-07-05T04:23:39.269Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=zc1p2","timestamp":"2025-07-05T04:23:39.270Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:24:39.247Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:24:39.248Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: dy5y0h, Return URL: /dashboard","timestamp":"2025-07-05T04:24:39.248Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=dy5y0h","timestamp":"2025-07-05T04:24:39.249Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:25:39.232Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:25:39.232Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: j9a1e5, Return URL: /dashboard","timestamp":"2025-07-05T04:25:39.233Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=j9a1e5","timestamp":"2025-07-05T04:25:39.233Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-05T04:26:08.609Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-05T04:26:08.625Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-05T04:26:08.658Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-05T04:26:08.663Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-05T04:26:08.664Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:26:08.668Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:26:08.669Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-05T04:26:08.672Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-05T04:26:08.673Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-05T04:26:08.674Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-05T04:26:08.679Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-05T04:26:08.683Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-05T04:26:08.683Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-05T04:26:09.129Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-05T04:26:09.130Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-05T04:26:09.131Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-05T04:26:09.131Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-05T04:26:09.133Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-05T04:26:09.134Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-05T04:26:09.135Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-05T04:26:09.136Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-05T04:26:09.137Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-05T04:26:09.207Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-05T04:26:09.207Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-05T04:26:09.208Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-05T04:26:09.208Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-05T04:26:09.232Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-05T04:26:09.234Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-05T04:26:09.245Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-05T04:26:09.247Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-05T04:26:09.247Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-05T04:26:09.247Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-05T04:26:09.247Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-05T04:26:10.568Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-05T04:26:10.569Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-05T04:26:10.569Z"}
+{"category":"bot","level":"info","message":"👥 838명의 사용자와 함께","timestamp":"2025-07-05T04:26:10.569Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-05T04:26:10.631Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-05T04:26:48.806Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-05T04:26:48.819Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-05T04:26:48.845Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-05T04:26:48.848Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-05T04:26:48.849Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:26:48.852Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T04:26:48.853Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-05T04:26:48.856Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-05T04:26:48.857Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-05T04:26:48.858Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-05T04:26:48.861Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-05T04:26:48.864Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-05T04:26:48.864Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-05T04:26:49.269Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-05T04:26:49.271Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-05T04:26:49.271Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-05T04:26:49.272Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-05T04:26:49.274Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-05T04:26:49.275Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-05T04:26:49.275Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-05T04:26:49.276Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-05T04:26:49.276Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-05T04:26:49.335Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-05T04:26:49.336Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-05T04:26:49.336Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-05T04:26:49.336Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-05T04:26:49.359Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-05T04:26:49.359Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-05T04:26:49.371Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-05T04:26:49.373Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-05T04:26:49.373Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-05T04:26:49.373Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-05T04:26:49.373Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-05T04:26:50.336Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-05T04:26:50.336Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-05T04:26:50.336Z"}
+{"category":"bot","level":"info","message":"👥 838명의 사용자와 함께","timestamp":"2025-07-05T04:26:50.337Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-05T04:26:50.397Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:26:55.124Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:26:55.125Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: xp09fl, Return URL: /dashboard","timestamp":"2025-07-05T04:26:55.125Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=xp09fl","timestamp":"2025-07-05T04:26:55.126Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:27:04.828Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:27:04.828Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: if58lk, Return URL: /dashboard","timestamp":"2025-07-05T04:27:04.828Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=if58lk","timestamp":"2025-07-05T04:27:04.829Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:27:14.816Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:27:14.817Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: brxje, Return URL: /dashboard","timestamp":"2025-07-05T04:27:14.817Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=brxje","timestamp":"2025-07-05T04:27:14.818Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:27:24.812Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:27:24.812Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: i54g, Return URL: /dashboard","timestamp":"2025-07-05T04:27:24.813Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=i54g","timestamp":"2025-07-05T04:27:24.814Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:27:35.138Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:27:35.139Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 8m2uoh, Return URL: /dashboard","timestamp":"2025-07-05T04:27:35.139Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=8m2uoh","timestamp":"2025-07-05T04:27:35.141Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:27:45.099Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:27:45.099Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: ucs4do, Return URL: /dashboard","timestamp":"2025-07-05T04:27:45.099Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=ucs4do","timestamp":"2025-07-05T04:27:45.100Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:27:54.824Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:27:54.824Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 22igjo, Return URL: /dashboard","timestamp":"2025-07-05T04:27:54.824Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=22igjo","timestamp":"2025-07-05T04:27:54.825Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:28:39.282Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:28:39.282Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: enbet, Return URL: /dashboard","timestamp":"2025-07-05T04:28:39.282Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=enbet","timestamp":"2025-07-05T04:28:39.283Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:29:39.227Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:29:39.228Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: awyxze, Return URL: /dashboard","timestamp":"2025-07-05T04:29:39.228Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=awyxze","timestamp":"2025-07-05T04:29:39.229Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:30:39.233Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:30:39.234Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 5jy39i, Return URL: /dashboard","timestamp":"2025-07-05T04:30:39.234Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=5jy39i","timestamp":"2025-07-05T04:30:39.235Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:31:39.222Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:31:39.222Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: s7qeht, Return URL: /dashboard","timestamp":"2025-07-05T04:31:39.222Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=s7qeht","timestamp":"2025-07-05T04:31:39.223Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:32:39.277Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:32:39.277Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: p7bnih, Return URL: /dashboard","timestamp":"2025-07-05T04:32:39.277Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=p7bnih","timestamp":"2025-07-05T04:32:39.278Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:33:39.235Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:33:39.235Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: u4hspv, Return URL: /dashboard","timestamp":"2025-07-05T04:33:39.236Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=u4hspv","timestamp":"2025-07-05T04:33:39.237Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:34:39.257Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:34:39.257Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: vno3jj, Return URL: /dashboard","timestamp":"2025-07-05T04:34:39.257Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=vno3jj","timestamp":"2025-07-05T04:34:39.258Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:35:39.265Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:35:39.265Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: lidet, Return URL: /dashboard","timestamp":"2025-07-05T04:35:39.265Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=lidet","timestamp":"2025-07-05T04:35:39.266Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:36:39.294Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:36:39.295Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 240mhe, Return URL: /dashboard","timestamp":"2025-07-05T04:36:39.295Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=240mhe","timestamp":"2025-07-05T04:36:39.296Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:37:39.241Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:37:39.242Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: w9qvhk, Return URL: /dashboard","timestamp":"2025-07-05T04:37:39.242Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=w9qvhk","timestamp":"2025-07-05T04:37:39.242Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: 125.128.181.40, Protocol: http","timestamp":"2025-07-05T04:37:54.182Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:37:54.182Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: bbdjh5, Return URL: /dashboard","timestamp":"2025-07-05T04:37:54.183Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=bbdjh5","timestamp":"2025-07-05T04:37:54.184Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:38:39.264Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:38:39.264Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 8k7nz, Return URL: /dashboard","timestamp":"2025-07-05T04:38:39.264Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=8k7nz","timestamp":"2025-07-05T04:38:39.265Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:39:39.409Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:39:39.409Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: kerwj, Return URL: /dashboard","timestamp":"2025-07-05T04:39:39.410Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=kerwj","timestamp":"2025-07-05T04:39:39.410Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:40:39.258Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:40:39.258Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 6bosek, Return URL: /dashboard","timestamp":"2025-07-05T04:40:39.259Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=6bosek","timestamp":"2025-07-05T04:40:39.259Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:41:39.224Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:41:39.224Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: skv59, Return URL: /dashboard","timestamp":"2025-07-05T04:41:39.224Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=skv59","timestamp":"2025-07-05T04:41:39.225Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T04:42:39.191Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:42:39.230Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:42:39.230Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: aa4d1, Return URL: /dashboard","timestamp":"2025-07-05T04:42:39.231Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=aa4d1","timestamp":"2025-07-05T04:42:39.232Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:43:39.236Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:43:39.237Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: vri8e, Return URL: /dashboard","timestamp":"2025-07-05T04:43:39.237Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=vri8e","timestamp":"2025-07-05T04:43:39.238Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:44:39.236Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:44:39.236Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: j13pfl, Return URL: /dashboard","timestamp":"2025-07-05T04:44:39.237Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=j13pfl","timestamp":"2025-07-05T04:44:39.237Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:45:39.266Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:45:39.266Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 3ljn5n, Return URL: /dashboard","timestamp":"2025-07-05T04:45:39.267Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=3ljn5n","timestamp":"2025-07-05T04:45:39.267Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:46:39.217Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:46:39.217Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: ovm9xd, Return URL: /dashboard","timestamp":"2025-07-05T04:46:39.217Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=ovm9xd","timestamp":"2025-07-05T04:46:39.218Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:47:39.208Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:47:39.208Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: inko0r, Return URL: /dashboard","timestamp":"2025-07-05T04:47:39.208Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=inko0r","timestamp":"2025-07-05T04:47:39.209Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:48:39.265Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:48:39.266Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: ngg8ky, Return URL: /dashboard","timestamp":"2025-07-05T04:48:39.266Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=ngg8ky","timestamp":"2025-07-05T04:48:39.267Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: 125.128.181.40, Protocol: http","timestamp":"2025-07-05T04:48:46.919Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:48:46.919Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 0ahgpe, Return URL: /dashboard","timestamp":"2025-07-05T04:48:46.920Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=0ahgpe","timestamp":"2025-07-05T04:48:46.921Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:49:39.234Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:49:39.234Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 0xn3, Return URL: /dashboard","timestamp":"2025-07-05T04:49:39.235Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=0xn3","timestamp":"2025-07-05T04:49:39.236Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:50:39.367Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:50:39.367Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: czkhz, Return URL: /dashboard","timestamp":"2025-07-05T04:50:39.368Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=czkhz","timestamp":"2025-07-05T04:50:39.369Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:51:39.266Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:51:39.266Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: o8v1e, Return URL: /dashboard","timestamp":"2025-07-05T04:51:39.267Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=o8v1e","timestamp":"2025-07-05T04:51:39.267Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:52:39.209Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:52:39.209Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: eoyyoc, Return URL: /dashboard","timestamp":"2025-07-05T04:52:39.210Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=eoyyoc","timestamp":"2025-07-05T04:52:39.210Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party-create\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T04:53:01.714Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:53:39.227Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:53:39.227Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: jniefg, Return URL: /dashboard","timestamp":"2025-07-05T04:53:39.227Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=jniefg","timestamp":"2025-07-05T04:53:39.228Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:54:39.236Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:54:39.237Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: ti4zn7, Return URL: /dashboard","timestamp":"2025-07-05T04:54:39.237Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=ti4zn7","timestamp":"2025-07-05T04:54:39.238Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:55:39.270Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:55:39.270Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: c2bgsf, Return URL: /dashboard","timestamp":"2025-07-05T04:55:39.270Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=c2bgsf","timestamp":"2025-07-05T04:55:39.271Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:56:39.247Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:56:39.248Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: w0z5u8, Return URL: /dashboard","timestamp":"2025-07-05T04:56:39.248Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=w0z5u8","timestamp":"2025-07-05T04:56:39.249Z"}
+{"category":"party","level":"info","message":"2개의 오래된 파티가 삭제되었습니다.","timestamp":"2025-07-05T04:56:50.353Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:57:39.228Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:57:39.229Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: gv0ekq, Return URL: /dashboard","timestamp":"2025-07-05T04:57:39.229Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=gv0ekq","timestamp":"2025-07-05T04:57:39.230Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: aimdot.dev, Protocol: https","timestamp":"2025-07-05T04:58:39.253Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T04:58:39.253Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: o6g5wj, Return URL: /dashboard","timestamp":"2025-07-05T04:58:39.253Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=o6g5wj","timestamp":"2025-07-05T04:58:39.254Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-05T05:40:49.649Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-05T05:40:49.662Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-05T05:40:49.686Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-05T05:40:49.690Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-05T05:40:49.690Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T05:40:49.693Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-05T05:40:49.694Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-05T05:40:49.697Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-05T05:40:49.698Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-05T05:40:49.700Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-05T05:40:49.704Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-05T05:40:49.708Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-05T05:40:49.708Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-05T05:40:50.102Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-05T05:40:50.104Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-05T05:40:50.105Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-05T05:40:50.105Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-05T05:40:50.127Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-05T05:40:50.129Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-05T05:40:50.130Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-05T05:40:50.131Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-05T05:40:50.132Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-05T05:40:50.193Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-05T05:40:50.194Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-05T05:40:50.194Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-05T05:40:50.194Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-05T05:40:50.221Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-05T05:40:50.222Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-05T05:40:50.250Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-05T05:40:50.252Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-05T05:40:50.253Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-05T05:40:50.253Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-05T05:40:50.253Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-05T05:40:51.731Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-05T05:40:51.731Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-05T05:40:51.731Z"}
+{"category":"bot","level":"info","message":"👥 837명의 사용자와 함께","timestamp":"2025-07-05T05:40:51.731Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-05T05:40:51.827Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party-create\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T09:01:03.758Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: 125.128.181.40:80, Protocol: http","timestamp":"2025-07-05T09:32:27.191Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T09:32:27.192Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: ay12u, Return URL: /dashboard","timestamp":"2025-07-05T09:32:27.192Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=ay12u","timestamp":"2025-07-05T09:32:27.203Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: m.sdt-ad.xyz, Protocol: http","timestamp":"2025-07-05T09:41:32.945Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T09:41:32.946Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: pcyt8, Return URL: /dashboard","timestamp":"2025-07-05T09:41:32.946Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=pcyt8","timestamp":"2025-07-05T09:41:32.947Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T09:42:26.419Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: m.sdt-ad.xyz, Protocol: http","timestamp":"2025-07-05T09:52:05.311Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T09:52:05.312Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: 1ce4m, Return URL: /dashboard","timestamp":"2025-07-05T09:52:05.312Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=1ce4m","timestamp":"2025-07-05T09:52:05.313Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: 125.128.181.40:80, Protocol: http","timestamp":"2025-07-05T10:02:54.141Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T10:02:54.142Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: pm4qo, Return URL: /dashboard","timestamp":"2025-07-05T10:02:54.142Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=pm4qo","timestamp":"2025-07-05T10:02:54.143Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T10:46:08.484Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party-create\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T10:55:33.193Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: www.sdt-ad.xyz, Protocol: http","timestamp":"2025-07-05T11:23:58.797Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T11:23:58.798Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: t8nyr, Return URL: /dashboard","timestamp":"2025-07-05T11:23:58.799Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=t8nyr","timestamp":"2025-07-05T11:23:58.800Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T11:33:15.412Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to lookup view \"pages/party-create\" in views directory \"D:\\Discord bot\\Aimdot.dev\\src\\web\\views\"","timestamp":"2025-07-05T12:03:11.906Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - Host: www.sdt-ad.xyz, Protocol: http","timestamp":"2025-07-05T12:12:58.729Z"}
+{"category":"auth","level":"info","message":"Redirect URI: https://aimdot.dev/auth/callback","timestamp":"2025-07-05T12:12:58.730Z"}
+{"category":"auth","level":"info","message":"OAuth 시작 - State: mz7sc8, Return URL: /dashboard","timestamp":"2025-07-05T12:12:58.730Z"}
+{"category":"auth","level":"info","message":"Discord로 리디렉션: https://discord.com/api/oauth2/authorize?client_id=901099300661116979&redirect_uri=https%3A%2F%2Faimdot.dev%2Fauth%2Fcallback&response_type=code&scope=identify+email+guilds&state=mz7sc8","timestamp":"2025-07-05T12:12:58.731Z"}
+{"category":"party","level":"info","message":"1개의 오래된 파티가 삭제되었습니다.","timestamp":"2025-07-05T12:40:51.926Z"}
+{"category":"party","level":"info","message":"1개의 오래된 파티가 삭제되었습니다.","timestamp":"2025-07-05T13:10:51.881Z"}
+{"category":"error","level":"error","message":"서버 오류:: Failed to decode param '/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh'","timestamp":"2025-07-05T22:58:13.535Z"}
+{"category":"database","level":"info","message":"MongoDB 연결 성공","timestamp":"2025-07-06T02:29:24.812Z"}
+{"category":"database","level":"info","message":"데이터베이스 연결 성공","timestamp":"2025-07-06T02:29:24.823Z"}
+{"category":"startup","level":"info","message":"권한 시스템 초기화 완료","timestamp":"2025-07-06T02:29:24.846Z"}
+{"category":"event","level":"info","message":"이벤트 로드: guildMemberAdd","timestamp":"2025-07-06T02:29:24.851Z"}
+{"category":"event","level":"info","message":"이벤트 로드: interactionCreate","timestamp":"2025-07-06T02:29:24.852Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-06T02:29:24.855Z"}
+{"category":"event","level":"info","message":"이벤트 로드: ready","timestamp":"2025-07-06T02:29:24.856Z"}
+{"category":"command","level":"info","message":"명령어 로드: help","timestamp":"2025-07-06T02:29:24.859Z"}
+{"category":"command","level":"info","message":"명령어 로드: ping","timestamp":"2025-07-06T02:29:24.860Z"}
+{"category":"command","level":"info","message":"명령어 로드: 파티모집","timestamp":"2025-07-06T02:29:24.861Z"}
+{"category":"command","level":"info","message":"명령어 로드: partystats","timestamp":"2025-07-06T02:29:24.865Z"}
+{"category":"command","level":"info","message":"명령어 로드: setup","timestamp":"2025-07-06T02:29:24.869Z"}
+{"category":"startup","level":"info","message":"슬래시 명령어 등록 시작...","timestamp":"2025-07-06T02:29:24.869Z"}
+{"category":"command","level":"info","message":"5개의 슬래시 명령어 등록 완료","timestamp":"2025-07-06T02:29:25.303Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_party","timestamp":"2025-07-06T02:29:25.307Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: party_","timestamp":"2025-07-06T02:29:25.308Z"}
+{"category":"handler","level":"info","message":"버튼 핸들러 로드: persistent_verify","timestamp":"2025-07-06T02:29:25.308Z"}
+{"category":"handler","level":"info","message":"0개의 영속적 버튼 복원 완료","timestamp":"2025-07-06T02:29:25.311Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: help_category","timestamp":"2025-07-06T02:29:25.313Z"}
+{"category":null,"level":"info","message":"메뉴 핸들러 로드: persistent_roles","timestamp":"2025-07-06T02:29:25.313Z"}
+{"category":null,"level":"info","message":"0개의 영속적 메뉴 복원 완료","timestamp":"2025-07-06T02:29:25.315Z"}
+{"category":"handler","level":"info","message":"모든 핸들러 로드 완료","timestamp":"2025-07-06T02:29:25.315Z"}
+{"category":"server","level":"info","message":"MongoDB 세션 스토어 활성화","timestamp":"2025-07-06T02:29:25.408Z"}
+{"category":"server","level":"info","message":"현재 작업 디렉토리: D:\\Discord bot\\Aimdot.dev\\src\\web","timestamp":"2025-07-06T02:29:25.409Z"}
+{"category":"server","level":"info","message":"views 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\views","timestamp":"2025-07-06T02:29:25.409Z"}
+{"category":"server","level":"info","message":"routes 경로: D:\\Discord bot\\Aimdot.dev\\src\\web\\routes","timestamp":"2025-07-06T02:29:25.409Z"}
+{"category":"server","level":"info","message":"index.js 라우트 등록 완료","timestamp":"2025-07-06T02:29:25.440Z"}
+{"category":"server","level":"info","message":"pages.js 라우트 등록 완료","timestamp":"2025-07-06T02:29:25.442Z"}
+{"category":"server","level":"info","message":"메뉴 권한 초기화 완료","timestamp":"2025-07-06T02:29:25.452Z"}
+{"category":"server","level":"info","message":"✅ 웹 서버가 포트 3000에서 실행 중입니다.","timestamp":"2025-07-06T02:29:25.454Z"}
+{"category":"server","level":"info","message":"📡 대시보드: http://localhost:3000/dashboard","timestamp":"2025-07-06T02:29:25.454Z"}
+{"category":"server","level":"info","message":"🌐 프로덕션: https://aimdot.dev","timestamp":"2025-07-06T02:29:25.454Z"}
+{"category":"server","level":"info","message":"🎨 EJS 뷰 엔진 활성화됨","timestamp":"2025-07-06T02:29:25.455Z"}
+{"category":"party","level":"info","message":"파티 이벤트 핸들러 초기화 완료","timestamp":"2025-07-06T02:29:26.970Z"}
+{"category":"bot","level":"info","message":"✅ 봇이 준비되었습니다! ✦Aimbot#2816로 로그인됨","timestamp":"2025-07-06T02:29:26.971Z"}
+{"category":"bot","level":"info","message":"📊 9개의 서버에서 활동 중","timestamp":"2025-07-06T02:29:26.971Z"}
+{"category":"bot","level":"info","message":"👥 836명의 사용자와 함께","timestamp":"2025-07-06T02:29:26.971Z"}
+{"category":"database","level":"info","message":"봇 상태 업데이트 완료","timestamp":"2025-07-06T02:29:27.046Z"}
