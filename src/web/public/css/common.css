@@ -1,37 +1,77 @@
 /* 
- * Aimdot.dev Discord Bot - 공통 스타일시트
- * 이전 디자인의 색상 팔레트 적용
+ * Aimdot.dev Discord Bot - Discord 스타일 통합 CSS
+ * 기존 main.html의 Discord 스타일을 완전 재현
  */
 
-/* CSS 변수 정의 */
+/* === Discord 테마 색상 변수 === */
 :root {
-    /* 색상 - 이전 디자인 기준 */
-    --bg-primary: #0a0a0a;
-    --bg-secondary: #1a1a1a;
-    --bg-tertiary: #2a2a2a;
-    --text-primary: #ffffff;
-    --text-secondary: #999999;
-    --accent-primary: #2196f3;
-    --accent-secondary: #1976d2;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --success: #4caf50;
-    --warning: #ff9800;
-    --error: #f44336;
-    --info: #2196f3;
+    /* Discord 배경색 */
+    --bg-primary: #000000;        /* Discord 최외각 배경 */
+    --bg-secondary: #0a0a0a;      /* Discord 사이드바 배경 */
+    --bg-tertiary: #1a1a1a;       /* Discord 카드/모달 배경 */
+    --bg-hover: #2a2a2a;          /* 호버 상태 배경 */
     
-    /* 간격 */
+    /* Discord 텍스트 색상 */
+    --text-primary: #ffffff;       /* 주요 텍스트 */
+    --text-secondary: #b0b0b0;     /* 보조 텍스트 */
+    --text-muted: #949BA4;         /* 희미한 텍스트 */
+    --text-bright: #F2F3F5;        /* 밝은 텍스트 */
+    
+    /* Discord 브랜드 색상 */
+    --discord-blurple: #5865F2;    /* Discord 메인 컬러 */
+    --discord-dark-blurple: #4752C4;
+    --discord-light-blurple: #7289DA;
+    --discord-green: #3BA55D;      /* 온라인 상태 */
+    --discord-yellow: #FAA81A;     /* 자리비움 상태 */
+    --discord-red: #ED4245;        /* 오프라인/에러 */
+    
+    /* 액센트 색상 */
+    --accent-primary: var(--discord-blurple);
+    --accent-secondary: var(--discord-dark-blurple);
+    --accent-hover: var(--discord-light-blurple);
+    
+    /* 상태 색상 */
+    --success: var(--discord-green);
+    --warning: var(--discord-yellow);
+    --error: var(--discord-red);
+    --info: var(--discord-blurple);
+    
+    /* 테두리 색상 */
+    --border-color: #2a2a2a;
+    --border-light: rgba(255, 255, 255, 0.1);
+    --border-hover: rgba(88, 101, 242, 0.3);
+    
+    /* 그림자 */
+    --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-large: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --shadow-discord: 0 4px 12px rgba(88, 101, 242, 0.3);
+    
+    /* 간격 및 크기 */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
     --spacing-lg: 1.5rem;
     --spacing-xl: 2rem;
     
+    /* 둥근 모서리 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 50%;
+    
     /* 폰트 */
     --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --font-mono: 'Consolas', 'Monaco', 'Courier New', monospace;
+    
+    /* 트랜지션 */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.2s ease;
+    --transition-slow: 0.3s ease;
 }
 
-/* 전역 스타일 */
+/* === 전역 스타일 === */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -46,7 +86,337 @@ body {
     overflow-x: hidden;
 }
 
-/* 컨테이너 */
+/* === Discord 버튼 스타일 === */
+.discord-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    justify-content: center;
+}
+
+.discord-btn-primary {
+    background: var(--discord-blurple);
+    color: white;
+}
+
+.discord-btn-primary:hover {
+    background: var(--discord-dark-blurple);
+    box-shadow: var(--shadow-discord);
+    color: white;
+    text-decoration: none;
+}
+
+.discord-btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.discord-btn-secondary:hover {
+    background: var(--bg-hover);
+    border-color: var(--discord-blurple);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.discord-btn-danger {
+    background: var(--discord-red);
+    color: white;
+}
+
+.discord-btn-danger:hover {
+    background: #C53030;
+    color: white;
+    text-decoration: none;
+}
+
+/* === Discord 입력 필드 === */
+.discord-input {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    padding: 10px 12px;
+    width: 100%;
+    transition: border-color var(--transition-fast);
+    font-family: var(--font-primary);
+}
+
+.discord-input:focus {
+    outline: none;
+    border-color: var(--discord-blurple);
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+}
+
+.discord-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* === Discord 카드 스타일 === */
+.discord-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: all var(--transition-normal);
+}
+
+.discord-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--border-hover);
+}
+
+/* === Discord 통계 카드 === */
+.discord-stat-card {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-hover) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    text-align: center;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.discord-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--discord-blurple) 0%, var(--discord-light-blurple) 100%);
+}
+
+.discord-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--border-hover);
+}
+
+.discord-stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--discord-blurple);
+    margin-bottom: 8px;
+}
+
+.discord-stat-label {
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* === Discord 토스트 알림 === */
+.discord-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-large);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 300px;
+    border-left: 4px solid;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.discord-toast.show {
+    transform: translateX(0);
+}
+
+.discord-toast.success {
+    border-left-color: var(--discord-green);
+}
+
+.discord-toast.error {
+    border-left-color: var(--discord-red);
+}
+
+.discord-toast.info {
+    border-left-color: var(--discord-blurple);
+}
+
+.discord-toast.warning {
+    border-left-color: var(--discord-yellow);
+}
+
+.toast-icon.success {
+    color: var(--discord-green);
+}
+
+.toast-icon.error {
+    color: var(--discord-red);
+}
+
+.toast-icon.info {
+    color: var(--discord-blurple);
+}
+
+.toast-icon.warning {
+    color: var(--discord-yellow);
+}
+
+/* === Discord 모달 === */
+.discord-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.discord-modal-content {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-large);
+    max-width: 440px;
+    width: 90%;
+    padding: var(--spacing-xl);
+}
+
+.discord-modal-header {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* === 닉네임 변경 모달 스타일 === */
+.nickname-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.nickname-modal-content {
+    background-color: #2B2D31;
+    border-radius: 12px;
+    padding: 24px;
+    width: 90%;
+    max-width: 440px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.modal-header {
+    font-size: 20px;
+    font-weight: 600;
+    color: #F2F3F5;
+    margin-bottom: 20px;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.nickname-input {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #1E1F22;
+    border: 1px solid #3F4147;
+    border-radius: 4px;
+    color: #F2F3F5;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.nickname-input:focus {
+    outline: none;
+    border-color: #5865F2;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.modal-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-btn.cancel {
+    background-color: transparent;
+    color: #B5BAC1;
+}
+
+.modal-btn.cancel:hover {
+    text-decoration: underline;
+}
+
+.modal-btn.confirm {
+    background-color: #5865F2;
+    color: #FFFFFF;
+}
+
+.modal-btn.confirm:hover {
+    background-color: #4752C4;
+}
+
+/* === Discord 상태 배지 === */
+.discord-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.discord-status.online {
+    background: rgba(59, 165, 93, 0.2);
+    color: var(--discord-green);
+}
+
+.discord-status.idle {
+    background: rgba(250, 168, 26, 0.2);
+    color: var(--discord-yellow);
+}
+
+.discord-status.offline {
+    background: rgba(237, 66, 69, 0.2);
+    color: var(--discord-red);
+}
+
+/* === 레이아웃 컴포넌트 === */
 .container {
     display: flex;
     min-height: 100vh;
@@ -56,22 +426,13 @@ body {
 .main-content {
     flex: 1;
     margin-left: 280px;
-    margin-right: 200px;
+    margin-right: 250px;
     padding: 2rem;
     min-height: 100vh;
 }
 
-@media (max-width: 768px) {
-    .main-content {
-        margin-left: 0;
-        margin-right: 0;
-        padding: 1rem;
-    }
-}
-
-/* 사이드바 */
-.sidebar {
-    width: 280px;
+/* === 사이드바 기본 스타일 === */
+.discord-sidebar {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     position: fixed;
@@ -81,471 +442,271 @@ body {
     transition: transform 0.3s ease;
     overflow-y: auto;
     overflow-x: hidden;
-    /* 스크롤바 숨기기 */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: thin;
+    scrollbar-color: var(--bg-hover) var(--bg-secondary);
 }
 
-.sidebar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+.discord-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.discord-sidebar::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+.discord-sidebar::-webkit-scrollbar-thumb {
+    background: var(--bg-hover);
+    border-radius: var(--radius-sm);
+}
+
+.discord-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--border-color);
 }
 
 .sidebar-left {
     left: 0;
+    width: 280px;
 }
 
 .sidebar-right {
     right: 0;
-    width: 200px;
+    width: 250px;
 }
 
-.sidebar-content {
-    padding: 1.5rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+/* === 애니메이션 === */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
-/* 프로필 박스 (새로운 디자인) */
-.profile-box {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
-.profile-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
-.profile-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid transparent;
-    background: linear-gradient(var(--bg-secondary), var(--bg-secondary)) padding-box,
-                linear-gradient(135deg, var(--accent-primary), #7289da) border-box;
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }
 
-.profile-info {
-    flex: 1;
-    min-width: 0;
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
-.profile-name {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0 0 0.5rem 0;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+/* === 유틸리티 클래스 === */
+.discord-animate-slideInRight {
+    animation: slideInRight 0.3s ease-out;
 }
 
-.edit-name-btn {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 0.25rem;
-    font-size: 0.875rem;
-    opacity: 0;
-    transition: opacity 0.2s, color 0.2s;
+.discord-animate-slideInLeft {
+    animation: slideInLeft 0.3s ease-out;
 }
 
-.profile-box:hover .edit-name-btn {
-    opacity: 1;
+.discord-animate-fadeInUp {
+    animation: fadeInUp 0.3s ease-out;
 }
 
-.edit-name-btn:hover {
-    color: var(--accent-primary);
+.discord-animate-pulse {
+    animation: pulse 2s infinite;
 }
 
-.profile-role {
-    margin: 0;
-}
-
-.role-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.role-badge.owner {
-    background: rgba(255, 59, 48, 0.2);
-    color: #ff3b30;
-}
-
-.role-badge.owner::after {
-    content: "✓";
-    color: #4a9eff;
-    font-weight: bold;
-}
-
-.role-badge.admin {
-    background: rgba(255, 149, 0, 0.2);
-    color: #ff9500;
-}
-
-.role-badge.subadmin {
-    background: rgba(52, 199, 89, 0.2);
-    color: #34c759;
-}
-
-.role-badge.member {
-    background: rgba(90, 200, 250, 0.2);
-    color: #5ac8fa;
-}
-
-/* 전적 통계 */
-.profile-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.stat-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.875rem;
-}
-
-.stat-label {
-    color: var(--text-secondary);
-    min-width: 50px;
-}
-
-.stat-value {
-    font-weight: 600;
-    color: var(--text-primary);
-    flex: 1;
+.text-center {
     text-align: center;
 }
 
-.stat-percent {
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-    min-width: 70px;
+.text-left {
+    text-align: left;
+}
+
+.text-right {
     text-align: right;
 }
 
-/* 로그아웃 버튼 */
-.logout-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    padding: 0.75rem;
-    background: rgba(255, 59, 48, 0.1);
-    color: #ff3b30;
-    border: 1px solid rgba(255, 59, 48, 0.2);
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+.mb-5 { margin-bottom: var(--spacing-xl); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+.mt-5 { margin-top: var(--spacing-xl); }
+
+.p-0 { padding: 0; }
+.p-1 { padding: var(--spacing-xs); }
+.p-2 { padding: var(--spacing-sm); }
+.p-3 { padding: var(--spacing-md); }
+.p-4 { padding: var(--spacing-lg); }
+.p-5 { padding: var(--spacing-xl); }
+
+.d-none { display: none; }
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+.flex-column { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.align-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+
+.w-100 { width: 100%; }
+.h-100 { height: 100%; }
+
+/* === 반응형 디자인 === */
+@media (max-width: 1200px) {
+    .sidebar-left {
+        width: 250px;
+    }
+    
+    .main-content {
+        margin-left: 250px;
+    }
 }
 
-.logout-btn:hover {
-    background: rgba(255, 59, 48, 0.2);
-    border-color: rgba(255, 59, 48, 0.3);
-}
-
-/* 게스트 박스 */
-.guest-box {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 2rem 1.5rem;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.guest-logo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-}
-
-.guest-message {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-}
-
-/* 네비게이션 */
-.sidebar-nav {
-    flex: 1;
-}
-
-.nav-section-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin: 1.5rem 0 0.75rem 0;
-    padding: 0 0.5rem;
-    letter-spacing: 0.05em;
-}
-
-.nav-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1rem 0;
-}
-
-.nav-item {
-    margin-bottom: 0.25rem;
-}
-
-.nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    font-size: 0.9375rem;
-}
-
-.nav-link:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.nav-link.active {
-    color: var(--accent-primary);
-    background: rgba(33, 150, 243, 0.1);
-}
-
-.nav-link i {
-    width: 20px;
-    text-align: center;
-    font-size: 1rem;
-}
-
-/* 우측 사이드바 */
-.changelog-list {
-    padding: 1.5rem;
-}
-
-.changelog-item {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.changelog-item:last-child {
-    border-bottom: none;
-}
-
-.changelog-date {
-    font-size: 0.625rem;
-    color: var(--accent-primary);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.changelog-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
-}
-
-.changelog-description {
-    font-size: 0.625rem;
-    color: var(--text-secondary);
-    line-height: 1.4;
-}
-
-/* 버튼 */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-}
-
-.btn-primary {
-    background: var(--accent-primary);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: var(--accent-secondary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
-}
-
-.btn-secondary {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-}
-
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.btn-block {
-    width: 100%;
-    justify-content: center;
-}
-
-/* 닉네임 변경 모달 */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 1rem;
-}
-
-.modal-content {
-    background: var(--bg-primary);
-    border-radius: 12px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
-
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.modal-header h3 {
-    margin: 0;
-    font-size: 1.25rem;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    font-size: 1.25rem;
-    padding: 0.25rem;
-    transition: color 0.2s;
-}
-
-.modal-close:hover {
-    color: var(--text-primary);
-}
-
-.modal-body {
-    padding: 1.5rem;
-}
-
-.modal-footer {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-    padding: 1.5rem;
-    border-top: 1px solid var(--border-color);
-}
-
-.form-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 1rem;
-    transition: border-color 0.2s;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--accent-primary);
-}
-
-/* 모바일 대응 */
 @media (max-width: 768px) {
-    .sidebar {
+    :root {
+        --spacing-md: 0.75rem;
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.5rem;
+    }
+    
+    .sidebar-left {
         transform: translateX(-100%);
+        transition: transform 0.3s;
     }
-    
-    .sidebar-right {
-        transform: translateX(100%);
-    }
-    
-    .sidebar.open {
+
+    .sidebar-left.open {
         transform: translateX(0);
     }
-    
-    .sidebar-content {
+
+    .sidebar-right {
+        transform: translateX(100%);
+        transition: transform 0.3s;
+    }
+
+    .sidebar-right.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        margin-right: 0;
         padding: 1rem;
     }
     
-    .profile-box {
-        padding: 1rem;
+    .discord-card {
+        padding: var(--spacing-md);
     }
     
-    .profile-avatar {
-        width: 50px;
-        height: 50px;
+    .discord-modal {
+        padding: var(--spacing-lg);
     }
-    
-    .hamburger {
-        display: block;
-        position: fixed;
-        top: 1rem;
-        left: 1rem;
-        z-index: 101;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        padding: 0.75rem;
-        border-radius: 8px;
-        cursor: pointer;
-        color: var(--text-primary);
+
+    .discord-toast {
+        right: 20px;
+        min-width: 280px;
     }
-    
-    .menu-toggle {
-        display: block;
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        z-index: 101;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        padding: 0.75rem;
-        border-radius: 8px;
-        cursor: pointer;
-        color: var(--text-primary);
+}
+
+/* === 모바일 토글 버튼 === */
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    z-index: 102;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mobile-toggle:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--discord-blurple);
+}
+
+.mobile-toggle.left {
+    left: 20px;
+}
+
+.mobile-toggle.right {
+    right: 20px;
+}
+
+@media (max-width: 768px) {
+    .mobile-toggle {
+        display: flex;
     }
+}
+
+/* === 접근성 === */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* === 포커스 스타일 === */
+.discord-btn:focus,
+.discord-input:focus,
+.mobile-toggle:focus {
+    outline: 2px solid var(--discord-blurple);
+    outline-offset: 2px;
+}
+
+/* === 고대비 모드 지원 === */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #ffffff;
+        --text-secondary: #ffffff;
+        --bg-tertiary: #000000;
+    }
+}
+
+/* === 다크모드 기본 설정 === */
+@media (prefers-color-scheme: dark) {
+    /* Discord는 기본적으로 다크 테마이므로 별도 처리 불필요 */
 }

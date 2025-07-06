@@ -1,197 +1,389 @@
-<!-- 좌측 사이드바 -->
-<aside class="sidebar sidebar-left" id="sidebar-left">
-    <div class="sidebar-content">
-        <% if (user) { %>
-            <!-- 프로필 박스 -->
-            <div class="profile-box">
-                <div class="profile-header">
-                    <img src="<%= user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png' %>" 
-                         alt="<%= user.username %>" 
-                         class="profile-avatar">
-                    <div class="profile-info">
-                        <h3 class="profile-name" id="profile-name">
-                            <%= user.nickname || user.username %>
-                            <button class="edit-name-btn" onclick="openNicknameModal()">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </h3>
-                        <p class="profile-role">
-                            <span class="role-badge <%= user.dashboardRole || 'member' %>">
-                                <%= user.dashboardRole ? user.dashboardRole.toUpperCase() : 'MEMBER' %>
-                            </span>
-                        </p>
-                    </div>
+<!-- Discord 스타일 좌측 사이드바 -->
+<aside class="discord-sidebar sidebar-left" id="sidebar-left">
+    <!-- 사이드바 로고 -->
+    <div class="discord-sidebar-logo">
+        <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
+        <h2>Aimdot.dev</h2>
+    </div>
+
+    <!-- 로그인 전 섹션 -->
+    <div class="discord-login-section" id="login-section">
+        <h3>시작하기</h3>
+        <p>Discord 계정으로 로그인하여 더 많은 기능을 이용하세요!</p>
+        <button class="discord-btn discord-btn-primary" id="discord-login">
+            <i class="fab fa-discord"></i>
+            <span>Discord로 로그인</span>
+        </button>
+    </div>
+    
+    <!-- Discord에 봇 추가 버튼 (로그인 박스 외부) -->
+    <a href="#" class="discord-add-bot-btn" id="add-bot-guest">
+        <i class="fab fa-discord"></i>
+        Discord에 봇 추가
+    </a>
+
+    <!-- 사용자 프로필 섹션 (로그인 후) -->
+    <div class="discord-user-card" id="user-profile-section" style="display: none;">
+        <div class="discord-user-header">
+            <img src="" alt="Avatar" class="discord-user-avatar" id="user-profile-avatar">
+            <div class="discord-user-info">
+                <div class="discord-user-name">
+                    <span id="user-profile-name">로딩 중...</span>
+                    <i class="fas fa-edit discord-edit-btn" onclick="openNicknameModal()" title="닉네임 수정"></i>
                 </div>
-                
-                <!-- 전적 통계 -->
-                <div class="profile-stats">
-                    <div class="stat-row">
-                        <span class="stat-label">전적</span>
-                        <span class="stat-value"><%= user.wins || 0 %>승 <%= user.losses || 0 %>패</span>
-                        <span class="stat-percent">승률 <%= user.wins && user.losses ? Math.round((user.wins / (user.wins + user.losses)) * 100) : 0 %>%</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">평균 킬</span>
-                        <span class="stat-value"><%= user.avgKills || '0.0' %></span>
-                        <span class="stat-percent">최규전 <%= user.rankedGames || 0 %>회</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">모의전</span>
-                        <span class="stat-value"><%= user.practiceGames || 0 %>회</span>
-                        <span class="stat-percent">총 게임 <%= (user.rankedGames || 0) + (user.practiceGames || 0) %>회</span>
-                    </div>
-                </div>
-                
-                <!-- 로그아웃 버튼 -->
-                <a href="/auth/logout" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    로그아웃
-                </a>
+                <div class="discord-user-role" id="user-profile-role">guest</div>
             </div>
-        <% } else { %>
-            <!-- 비로그인 상태 -->
-            <div class="guest-box">
-                <img src="https://i.imgur.com/Sd8qK9c.gif" alt="Aimdot" class="guest-logo">
-                <p class="guest-message">로그인하여 모든 기능을 이용하세요</p>
-                <a href="/auth/discord" class="btn btn-primary btn-block">
-                    <i class="fab fa-discord"></i>
-                    Discord 로그인
-                </a>
-            </div>
-        <% } %>
+        </div>
         
-        <!-- 메뉴 -->
-        <nav class="sidebar-nav">
-            <h4 class="nav-section-title">메뉴</h4>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="/" class="nav-link <%= currentPath === '/' ? 'active' : '' %>">
-                        <i class="fas fa-home"></i>
-                        <span>홈</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/party" class="nav-link <%= currentPath === '/party' ? 'active' : '' %>">
-                        <i class="fas fa-users"></i>
-                        <span>파티</span>
-                    </a>
-                </li>
-            </ul>
-            
-            <% if (user) { %>
-                <h4 class="nav-section-title">기능</h4>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="/dashboard" class="nav-link <%= currentPath === '/dashboard' ? 'active' : '' %>">
-                            <i class="fas fa-th-large"></i>
-                            <span>대시보드</span>
-                        </a>
-                    </li>
-                    <% if (['admin', 'subadmin', 'owner'].includes(user.dashboardRole)) { %>
-                        <li class="nav-item">
-                            <a href="/dashboard/servers" class="nav-link <%= currentPath === '/dashboard/servers' ? 'active' : '' %>">
-                                <i class="fas fa-server"></i>
-                                <span>서버 관리</span>
-                            </a>
-                        </li>
-                    <% } %>
-                    <% if (['admin', 'owner'].includes(user.dashboardRole)) { %>
-                        <li class="nav-item">
-                            <a href="/dashboard/permissions" class="nav-link <%= currentPath === '/dashboard/permissions' ? 'active' : '' %>">
-                                <i class="fas fa-user-shield"></i>
-                                <span>권한 관리</span>
-                            </a>
-                        </li>
-                    <% } %>
-                </ul>
-            <% } %>
-        </nav>
+        <!-- 사용자 통계 -->
+        <div class="discord-user-stats">
+            <div class="discord-stat-item">
+                <span class="discord-stat-label">전적</span>
+                <span class="discord-stat-value" id="stat-record">0승 0패</span>
+            </div>
+            <div class="discord-stat-item">
+                <span class="discord-stat-label">승률</span>
+                <span class="discord-stat-value" id="stat-winrate">0%</span>
+            </div>
+            <div class="discord-stat-item">
+                <span class="discord-stat-label">평균 킬</span>
+                <span class="discord-stat-value" id="stat-avgkills">0</span>
+            </div>
+            <div class="discord-stat-item">
+                <span class="discord-stat-label">정규전</span>
+                <span class="discord-stat-value" id="stat-ranked">0회</span>
+            </div>
+            <div class="discord-stat-item">
+                <span class="discord-stat-label">모의전</span>
+                <span class="discord-stat-value" id="stat-practice">0회</span>
+            </div>
+            <div class="discord-stat-item">
+                <span class="discord-stat-label">총 게임</span>
+                <span class="discord-stat-value" id="stat-total">0회</span>
+            </div>
+        </div>
+        
+        <!-- 프로필 액션 버튼들 -->
+        <div class="discord-profile-actions">
+            <button class="discord-btn discord-btn-secondary" onclick="viewFullProfile()">
+                <i class="fas fa-user"></i>
+                프로필 보기
+            </button>
+            <a href="/dashboard" class="discord-btn discord-btn-secondary">
+                <i class="fas fa-tachometer-alt"></i>
+                대시보드
+            </a>
+            <a href="/auth/logout" class="discord-btn discord-btn-danger">
+                <i class="fas fa-sign-out-alt"></i>
+                로그아웃
+            </a>
+        </div>
+    </div>
+    
+    <!-- Discord에 봇 추가 버튼 (프로필 박스 외부) -->
+    <a href="#" class="discord-add-bot-btn" id="add-bot-user" style="display: none;">
+        <i class="fab fa-discord"></i>
+        Discord에 봇 추가
+    </a>
+
+    <!-- 온라인 상태 표시 (선택적) -->
+    <div class="discord-status-section">
+        <div class="discord-status online">
+            <i class="fas fa-circle"></i>
+            <span>봇 온라인</span>
+        </div>
     </div>
 </aside>
 
-<!-- 닉네임 변경 모달 -->
-<div class="modal" id="nickname-modal" style="display: none;">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>닉네임 변경</h3>
-            <button class="modal-close" onclick="closeNicknameModal()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <input type="text" 
-                   id="nickname-input" 
-                   class="form-input" 
-                   placeholder="새 닉네임 입력"
-                   maxlength="32">
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeNicknameModal()">취소</button>
-            <button class="btn btn-primary" onclick="saveNickname()">저장</button>
-        </div>
-    </div>
-</div>
-
-<script>
-// 닉네임 변경 모달
-function openNicknameModal() {
-    const modal = document.getElementById('nickname-modal');
-    const input = document.getElementById('nickname-input');
-    const currentName = document.getElementById('profile-name').textContent.trim();
-    
-    input.value = currentName;
-    modal.style.display = 'flex';
-    input.focus();
-    input.select();
+<style>
+/* Discord 좌측 사이드바 스타일 */
+.discord-sidebar.sidebar-left {
+    width: 280px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform 0.3s ease;
 }
 
-function closeNicknameModal() {
-    document.getElementById('nickname-modal').style.display = 'none';
+/* Discord 스크롤바 */
+.discord-sidebar::-webkit-scrollbar {
+    width: 8px;
 }
 
-async function saveNickname() {
-    const input = document.getElementById('nickname-input');
-    const newNickname = input.value.trim();
-    
-    if (!newNickname) {
-        showToast('닉네임을 입력해주세요.', 'warning');
-        return;
+.discord-sidebar::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+.discord-sidebar::-webkit-scrollbar-thumb {
+    background: var(--bg-hover);
+    border-radius: 4px;
+}
+
+.discord-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--border-color);
+}
+
+/* 사이드바 로고 */
+.discord-sidebar-logo {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.discord-sidebar-logo img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
+}
+
+.discord-sidebar-logo h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* 로그인 섹션 */
+.discord-login-section {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-hover) 100%);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.discord-login-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--text-bright);
+}
+
+.discord-login-section p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* 사용자 프로필 카드 */
+.discord-user-card {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-hover) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: var(--shadow-small);
+}
+
+.discord-user-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.discord-user-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid var(--discord-blurple);
+    transition: border-color 0.3s;
+}
+
+.discord-user-avatar:hover {
+    border-color: var(--discord-light-blurple);
+}
+
+.discord-user-info {
+    flex: 1;
+}
+
+.discord-user-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.discord-edit-btn {
+    font-size: 14px;
+    color: var(--discord-blurple);
+    cursor: pointer;
+    transition: color 0.2s;
+    opacity: 0.7;
+}
+
+.discord-edit-btn:hover {
+    color: var(--discord-light-blurple);
+    opacity: 1;
+}
+
+.discord-user-role {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 사용자 통계 */
+.discord-user-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 16px;
+    margin-bottom: 20px;
+}
+
+.discord-stat-item {
+    background: rgba(88, 101, 242, 0.05);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.discord-stat-item:hover {
+    background: rgba(88, 101, 242, 0.1);
+}
+
+.discord-stat-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.discord-stat-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+}
+
+/* 프로필 액션 버튼들 */
+.discord-profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Discord에 봇 추가 버튼 */
+.discord-add-bot-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px;
+    padding: 12px 16px;
+    background: var(--discord-blurple);
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.discord-add-bot-btn:hover {
+    background: var(--discord-dark-blurple);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-discord);
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+/* 온라인 상태 섹션 */
+.discord-status-section {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.discord-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.discord-status.online {
+    color: var(--discord-green);
+}
+
+.discord-status.online i {
+    animation: pulse 2s infinite;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .discord-sidebar.sidebar-left {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
     }
-    
-    try {
-        const response = await fetch('/api/user/nickname', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nickname: newNickname })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            document.getElementById('profile-name').childNodes[0].textContent = newNickname + ' ';
-            closeNicknameModal();
-            showToast('닉네임이 변경되었습니다.', 'success');
-        } else {
-            showToast(result.error || '닉네임 변경에 실패했습니다.', 'error');
-        }
-    } catch (error) {
-        showToast('닉네임 변경 중 오류가 발생했습니다.', 'error');
+
+    .discord-sidebar.sidebar-left.open {
+        transform: translateX(0);
+    }
+
+    .discord-user-stats {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .discord-user-card {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .discord-login-section {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .discord-add-bot-btn {
+        margin: 15px;
+        padding: 10px 14px;
     }
 }
 
-// 엔터키로 저장
-document.getElementById('nickname-input')?.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        saveNickname();
+/* 애니메이션 */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
     }
-});
+    50% {
+        opacity: 0.5;
+    }
+}
 
-// 모달 외부 클릭 시 닫기
-document.getElementById('nickname-modal')?.addEventListener('click', (e) => {
-    if (e.target === document.getElementById('nickname-modal')) {
-        closeNicknameModal();
-    }
-});
-</script>
+/* 로딩 상태 */
+.discord-sidebar .loading {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.discord-sidebar .loading i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>

@@ -1,69 +1,94 @@
-<div class="sidebar-right">
-    <div class="right-section">
-        <h3 class="section-title">
-            <i class="fas fa-bell"></i> 최근 활동
-        </h3>
-        <div class="activity-list">
-            <div class="activity-item">
-                <i class="fas fa-user-plus activity-icon"></i>
-                <span>새로운 멤버가 서버에 참가했습니다</span>
-            </div>
-            <div class="activity-item">
-                <i class="fas fa-gamepad activity-icon"></i>
-                <span>파티 모집이 시작되었습니다</span>
-            </div>
-            <div class="activity-item">
-                <i class="fas fa-trophy activity-icon"></i>
-                <span>일일 미션을 완료했습니다</span>
-            </div>
-        </div>
+<!-- Discord 스타일 우측 사이드바 -->
+<aside class="discord-sidebar sidebar-right" id="sidebar-right">
+    <!-- 메뉴 헤더 -->
+    <div class="discord-menu-header">
+        <i class="fas fa-bars"></i>
+        <span>메뉴</span>
     </div>
-    
-    <div class="right-section">
-        <h3 class="section-title">
-            <i class="fas fa-rocket"></i> 빠른 실행
+
+    <!-- 기능 섹션 -->
+    <div class="discord-menu-section">
+        <h3 class="discord-menu-title">
+            <i class="fas fa-cog"></i>
+            기능
         </h3>
-        <div class="quick-actions">
-            <a href="/party/create" class="quick-action">
-                <i class="fas fa-plus-circle quick-action-icon"></i>
-                <span class="quick-action-label">파티 만들기</span>
-            </a>
-            <a href="/invite" class="quick-action">
-                <i class="fas fa-user-plus quick-action-icon"></i>
-                <span class="quick-action-label">봇 초대</span>
-            </a>
-            <a href="/support" class="quick-action">
-                <i class="fas fa-life-ring quick-action-icon"></i>
-                <span class="quick-action-label">지원</span>
-            </a>
-            <a href="/docs" class="quick-action">
-                <i class="fas fa-book quick-action-icon"></i>
-                <span class="quick-action-label">문서</span>
-            </a>
-        </div>
+        <ul class="discord-menu-list">
+            <li class="discord-menu-item">
+                <a href="/dashboard" class="discord-menu-item <%= isActive(currentPath, '/dashboard') %>">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>대시보드</span>
+                </a>
+            </li>
+            <li class="discord-menu-item">
+                <a href="/party" class="discord-menu-item <%= isActive(currentPath, '/party') %>">
+                    <i class="fas fa-users"></i>
+                    <span>파티 찾기</span>
+                </a>
+            </li>
+            <li class="discord-menu-item">
+                <a href="/party/create" class="discord-menu-item">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>파티 생성</span>
+                </a>
+            </li>
+        </ul>
     </div>
-    
-    <div class="right-section">
-        <h3 class="section-title">
-            <i class="fas fa-users"></i> 온라인 멤버
+
+    <!-- 정보 섹션 -->
+    <div class="discord-menu-section">
+        <h3 class="discord-menu-title">
+            <i class="fas fa-info-circle"></i>
+            정보
         </h3>
-        <div class="online-users">
-            <div class="user-item">
-                <div class="user-avatar">A</div>
-                <div class="user-info">
-                    <div class="user-name">Admin</div>
-                    <div class="user-status">온라인</div>
-                </div>
-                <div class="user-badge"></div>
-            </div>
-            <div class="user-item">
-                <div class="user-avatar">U</div>
-                <div class="user-info">
-                    <div class="user-name">User123</div>
-                    <div class="user-status">게임 중</div>
-                </div>
-                <div class="user-badge" style="background: #f59e0b;"></div>
-            </div>
-        </div>
+        <ul class="discord-menu-list">
+            <li class="discord-menu-item">
+                <a href="#" onclick="showToast('준비 중인 기능입니다.', 'info'); return false;" class="discord-menu-item">
+                    <i class="fas fa-book"></i>
+                    <span>가이드</span>
+                </a>
+            </li>
+            <li class="discord-menu-item">
+                <a href="#" onclick="showToast('준비 중인 기능입니다.', 'info'); return false;" class="discord-menu-item">
+                    <i class="fas fa-terminal"></i>
+                    <span>명령어</span>
+                </a>
+            </li>
+            <li class="discord-menu-item">
+                <a href="#" onclick="showToast('준비 중인 기능입니다.', 'info'); return false;" class="discord-menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>도움말</span>
+                </a>
+            </li>
+        </ul>
     </div>
-</div>
+
+    <!-- 관리자 섹션 (권한이 있는 경우에만 표시) -->
+    <% if (typeof user !== 'undefined' && user && (user.dashboardRole === 'admin' || user.dashboardRole === 'owner')) { %>
+    <div class="discord-menu-section">
+        <h3 class="discord-menu-title">
+            <i class="fas fa-shield-alt"></i>
+            관리자
+        </h3>
+        <ul class="discord-menu-list">
+            <li class="discord-menu-item">
+                <a href="/permissions" class="discord-menu-item <%= isActive(currentPath, '/permissions') %>">
+                    <i class="fas fa-user-shield"></i>
+                    <span>권한 관리</span>
+                </a>
+            </li>
+            <li class="discord-menu-item">
+                <a href="/servers" class="discord-menu-item <%= isActive(currentPath, '/servers') %>">
+                    <i class="fas fa-server"></i>
+                    <span>서버 관리</span>
+                </a>
+            </li>
+            <% if (user.dashboardRole === 'owner') { %>
+            <li class="discord-menu-item">
+                <a href="/db-management" class="discord-menu-item <%= isActive(currentPath, '/db-management') %>">
+                    <i class="fas fa-database"></i>
+                    <span>DB 관리</span>
+                </a>
+            </li>
+            <% } %>
+        </ul>
+    </div>
