@@ -1,69 +1,63 @@
+// src/web/routes/index.js
 const express = require('express');
 const router = express.Router();
+const User = require('../../models/User');
 
-/**
- * 메인 페이지 라우트
- * EJS 템플릿을 사용하여 동적 데이터와 함께 렌더링
- */
+// 메인 페이지
 router.get('/', async (req, res) => {
     try {
-        // 봇 클라이언트 가져오기
-        const bot = req.app.locals.bot;
+        // 봇 클라이언트 가져오기 (봇이 아직 초기화되지 않았을 수 있음)
+        const bot = req.app.locals.bot || req.client;
         
-        // 통계 데이터 수집
+        // 세션에서 사용자 정보 가져오기
+        let userData = null;
+        if (req.session && req.session.user) {
+            // DB에서 전체 사용자 정보 조회
+            const user = await User.findOne({ discordId: req.session.user.id });
+            if (user) {
+                userData = {
+                    id: user.discordId,
+                    username: user.username,
+                    avatar: user.avatar,
+                    nickname: user.nickname,
+                    dashboardRole: user.dashboardRole || 'member',
+                    // 게임 전적 정보
+                    wins: user.gameStats?.wins || 0,
+                    losses: user.gameStats?.losses || 0,
+                    avgKills: user.gameStats?.avgKills || 0,
+                    rankedGames: user.gameStats?.rankedGames || 0,
+                    practiceGames: user.gameStats?.practiceGames || 0
+                };
+            } else {
+                userData = req.session.user;
+            }
+        }
+        
+        // 통계 정보 수집
         const stats = {
             serverCount: bot ? bot.guilds.cache.size : 0,
             userCount: bot ? bot.users.cache.size : 0,
-            commandCount: bot ? bot.commands?.size || 0 : 0
+            commandCount: bot && bot.commands ? bot.commands.size : 0
         };
         
         // EJS 템플릿 렌더링
         res.render('pages/index', {
             title: 'Aimdot.dev - Discord Bot',
             ...stats,
-            user: req.session?.user || null
+            user: userData
         });
     } catch (error) {
         console.error('메인 페이지 렌더링 오류:', error);
         
-        // 오류 발생 시 기본값으로 렌더링
+        // 오류 시 기본값으로 렌더링
         res.render('pages/index', {
             title: 'Aimdot.dev - Discord Bot',
             serverCount: 0,
             userCount: 0,
             commandCount: 0,
-            user: null
+            user: req.session?.user || null
         });
     }
-});
-
-/**
- * 봇 초대 링크 리다이렉트
- */
-router.get('/invite', (req, res) => {
-    const botId = process.env.BOT_CLIENT_ID || 'YOUR_BOT_ID';
-    const permissions = '8'; // Administrator 권한
-    const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${botId}&permissions=${permissions}&scope=bot%20applications.commands`;
-    
-    res.redirect(inviteUrl);
-});
-
-/**
- * API 상태 체크 엔드포인트
- */
-router.get('/api/status', (req, res) => {
-    const bot = req.app.locals.bot;
-    
-    res.json({
-        success: true,
-        data: {
-            online: bot ? bot.ws.ping > 0 : false,
-            ping: bot ? bot.ws.ping : null,
-            uptime: bot ? bot.uptime : 0,
-            servers: bot ? bot.guilds.cache.size : 0,
-            users: bot ? bot.users.cache.size : 0
-        }
-    });
 });
 
 module.exports = router;

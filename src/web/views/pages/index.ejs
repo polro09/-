@@ -10,10 +10,29 @@
                 디스코드 서버를 위한 강력하고 직관적인 봇
             </p>
             <div class="hero-buttons">
-                <a href="/invite" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    봇 초대하기
-                </a>
+                <% if (user) { %>
+                    <a href="/dashboard" class="btn btn-primary">
+                        <i class="fas fa-th-large"></i>
+                        대시보드
+                    </a>
+                    <a href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID&permissions=8&scope=bot%20applications.commands" 
+                       class="btn btn-secondary" 
+                       target="_blank">
+                        <i class="fas fa-plus"></i>
+                        봇 초대하기
+                    </a>
+                <% } else { %>
+                    <a href="/auth/discord" class="btn btn-primary">
+                        <i class="fab fa-discord"></i>
+                        Discord로 로그인
+                    </a>
+                    <a href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID&permissions=8&scope=bot%20applications.commands" 
+                       class="btn btn-secondary" 
+                       target="_blank">
+                        <i class="fas fa-plus"></i>
+                        봇 초대하기
+                    </a>
+                <% } %>
             </div>
         </div>
         <div class="hero-image">
@@ -51,15 +70,6 @@
                     <p class="stat-label">명령어</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-content">
-                    <h3 class="stat-number" data-count="99.9">0</h3>
-                    <p class="stat-label">가동률 %</p>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -69,117 +79,77 @@
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">
-                    <i class="fas fa-shield-alt"></i>
+                    <i class="fas fa-gamepad"></i>
                 </div>
-                <h3>강력한 관리 도구</h3>
-                <p>서버 관리를 위한 다양한 명령어와 자동화 기능을 제공합니다.</p>
+                <h3>게임 통합</h3>
+                <p>발로란트 전적 조회, 팀 매칭, 스크림 관리 등 다양한 게임 기능을 제공합니다.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
-                    <i class="fas fa-music"></i>
+                    <i class="fas fa-users-cog"></i>
                 </div>
-                <h3>고품질 음악 재생</h3>
-                <p>YouTube, Spotify 등 다양한 플랫폼의 음악을 고품질로 재생합니다.</p>
+                <h3>파티 시스템</h3>
+                <p>게임 파티 모집, 자동 매칭, 역할 분배 등 팀 구성을 쉽게 관리할 수 있습니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>강력한 관리</h3>
+                <p>서버 관리, 권한 설정, 로그 추적 등 안전한 커뮤니티 운영을 지원합니다.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-chart-line"></i>
                 </div>
-                <h3>상세한 통계</h3>
-                <p>서버 활동과 사용자 통계를 실시간으로 확인할 수 있습니다.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-gamepad"></i>
-                </div>
-                <h3>미니 게임</h3>
-                <p>다양한 미니 게임으로 서버 멤버들과 즐거운 시간을 보내세요.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-bell"></i>
-                </div>
-                <h3>알림 시스템</h3>
-                <p>중요한 이벤트나 공지사항을 놓치지 않도록 알림을 받으세요.</p>
+                <h3>통계 & 분석</h3>
+                <p>서버 활동, 사용자 통계, 명령어 사용 현황을 실시간으로 확인할 수 있습니다.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-cogs"></i>
                 </div>
                 <h3>커스터마이징</h3>
-                <p>서버에 맞게 봇의 기능과 설정을 자유롭게 커스터마이징하세요.</p>
+                <p>서버별 설정, 사용자 정의 명령어, 자동화 기능으로 원하는 대로 구성하세요.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>빠른 응답</h3>
+                <p>최적화된 성능과 안정적인 서버로 언제나 빠른 응답을 보장합니다.</p>
             </div>
         </div>
     </section>
 </div>
 
-<%- contentFor('scripts') %>
-<script>
-// 숫자 카운트 애니메이션
-document.addEventListener('DOMContentLoaded', () => {
-    const observerOptions = {
-        threshold: 0.5,
-        rootMargin: '0px 0px -100px 0px'
-    };
+<!-- 토스트 컨테이너 -->
+<div class="toast" id="toast">
+    <i class="toast-icon fas fa-info-circle"></i>
+    <span class="toast-message" id="toast-message"></span>
+</div>
 
-    const animateCount = (element) => {
-        const target = parseFloat(element.getAttribute('data-count'));
-        const duration = 2000;
-        const start = 0;
-        const increment = target / (duration / 16);
-        let current = start;
-
-        const updateCount = () => {
-            current += increment;
-            if (current < target) {
-                element.textContent = Math.floor(current).toLocaleString();
-                requestAnimationFrame(updateCount);
-            } else {
-                element.textContent = target % 1 === 0 ? 
-                    Math.floor(target).toLocaleString() : 
-                    target.toFixed(1);
-            }
-        };
-
-        updateCount();
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCount(entry.target);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.stat-number').forEach(stat => {
-        observer.observe(stat);
-    });
-});
-</script>
-
+<!-- 페이지별 스타일 -->
 <style>
 /* Hero Section */
 .hero-section {
-    min-height: 60vh;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 2rem 0;  /* 4rem → 2rem */
-    gap: 1.5rem;  /* 3rem → 1.5rem */
+    min-height: 60vh;
+    padding: 4rem 0;
+    gap: 3rem;
 }
 
 .hero-content {
     flex: 1;
-    max-width: 600px;
 }
 
 .hero-title {
     font-size: 4rem;
     font-weight: 700;
-    margin-bottom: 1rem;  /* 1.5rem → 1rem */
-    line-height: 1.1;
+    margin-bottom: 1rem;
+    line-height: 1.2;
 }
 
 .gradient-text {
@@ -190,10 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .hero-description {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     color: var(--text-secondary);
-    margin-bottom: 1.5rem;  /* 2rem → 1.5rem */
-    line-height: 1.6;
+    margin-bottom: 2rem;
+    line-height: 1.5;
 }
 
 .hero-buttons {
@@ -203,9 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .hero-image {
-    flex: 1;
-    max-width: 400px;  /* 500px → 400px */
-    text-align: center;
+    flex: 0 0 300px;
 }
 
 .hero-image img {
@@ -219,50 +187,44 @@ document.addEventListener('DOMContentLoaded', () => {
 .stats-section {
     padding: 4rem 0;
     background: var(--bg-secondary);
-    margin: 0 -2rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    border-radius: 20px;
+    margin: 2rem 0;
 }
 
 .stats-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .stat-card {
+    text-align: center;
+    padding: 2rem;
     background: var(--bg-primary);
     border-radius: 12px;
-    padding: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .stat-icon {
     font-size: 2.5rem;
     color: var(--accent-primary);
-    opacity: 0.8;
+    margin-bottom: 1rem;
 }
 
 .stat-number {
     font-size: 2.5rem;
     font-weight: 700;
-    margin: 0;
     color: var(--text-primary);
+    margin: 0;
 }
 
 .stat-label {
-    font-size: 1rem;
     color: var(--text-secondary);
+    font-size: 1rem;
     margin: 0;
 }
 
@@ -314,6 +276,53 @@ document.addEventListener('DOMContentLoaded', () => {
     line-height: 1.6;
 }
 
+/* Toast 스타일 */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #1e1e1e;
+    color: #ffffff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 10000;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast.success {
+    border-left: 4px solid #4caf50;
+}
+
+.toast.error {
+    border-left: 4px solid #f44336;
+}
+
+.toast.info {
+    border-left: 4px solid #2196f3;
+}
+
+.toast.warning {
+    border-left: 4px solid #ff9800;
+}
+
+.toast-icon {
+    font-size: 20px;
+}
+
+.toast.success .toast-icon { color: #4caf50; }
+.toast.error .toast-icon { color: #f44336; }
+.toast.info .toast-icon { color: #2196f3; }
+.toast.warning .toast-icon { color: #ff9800; }
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero-section {
@@ -338,3 +347,85 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 }
 </style>
+
+<!-- 페이지별 스크립트 -->
+<script>
+// 숫자 카운트 애니메이션
+document.addEventListener('DOMContentLoaded', function() {
+    const animateNumbers = () => {
+        const numbers = document.querySelectorAll('.stat-number');
+        
+        numbers.forEach(num => {
+            const target = parseInt(num.getAttribute('data-count'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const updateNumber = () => {
+                current += increment;
+                if (current < target) {
+                    num.textContent = Math.floor(current).toLocaleString();
+                    requestAnimationFrame(updateNumber);
+                } else {
+                    num.textContent = target.toLocaleString();
+                }
+            };
+            
+            updateNumber();
+        });
+    };
+    
+    // Intersection Observer로 스크롤 시 애니메이션
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateNumbers();
+                observer.disconnect();
+            }
+        });
+    });
+    
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+});
+
+// 토스트 메시지 함수
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    const toastIcon = toast.querySelector('.toast-icon');
+    
+    toast.className = `toast ${type}`;
+    toastMessage.textContent = message;
+    
+    // 아이콘 변경
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        warning: 'fa-exclamation-triangle',
+        info: 'fa-info-circle'
+    };
+    
+    toastIcon.className = `toast-icon fas ${icons[type] || icons.info}`;
+    
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// 봇 초대 URL (실제 봇 ID로 교체 필요)
+document.querySelectorAll('a[href*="YOUR_BOT_ID"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+        if (link.href.includes('YOUR_BOT_ID')) {
+            e.preventDefault();
+            showToast('봇 ID를 설정해주세요.', 'warning');
+        }
+    });
+});
+</script>
+
+<!-- 페이지별 추가 스크립트 -->

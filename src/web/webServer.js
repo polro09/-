@@ -1,3 +1,4 @@
+// src/web/webServer.js
 const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -118,13 +119,42 @@ class WebServer {
             next();
         });
         
-        // 클라이언트 인스턴스를 req에 추가
-        this.app.use((req, res, next) => {
+        // 클라이언트 인스턴스와 사용자 정보를 req에 추가
+        this.app.use(async (req, res, next) => {
             req.client = this.client;
             // 현재 경로를 locals에 추가 (네비게이션 활성화용)
             res.locals.currentPath = req.path;
+            
             // 세션 사용자 정보를 locals에 추가
-            res.locals.user = req.session.user || null;
+            if (req.session && req.session.user) {
+                try {
+                    const User = require('../models/User');
+                    const user = await User.findOne({ discordId: req.session.user.id });
+                    
+                    if (user) {
+                        res.locals.user = {
+                            id: user.discordId,
+                            username: user.username,
+                            avatar: user.avatar,
+                            nickname: user.nickname,
+                            dashboardRole: user.dashboardRole || 'member',
+                            wins: user.gameStats?.wins || 0,
+                            losses: user.gameStats?.losses || 0,
+                            avgKills: user.gameStats?.avgKills || 0,
+                            rankedGames: user.gameStats?.rankedGames || 0,
+                            practiceGames: user.gameStats?.practiceGames || 0
+                        };
+                    } else {
+                        res.locals.user = req.session.user;
+                    }
+                } catch (error) {
+                    console.error('사용자 정보 조회 오류:', error);
+                    res.locals.user = req.session.user;
+                }
+            } else {
+                res.locals.user = null;
+            }
+            
             next();
         });
     }
@@ -142,87 +172,63 @@ class WebServer {
         this.app.use('/auth', require('./routes/auth'));
         this.app.use('/api', require('./routes/api'));
         this.app.use('/dashboard/api/permissions', require('./routes/permissions'));
-        this.app.use('/dashboard/api', require('./routes/dashboard')); // 기존 648줄 파일
+        this.app.use('/dashboard/api', require('./routes/dashboard'));
         this.app.use('/party/api', require('./routes/party'));
         
-        // 메인 페이지 라우트
+        // 메인 페이지 라우트 (EJS)
         try {
             const indexRouter = require('./routes/index');
             this.app.use('/', indexRouter);
             logger.server('index.js 라우트 등록 완료');
         } catch (error) {
-            logger.server('index.js 파일이 없어 기본 라우트 사용');
+            logger.server('index.js 파일이 없어 기본 라우트 사용:', error.message);
+            
+            // index.js가 없으면 직접 메인 페이지 라우트 설정
+            this.app.get('/', async (req, res) => {
+                try {
+                    // 봇 클라이언트 가져오기
+                    const bot = this.client;
+                    
+                    // 세션에서 사용자 정보 가져오기
+                    let userData = res.locals.user; // 미들웨어에서 이미 설정됨
+                    
+                    // 통계 정보 수집
+                    const stats = {
+                        serverCount: bot ? bot.guilds.cache.size : 0,
+                        userCount: bot ? bot.users.cache.size : 0,
+                        commandCount: bot && bot.commands ? bot.commands.size : 0
+                    };
+                    
+                    // EJS 템플릿 렌더링
+                    res.render('pages/index', {
+                        title: 'Aimdot.dev - Discord Bot',
+                        ...stats,
+                        user: userData
+                    });
+                } catch (renderError) {
+                    console.error('EJS 렌더링 오류:', renderError);
+                    // EJS 렌더링 실패 시 기존 HTML 파일 사용
+                    res.sendFile(path.join(__dirname, 'public', 'main.html'));
+                }
+            });
         }
         
-        // 페이지 라우트 (EJS 렌더링) - pages.js 파일 확인
+        // 페이지 라우트 (EJS 렌더링)
         try {
             const pagesRouter = require('./routes/pages');
             this.app.use('/', pagesRouter);
             logger.server('pages.js 라우트 등록 완료');
         } catch (error) {
             logger.error('pages.js 라우트 파일을 찾을 수 없습니다:', error.message);
-            
-            // pages.js가 없으면 직접 대시보드 라우트 설정
-            this.app.get('/dashboard', (req, res) => {
-                if (!req.session.user) {
-                    return res.redirect('/auth/discord?returnUrl=/dashboard');
-                }
-                
-                // 기존 HTML 파일로 폴백
-                res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
-            });
         }
         
         // 기존 HTML 페이지들 (점진적 마이그레이션)
-        // 최초 방문 처리 (로딩 페이지)
+        // 로딩 페이지는 더 이상 메인에서 사용하지 않음
         this.app.get('/loading', (req, res) => {
             res.sendFile(path.join(__dirname, 'public', 'loading.html'));
         });
         
-        // 메인 페이지 (기존 HTML 백업용)
-        this.app.get('/main-legacy', (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'main.html'));
-        });
-        
-        // API 라우트
-        this.app.use('/auth', require('./routes/auth'));
-        this.app.use('/api', require('./routes/api'));
-        this.app.use('/dashboard/api/permissions', require('./routes/permissions'));
-        this.app.use('/dashboard/api', require('./routes/dashboard'));
-        this.app.use('/party/api', require('./routes/party'));
-        
-        // EJS 라우트를 먼저 등록
-        try {
-            const indexRouter = require('./routes/index');
-            this.app.use('/', indexRouter);
-            logger.server('EJS 라우트 등록 완료');
-        } catch (error) {
-            logger.error('index.js 라우트 파일을 찾을 수 없습니다. 직접 라우트 설정:', error.message);
-            
-            // 직접 라우트 설정
-            this.app.get('/', async (req, res) => {
-                try {
-                    const bot = this.client;
-                    const stats = {
-                        serverCount: bot ? bot.guilds.cache.size : 0,
-                        userCount: bot ? bot.users.cache.size : 0,
-                        commandCount: bot ? bot.commands?.size || 0 : 0
-                    };
-                    
-                    res.render('pages/index', {
-                        title: 'Aimdot.dev - Discord Bot',
-                        ...stats,
-                        user: req.session?.user || null
-                    });
-                } catch (renderError) {
-                    logger.error('EJS 렌더링 오류:', renderError);
-                    res.status(500).send('페이지 렌더링 오류');
-                }
-            });
-        }
-        
-        // 기존 HTML 페이지들 (점진적 마이그레이션)
-        // 메인 페이지 (기존 HTML 백업용)
+        // 메인 페이지 HTML 백업
         this.app.get('/main-legacy', (req, res) => {
             res.sendFile(path.join(__dirname, 'public', 'main.html'));
         });
@@ -238,19 +244,6 @@ class WebServer {
         
         this.app.get('/party/:partyId', (req, res) => {
             res.sendFile(path.join(__dirname, 'public', 'party-detail.html'));
-        });
-        
-        // 대시보드 페이지 (로그인 필요) - EJS 사용
-        const dashboardRouter = require('./routes/dashboard');
-        this.app.use('/', dashboardRouter);
-        
-        // 기존 대시보드 HTML (백업용)
-        this.app.get('/dashboard-legacy', (req, res) => {
-            if (!req.session.user) {
-                const currentUrl = '/dashboard';
-                return res.redirect(`/auth/discord?returnUrl=${encodeURIComponent(currentUrl)}`);
-            }
-            res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
         });
         
         // DB 관리 페이지 (Sub Admin 이상)
@@ -270,10 +263,50 @@ class WebServer {
         
         // 404 처리
         this.app.use((req, res) => {
-            res.status(404).render('pages/404', {
-                title: '페이지를 찾을 수 없습니다 - Aimdot.dev',
-                layout: 'layouts/main'
-            });
+            try {
+                res.status(404).render('pages/404', {
+                    title: '페이지를 찾을 수 없습니다 - Aimdot.dev',
+                    layout: 'layouts/main'
+                });
+            } catch (error) {
+                res.status(404).send(`
+                    <!DOCTYPE html>
+                    <html lang="ko">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>404 - 페이지를 찾을 수 없습니다</title>
+                        <style>
+                            body {
+                                background: #0a0a0a;
+                                color: #ffffff;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100vh;
+                                margin: 0;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            }
+                            .error-container {
+                                text-align: center;
+                            }
+                            .error-code {
+                                font-size: 6rem;
+                                font-weight: bold;
+                                color: #2196f3;
+                                margin: 0;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="error-container">
+                            <h1 class="error-code">404</h1>
+                            <p>페이지를 찾을 수 없습니다</p>
+                            <a href="/" style="color: #2196f3;">메인으로 돌아가기</a>
+                        </div>
+                    </body>
+                    </html>
+                `);
+            }
         });
         
         // 에러 처리

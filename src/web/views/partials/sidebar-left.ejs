@@ -1,120 +1,197 @@
-<div class="sidebar-left">
-    <div class="sidebar-header">
-        <a href="/" class="sidebar-title">
-            <img src="https://i.imgur.com/Sd8qK9c.gif" alt="Logo">
-            Aimdot.dev
-        </a>
-    </div>
-    
-    <% if (locals.user) { %>
-    <div class="sidebar-profile">
-        <img src="<%= user.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png' %>" 
-             alt="Avatar" 
-             class="profile-avatar">
-        <div class="profile-name"><%= user.username %></div>
-        <div class="profile-role"><%= user.dashboardRole || 'Member' %></div>
-    </div>
-    
-    <div class="sidebar-stats">
-        <div class="stat-item">
-            <span class="stat-label">접속</span>
-            <span class="stat-value">0승 0패</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">승률</span>
-            <span class="stat-value">0%</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">평균 킬</span>
-            <span class="stat-value">0.0</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">평균진</span>
-            <span class="stat-value">0회</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">모의전</span>
-            <span class="stat-value">0회</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">총 게임</span>
-            <span class="stat-value">0회</span>
-        </div>
-    </div>
-    
-    <div class="sidebar-buttons">
-        <a href="/profile" class="btn-profile">
-            <i class="fas fa-user"></i> 프로필 보기
-        </a>
-        <a href="/auth/logout" class="btn-profile btn-logout">
-            <i class="fas fa-sign-out-alt"></i> 로그아웃
-        </a>
-    </div>
-    <% } else { %>
-    <div class="sidebar-profile">
-        <div class="profile-avatar" style="background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-user" style="font-size: 2rem; color: var(--text-muted);"></i>
-        </div>
-        <div class="profile-name">로그인이 필요합니다</div>
-        <a href="/auth/discord" class="btn btn-primary" style="margin-top: 1rem;">
-            <i class="fab fa-discord"></i> Discord로 로그인
-        </a>
-    </div>
-    <% } %>
-    
-    <nav class="sidebar-menu">
-        <div class="menu-section">
-            <div class="menu-title">기능</div>
-            <a href="/" class="menu-item <%= locals.currentPath === '/' ? 'active' : '' %>">
-                <i class="fas fa-home menu-icon"></i>
-                홈
-            </a>
-            <a href="/dashboard" class="menu-item <%= locals.currentPath === '/dashboard' ? 'active' : '' %>">
-                <i class="fas fa-th-large menu-icon"></i>
-                대시보드
-            </a>
-            <a href="/party" class="menu-item <%= locals.currentPath === '/party' ? 'active' : '' %>">
-                <i class="fas fa-users menu-icon"></i>
-                파티
-            </a>
-            <a href="/stats" class="menu-item">
-                <i class="fas fa-chart-bar menu-icon"></i>
-                스쿼드 자료
-            </a>
-        </div>
-        
-        <% if (locals.user) { %>
-        <div class="menu-section">
-            <div class="menu-title">서버 관리</div>
-            <a href="/dashboard/servers" class="menu-item">
-                <i class="fas fa-server menu-icon"></i>
-                서버 관리
-            </a>
-            <a href="/dashboard/settings" class="menu-item">
-                <i class="fas fa-cog menu-icon"></i>
-                봇 설정
-            </a>
-            <a href="/commands" class="menu-item">
-                <i class="fas fa-terminal menu-icon"></i>
-                명령어
-            </a>
-        </div>
+<!-- 좌측 사이드바 -->
+<aside class="sidebar sidebar-left" id="sidebar-left">
+    <div class="sidebar-content">
+        <% if (user) { %>
+            <!-- 프로필 박스 -->
+            <div class="profile-box">
+                <div class="profile-header">
+                    <img src="<%= user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png' %>" 
+                         alt="<%= user.username %>" 
+                         class="profile-avatar">
+                    <div class="profile-info">
+                        <h3 class="profile-name" id="profile-name">
+                            <%= user.nickname || user.username %>
+                            <button class="edit-name-btn" onclick="openNicknameModal()">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </h3>
+                        <p class="profile-role">
+                            <span class="role-badge <%= user.dashboardRole || 'member' %>">
+                                <%= user.dashboardRole ? user.dashboardRole.toUpperCase() : 'MEMBER' %>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 전적 통계 -->
+                <div class="profile-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">전적</span>
+                        <span class="stat-value"><%= user.wins || 0 %>승 <%= user.losses || 0 %>패</span>
+                        <span class="stat-percent">승률 <%= user.wins && user.losses ? Math.round((user.wins / (user.wins + user.losses)) * 100) : 0 %>%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">평균 킬</span>
+                        <span class="stat-value"><%= user.avgKills || '0.0' %></span>
+                        <span class="stat-percent">최규전 <%= user.rankedGames || 0 %>회</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">모의전</span>
+                        <span class="stat-value"><%= user.practiceGames || 0 %>회</span>
+                        <span class="stat-percent">총 게임 <%= (user.rankedGames || 0) + (user.practiceGames || 0) %>회</span>
+                    </div>
+                </div>
+                
+                <!-- 로그아웃 버튼 -->
+                <a href="/auth/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    로그아웃
+                </a>
+            </div>
+        <% } else { %>
+            <!-- 비로그인 상태 -->
+            <div class="guest-box">
+                <img src="https://i.imgur.com/Sd8qK9c.gif" alt="Aimdot" class="guest-logo">
+                <p class="guest-message">로그인하여 모든 기능을 이용하세요</p>
+                <a href="/auth/discord" class="btn btn-primary btn-block">
+                    <i class="fab fa-discord"></i>
+                    Discord 로그인
+                </a>
+            </div>
         <% } %>
         
-        <div class="menu-section">
-            <div class="menu-title">관리자</div>
-            <a href="/dashboard/permissions" class="menu-item">
-                <i class="fas fa-user-shield menu-icon"></i>
-                권한 관리
-            </a>
-            <a href="/dashboard/db-management" class="menu-item">
-                <i class="fas fa-database menu-icon"></i>
-                DB 관리
-            </a>
-            <a href="/dashboard/system" class="menu-item">
-                <i class="fas fa-server menu-icon"></i>
-                시스템 설정
-            </a>
+        <!-- 메뉴 -->
+        <nav class="sidebar-nav">
+            <h4 class="nav-section-title">메뉴</h4>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/" class="nav-link <%= currentPath === '/' ? 'active' : '' %>">
+                        <i class="fas fa-home"></i>
+                        <span>홈</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/party" class="nav-link <%= currentPath === '/party' ? 'active' : '' %>">
+                        <i class="fas fa-users"></i>
+                        <span>파티</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <% if (user) { %>
+                <h4 class="nav-section-title">기능</h4>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="/dashboard" class="nav-link <%= currentPath === '/dashboard' ? 'active' : '' %>">
+                            <i class="fas fa-th-large"></i>
+                            <span>대시보드</span>
+                        </a>
+                    </li>
+                    <% if (['admin', 'subadmin', 'owner'].includes(user.dashboardRole)) { %>
+                        <li class="nav-item">
+                            <a href="/dashboard/servers" class="nav-link <%= currentPath === '/dashboard/servers' ? 'active' : '' %>">
+                                <i class="fas fa-server"></i>
+                                <span>서버 관리</span>
+                            </a>
+                        </li>
+                    <% } %>
+                    <% if (['admin', 'owner'].includes(user.dashboardRole)) { %>
+                        <li class="nav-item">
+                            <a href="/dashboard/permissions" class="nav-link <%= currentPath === '/dashboard/permissions' ? 'active' : '' %>">
+                                <i class="fas fa-user-shield"></i>
+                                <span>권한 관리</span>
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+            <% } %>
+        </nav>
+    </div>
+</aside>
+
+<!-- 닉네임 변경 모달 -->
+<div class="modal" id="nickname-modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>닉네임 변경</h3>
+            <button class="modal-close" onclick="closeNicknameModal()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-    </nav>
+        <div class="modal-body">
+            <input type="text" 
+                   id="nickname-input" 
+                   class="form-input" 
+                   placeholder="새 닉네임 입력"
+                   maxlength="32">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeNicknameModal()">취소</button>
+            <button class="btn btn-primary" onclick="saveNickname()">저장</button>
+        </div>
+    </div>
 </div>
+
+<script>
+// 닉네임 변경 모달
+function openNicknameModal() {
+    const modal = document.getElementById('nickname-modal');
+    const input = document.getElementById('nickname-input');
+    const currentName = document.getElementById('profile-name').textContent.trim();
+    
+    input.value = currentName;
+    modal.style.display = 'flex';
+    input.focus();
+    input.select();
+}
+
+function closeNicknameModal() {
+    document.getElementById('nickname-modal').style.display = 'none';
+}
+
+async function saveNickname() {
+    const input = document.getElementById('nickname-input');
+    const newNickname = input.value.trim();
+    
+    if (!newNickname) {
+        showToast('닉네임을 입력해주세요.', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/user/nickname', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nickname: newNickname })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('profile-name').childNodes[0].textContent = newNickname + ' ';
+            closeNicknameModal();
+            showToast('닉네임이 변경되었습니다.', 'success');
+        } else {
+            showToast(result.error || '닉네임 변경에 실패했습니다.', 'error');
+        }
+    } catch (error) {
+        showToast('닉네임 변경 중 오류가 발생했습니다.', 'error');
+    }
+}
+
+// 엔터키로 저장
+document.getElementById('nickname-input')?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        saveNickname();
+    }
+});
+
+// 모달 외부 클릭 시 닫기
+document.getElementById('nickname-modal')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('nickname-modal')) {
+        closeNicknameModal();
+    }
+});
+</script>
