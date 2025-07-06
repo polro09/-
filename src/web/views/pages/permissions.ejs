@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || '권한 관리 - Aimdot.dev' %></title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://i.imgur.com/Sd8qK9c.gif" type="image/gif">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/common.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Aimdot.dev Discord Bot 권한 관리 페이지">
+    <meta name="keywords" content="Discord Bot, Aimdot, 권한관리">
+    <meta name="author" content="Aimdot.dev">
+    
+    <style>
+        /* === 권한 관리 전용 스타일 === */
+        .header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* 탭 메뉴 */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        .tab.active {
+            color: var(--accent-primary);
+            border-bottom-color: var(--accent-primary);
+        }
+
+        .tab-content {
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        /* 검색 섹션 */
+        .search-section {
+            margin-bottom: 24px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 12px;
+            max-width: 500px;
+        }
+
+        .search-input {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+        }
+
+        .search-btn {
+            background: var(--accent-primary);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .search-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        /* 데이터 테이블 */
+        .data-table {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s;
+            align-items: center;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-row:hover {
+            background: var(--bg-hover);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+        }
+
+        .role-select {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .role-select:hover:not(:disabled) {
+            border-color: var(--accent-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .role-select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .last-login {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* 메뉴 권한 설정 */
+        .menu-permissions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.2s;
+        }
+
+        .menu-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.1);
+        }
+
+        .menu-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .menu-icon {
+            font-size: 20px;
+            color: var(--accent-primary);
+        }
+
+        .menu-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .menu-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .permission-level {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .permission-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* 로딩 및 빈 상태 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+        }
+
+        /* 토스트 알림 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 280px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-large);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease-out;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast i {
+            color: var(--success);
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .table-header > div:not(:first-child),
+            .table-row > div:not(:first-child) {
+                display: none;
+            }
+
+            .menu-permissions {
+                grid-template-columns: 1fr;
+            }
+
+            .toast {
+                right: 20px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 모바일 메뉴 토글 -->
+    <button class="mobile-toggle left" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <button class="mobile-toggle right" onclick="toggleMenu()">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+
+    <!-- 좌측 사이드바 - 사용자 프로필 -->
+    <aside class="sidebar-left" id="sidebar-left">
+        <div class="sidebar-logo">
+            <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
+            <h2>Aimdot.dev</h2>
+        </div>
+
+        <!-- 사용자 프로필 섹션 -->
+        <div class="user-profile-section">
+            <div class="user-profile-header">
+                <img src="<%= user?.avatar || 'https://i.imgur.com/Sd8qK9c.gif' %>" alt="Avatar" class="user-profile-avatar" id="user-avatar">
+                <div class="user-profile-info">
+                    <div class="user-profile-name" id="user-name"><%= user?.username || '로딩 중...' %></div>
+                    <div class="user-profile-role" id="user-role"><%= user?.dashboardRole || '-' %></div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <a href="/dashboard" class="profile-btn back">
+                    <i class="fas fa-arrow-left"></i>
+                    대시보드로 돌아가기
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 우측 사이드바 - 메뉴 -->
+    <aside class="sidebar-right" id="sidebar-right">
+        <div class="menu-header">
+            <i class="fas fa-bars"></i>
+            <span>빠른 메뉴</span>
+        </div>
+
+        <div class="menu-section">
+            <h3>관리</h3>
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="/dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        대시보드
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/dashboard/servers">
+                        <i class="fas fa-server"></i>
+                        서버 관리
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/dashboard/db-management">
+                        <i class="fas fa-database"></i>
+                        DB 관리
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/dashboard/permissions" class="active">
+                        <i class="fas fa-user-shield"></i>
+                        권한 관리
+                    </a>
+                </li>
+            </ul>
+
+            <h3>기타</h3>
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="/auth/logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        로그아웃
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>권한 관리</h1>
+            <p>사용자 권한과 메뉴 접근 권한을 관리합니다.</p>
+        </div>
+
+        <!-- 탭 메뉴 -->
+        <div class="tabs">
+            <button class="tab active" data-tab="users">사용자 권한</button>
+            <button class="tab" data-tab="menus">메뉴 권한</button>
+        </div>
+
+        <!-- 사용자 권한 탭 -->
+        <div id="users-tab" class="tab-content">
+            <!-- 검색 섹션 -->
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="user-search" placeholder="사용자 이름 또는 Discord ID로 검색...">
+                    <button class="search-btn" onclick="searchUsers()">
+                        <i class="fas fa-search"></i>
+                        <span>검색</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 사용자 테이블 -->
+            <div class="data-table">
+                <div class="table-header">
+                    <div>사용자</div>
+                    <div>현재 권한</div>
+                    <div>마지막 접속</div>
+                    <div>작업</div>
+                </div>
+                <div id="users-table-body">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 메뉴 권한 탭 -->
+        <div id="menus-tab" class="tab-content" style="display: none;">
+            <div class="menu-permissions" id="menu-permissions">
+                <!-- 메뉴 카드들이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">변경사항이 저장되었습니다.</span>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let allUsers = [];
+        let menus = [];
+        let currentUser = null;
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('권한 관리 페이지 초기화 시작');
+            try {
+                await loadUserInfo();
+                await checkPermission();
+                
+                // API 경로 확인을 위한 디버깅
+                console.log('사용자 권한 목록 로드 시작');
+                await loadUserPermissions();
+                
+                console.log('메뉴 권한 설정 로드 시작');
+                await loadMenuPermissions();
+                
+                setupEventListeners();
+                console.log('권한 관리 페이지 초기화 완료');
+            } catch (error) {
+                console.error('페이지 초기화 오류:', error);
+                showToast('페이지를 불러오는 중 오류가 발생했습니다.', 'error');
+            }
+        });
+
+        // 사용자 정보 로드
+        async function loadUserInfo() {
+            try {
+                <% if (user) { %>
+                currentUser = <%- JSON.stringify(user) %>;
+                document.getElementById('user-name').textContent = currentUser.username;
+                document.getElementById('user-role').textContent = currentUser.dashboardRole || 'member';
+                document.getElementById('user-avatar').src = currentUser.avatar;
+                <% } else { %>
+                window.location.href = '/auth/discord';
+                <% } %>
+            } catch (error) {
+                console.error('사용자 정보 로드 실패:', error);
+            }
+        }
+
+        // 권한 체크
+        async function checkPermission() {
+            if (!currentUser || !['admin', 'owner'].includes(currentUser.dashboardRole)) {
+                alert('권한이 없습니다.');
+                window.location.href = '/dashboard';
+                return;
+            }
+        }
+
+        // 사용자 권한 목록 로드
+        async function loadUserPermissions() {
+            try {
+                console.log('API 요청: /dashboard/api/permissions/users');
+                const response = await fetch('/dashboard/api/permissions/users');
+                console.log('응답 상태:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('사용자 목록 데이터:', data);
+                allUsers = data.users || [];
+                renderUserTable(allUsers);
+            } catch (error) {
+                console.error('사용자 권한 목록 로드 실패:', error);
+                document.getElementById('users-table-body').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>사용자 목록을 불러오는데 실패했습니다.<br>API 연결을 확인해주세요.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 메뉴 권한 설정 로드
+        async function loadMenuPermissions() {
+            try {
+                console.log('API 요청: /dashboard/api/permissions/menus');
+                const response = await fetch('/dashboard/api/permissions/menus');
+                console.log('메뉴 권한 응답 상태:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('메뉴 권한 데이터:', data);
+                menus = data.menus || [];
+                renderMenuPermissions(menus);
+            } catch (error) {
+                console.error('메뉴 권한 설정 로드 실패:', error);
+                document.getElementById('menu-permissions').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>메뉴 권한 설정을 불러오는데 실패했습니다.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 사용자 테이블 렌더링
+        function renderUserTable(users) {
+            const tbody = document.getElementById('users-table-body');
+            
+            if (!users || users.length === 0) {
+                tbody.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <p>등록된 사용자가 없습니다.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <div class="table-row">
+                    <div class="user-info">
+                        <img src="${user.avatar || 'https://i.imgur.com/Sd8qK9c.gif'}" alt="Avatar" class="user-avatar">
+                        <div class="user-details">
+                            <div class="user-name">${user.username}</div>
+                            <div class="user-id">${user.discordId}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <select class="role-select" onchange="updateUserRole('${user.discordId}', this.value)" ${currentUser.discordId === user.discordId ? 'disabled' : ''}>
+                            <option value="guest" ${user.dashboardRole === 'guest' ? 'selected' : ''}>게스트</option>
+                            <option value="member" ${user.dashboardRole === 'member' ? 'selected' : ''}>멤버</option>
+                            <option value="subadmin" ${user.dashboardRole === 'subadmin' ? 'selected' : ''}>서브관리자</option>
+                            <option value="admin" ${user.dashboardRole === 'admin' ? 'selected' : ''}>관리자</option>
+                            ${currentUser.dashboardRole === 'owner' ? `<option value="owner" ${user.dashboardRole === 'owner' ? 'selected' : ''}>오너</option>` : ''}
+                        </select>
+                    </div>
+                    <div class="last-login">${formatDate(user.lastLogin)}</div>
+                    <div>
+                        <button class="role-select" onclick="refreshUser('${user.discordId}')" style="background: var(--bg-tertiary);">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 메뉴 권한 렌더링
+        function renderMenuPermissions(menuList) {
+            const container = document.getElementById('menu-permissions');
+            
+            if (!menuList || menuList.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-list"></i>
+                        <p>메뉴 권한 설정이 없습니다.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = menuList.map(menu => `
+                <div class="menu-card">
+                    <div class="menu-card-header">
+                        <i class="${menu.icon} menu-icon"></i>
+                        <div class="menu-title">${menu.title}</div>
+                    </div>
+                    <div class="menu-description">${menu.description}</div>
+                    <div class="permission-level">
+                        <span class="permission-label">최소 권한:</span>
+                        <select class="role-select" onchange="updateMenuPermission('${menu.menuId}', this.value)">
+                            <option value="guest" ${menu.minRole === 'guest' ? 'selected' : ''}>게스트</option>
+                            <option value="member" ${menu.minRole === 'member' ? 'selected' : ''}>멤버</option>
+                            <option value="subadmin" ${menu.minRole === 'subadmin' ? 'selected' : ''}>서브관리자</option>
+                            <option value="admin" ${menu.minRole === 'admin' ? 'selected' : ''}>관리자</option>
+                            <option value="owner" ${menu.minRole === 'owner' ? 'selected' : ''}>오너</option>
+                        </select>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 사용자 역할 업데이트
+        async function updateUserRole(discordId, newRole) {
+            try {
+                const response = await fetch('/dashboard/api/permissions/users/role', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        discordId: discordId,
+                        role: newRole
+                    })
+                });
+
+                if (response.ok) {
+                    showToast('사용자 권한이 업데이트되었습니다.', 'success');
+                } else {
+                    throw new Error('권한 업데이트 실패');
+                }
+            } catch (error) {
+                console.error('권한 업데이트 오류:', error);
+                showToast('권한 업데이트에 실패했습니다.', 'error');
+                await loadUserPermissions(); // 실패 시 새로고침
+            }
+        }
+
+        // 메뉴 권한 업데이트
+        async function updateMenuPermission(menuId, minRole) {
+            try {
+                const response = await fetch('/dashboard/api/permissions/menus/role', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        menuId: menuId,
+                        minRole: minRole
+                    })
+                });
+
+                if (response.ok) {
+                    showToast('메뉴 권한이 업데이트되었습니다.', 'success');
+                } else {
+                    throw new Error('메뉴 권한 업데이트 실패');
+                }
+            } catch (error) {
+                console.error('메뉴 권한 업데이트 오류:', error);
+                showToast('메뉴 권한 업데이트에 실패했습니다.', 'error');
+                await loadMenuPermissions(); // 실패 시 새로고침
+            }
+        }
+
+        // 사용자 검색
+        function searchUsers() {
+            const searchTerm = document.getElementById('user-search').value.toLowerCase();
+            const filteredUsers = allUsers.filter(user => 
+                user.username.toLowerCase().includes(searchTerm) ||
+                user.discordId.includes(searchTerm)
+            );
+            renderUserTable(filteredUsers);
+        }
+
+        // 사용자 새로고침
+        async function refreshUser(discordId) {
+            try {
+                const response = await fetch(`/dashboard/api/permissions/users/${discordId}/refresh`, {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    showToast('사용자 정보가 새로고침되었습니다.', 'success');
+                    await loadUserPermissions();
+                } else {
+                    throw new Error('사용자 새로고침 실패');
+                }
+            } catch (error) {
+                console.error('사용자 새로고침 오류:', error);
+                showToast('사용자 새로고침에 실패했습니다.', 'error');
+            }
+        }
+
+        // 탭 전환
+        function setupEventListeners() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    
+                    // 탭 활성화
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // 콘텐츠 표시
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.style.display = content.id === `${tabName}-tab` ? 'block' : 'none';
+                    });
+                });
+            });
+
+            // 검색 입력 이벤트
+            document.getElementById('user-search').addEventListener('input', searchUsers);
+        }
+
+        // 토스트 알림 표시
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const messageElement = document.getElementById('toast-message');
+            const icon = toast.querySelector('i');
+            
+            messageElement.textContent = message;
+            
+            // 아이콘 변경
+            icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+            icon.style.color = type === 'success' ? 'var(--success)' : 'var(--error)';
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 날짜 포맷팅
+        function formatDate(dateString) {
+            if (!dateString) return '없음';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR');
+        }
+
+        // 사이드바 토글 (모바일)
+        function toggleSidebar() {
+            document.getElementById('sidebar-left').classList.toggle('open');
+        }
+
+        function toggleMenu() {
+            document.getElementById('sidebar-right').classList.toggle('open');
+        }
+
+        // 키보드 이벤트
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('sidebar-left').classList.remove('open');
+                document.getElementById('sidebar-right').classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>

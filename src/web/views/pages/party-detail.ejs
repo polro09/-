@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || '파티 상세 - Aimdot.dev' %></title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://i.imgur.com/Sd8qK9c.gif" type="image/gif">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Aimdot.dev Discord Bot 파티 상세 페이지">
+    <meta name="keywords" content="Discord Bot, Aimdot, 파티상세, 게임파티">
+    <meta name="author" content="Aimdot.dev">
+    
+    <style>
+        /* === 파티 상세 페이지 전용 스타일 === */
+        :root {
+            /* Discord 색상 변수 */
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #1a1a1a;
+            --bg-hover: #2a2a2a;
+            
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #949BA4;
+            
+            --discord-blurple: #5865F2;
+            --discord-dark-blurple: #4752C4;
+            --discord-light-blurple: #7289DA;
+            --discord-green: #3BA55D;
+            --discord-yellow: #FAA81A;
+            --discord-red: #ED4245;
+            
+            --accent-primary: var(--discord-blurple);
+            --accent-hover: var(--discord-light-blurple);
+            
+            --border-color: #2a2a2a;
+            --shadow-large: 0 8px 24px rgba(0, 0, 0, 0.6);
+            
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--discord-light-blurple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: 1px solid;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent-primary);
+        }
+
+        .btn-danger {
+            background: var(--discord-red);
+            border-color: var(--discord-red);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c23e41;
+        }
+
+        /* 컨테이너 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* 파티 헤더 */
+        .party-header {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .party-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary) 0%, var(--discord-light-blurple) 100%);
+        }
+
+        .party-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .party-type-badge {
+            background: var(--accent-primary);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .party-status {
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .party-status.recruiting {
+            background: rgba(59, 165, 92, 0.2);
+            color: var(--discord-green);
+        }
+
+        .party-status.full {
+            background: rgba(250, 166, 26, 0.2);
+            color: var(--discord-yellow);
+        }
+
+        .party-status.closed {
+            background: rgba(237, 66, 69, 0.2);
+            color: var(--discord-red);
+        }
+
+        .party-status i {
+            font-size: 10px;
+        }
+
+        .party-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .party-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        /* 정보 섹션 */
+        .party-info-section {
+            margin-bottom: 32px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .info-title i {
+            color: var(--accent-primary);
+        }
+
+        .info-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* 섹션 타이틀 */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .section-title i {
+            color: var(--accent-primary);
+        }
+
+        /* 멤버 섹션 */
+        .members-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .member-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .member-card:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .member-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .member-role.leader {
+            color: var(--discord-yellow);
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .member-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .member-btn:hover {
+            border-color: var(--accent-primary);
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .member-btn.danger:hover {
+            border-color: var(--discord-red);
+            background: var(--discord-red);
+        }
+
+        /* 액션 섹션 */
+        .party-actions {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: 1px solid;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* 토스트 알림 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-large);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease-out;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            color: var(--discord-green);
+        }
+
+        /* 모달 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid;
+        }
+
+        .modal-btn.cancel {
+            background: var(--bg-tertiary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .modal-btn.cancel:hover {
+            background: var(--bg-hover);
+        }
+
+        .modal-btn.confirm {
+            background: var(--discord-red);
+            border-color: var(--discord-red);
+            color: white;
+        }
+
+        .modal-btn.confirm:hover {
+            background: #c23e41;
+        }
+
+        /* 로딩 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 16px;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .container {
+                padding: 24px 16px;
+            }
+
+            .party-title {
+                font-size: 2rem;
+            }
+
+            .party-meta {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .members-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <img src="https://i.imgur.com/IOPA7gL.gif" alt="Aimdot.dev">
+                <h1>Aimdot.dev 파티 시스템</h1>
+            </a>
+            <div class="header-actions">
+                <a href="/party" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    파티 목록
+                </a>
+                <% if (user) { %>
+                    <a href="/dashboard" class="btn btn-secondary">
+                        <i class="fas fa-tachometer-alt"></i>
+                        대시보드
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <div class="container">
+        <!-- 로딩 상태 -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- 파티 정보 (로딩 후 표시) -->
+        <div id="party-content" style="display: none;">
+            <!-- 파티 헤더 -->
+            <div class="party-header">
+                <div class="party-meta">
+                    <span class="party-type-badge" id="party-type">파티 타입</span>
+                    <span class="party-status recruiting" id="party-status">
+                        <i class="fas fa-circle"></i>
+                        모집중
+                    </span>
+                </div>
+                <h1 class="party-title" id="party-title">파티 제목</h1>
+                <p class="party-description" id="party-description">파티 설명이 여기에 표시됩니다.</p>
+            </div>
+
+            <!-- 파티 정보 섹션 -->
+            <div class="party-info-section">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-title">
+                            <i class="fas fa-info-circle"></i>
+                            기본 정보
+                        </div>
+                        <div class="info-content">
+                            <div class="info-item">
+                                <span class="info-label">파티장</span>
+                                <span class="info-value" id="party-leader">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">필요 레벨</span>
+                                <span class="info-value" id="required-level">제한 없음</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">인원</span>
+                                <span class="info-value" id="member-count">0/0명</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">생성일</span>
+                                <span class="info-value" id="created-date">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            일정 정보
+                        </div>
+                        <div class="info-content">
+                            <div class="info-item">
+                                <span class="info-label">예정 일시</span>
+                                <span class="info-value" id="scheduled-time">미정</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">시간 협의</span>
+                                <span class="info-value" id="flexible-time">불가능</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">음성 채널</span>
+                                <span class="info-value" id="voice-channel">사용 안함</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">관전자</span>
+                                <span class="info-value" id="allow-spectators">불허용</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 멤버 섹션 -->
+            <div class="members-section">
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i>
+                    파티 멤버
+                </h2>
+                <div class="members-grid" id="members-grid">
+                    <!-- 멤버 카드들이 여기에 동적으로 생성됩니다 -->
+                </div>
+            </div>
+
+            <!-- 액션 섹션 -->
+            <div class="party-actions">
+                <h2 class="section-title">
+                    <i class="fas fa-gamepad"></i>
+                    파티 참가
+                </h2>
+                <div class="action-buttons" id="action-buttons">
+                    <!-- 액션 버튼들이 여기에 동적으로 생성됩니다 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 확인 모달 -->
+    <div class="modal" id="confirm-modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-title">확인</div>
+            <div class="modal-body" id="modal-body">
+                정말로 이 작업을 수행하시겠습니까?
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" onclick="closeModal()">취소</button>
+                <button class="modal-btn confirm" onclick="confirmAction()" id="confirm-btn">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span class="toast-message"></span>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentUser = null;
+        let partyData = null;
+        let currentAction = null;
+        const partyId = '<%= partyId %>';
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('파티 상세 페이지 초기화 시작');
+            try {
+                await loadUserInfo();
+                await loadPartyData();
+                setupEventListeners();
+                console.log('파티 상세 페이지 초기화 완료');
+            } catch (error) {
+                console.error('페이지 초기화 오류:', error);
+                showToast('페이지를 불러오는 중 오류가 발생했습니다.', 'error');
+            }
+        });
+
+        // 사용자 정보 로드
+        async function loadUserInfo() {
+            try {
+                <% if (user) { %>
+                currentUser = <%- JSON.stringify(user) %>;
+                console.log('사용자 정보:', currentUser);
+                <% } %>
+            } catch (error) {
+                console.error('사용자 정보 로드 실패:', error);
+            }
+        }
+
+        // 파티 데이터 로드
+        async function loadPartyData() {
+            try {
+                console.log('API 요청: /party/api/detail/' + partyId);
+                const response = await fetch(`/party/api/detail/${partyId}`);
+                
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error('파티를 찾을 수 없습니다.');
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('파티 데이터:', data);
+                
+                partyData = data.party;
+                renderPartyData();
+                
+                // 로딩 숨기고 컨텐츠 표시
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('party-content').style.display = 'block';
+                
+            } catch (error) {
+                console.error('파티 데이터 로드 실패:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div style="text-align: center; color: var(--text-secondary);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 16px; color: var(--discord-red);"></i>
+                        <h3>${error.message}</h3>
+                        <p>파티 정보를 불러올 수 없습니다.</p>
+                        <button class="btn btn-primary" onclick="window.location.href='/party'" style="margin-top: 20px;">
+                            <i class="fas fa-arrow-left"></i>
+                            파티 목록으로 돌아가기
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // 파티 데이터 렌더링
+        function renderPartyData() {
+            if (!partyData) return;
+
+            // 기본 정보
+            document.getElementById('party-type').textContent = partyData.type;
+            document.getElementById('party-title').textContent = partyData.title;
+            document.getElementById('party-description').textContent = partyData.description || '설명이 없습니다.';
+            
+            // 상태
+            const statusElement = document.getElementById('party-status');
+            statusElement.className = `party-status ${partyData.status}`;
+            statusElement.innerHTML = `<i class="fas fa-circle"></i> ${getStatusText(partyData.status)}`;
+
+            // 상세 정보
+            document.getElementById('party-leader').textContent = partyData.creatorName || '알 수 없음';
+            document.getElementById('required-level').textContent = partyData.requiredLevel ? `${partyData.requiredLevel}레벨 이상` : '제한 없음';
+            document.getElementById('member-count').textContent = `${partyData.currentMembers || 0}/${partyData.maxMembers || 0}명`;
+            document.getElementById('created-date').textContent = formatDate(partyData.createdAt);
+
+            // 일정 정보
+            document.getElementById('scheduled-time').textContent = partyData.scheduledTime ? formatDateTime(partyData.scheduledTime) : '미정';
+            document.getElementById('flexible-time').textContent = partyData.flexibleTime ? '가능' : '불가능';
+            document.getElementById('voice-channel').textContent = getVoiceChannelText(partyData.voiceChannel);
+            document.getElementById('allow-spectators').textContent = partyData.allowSpectators ? '허용' : '불허용';
+
+            // 멤버 렌더링
+            renderMembers();
+            
+            // 액션 버튼 렌더링
+            renderActionButtons();
+        }
+
+        // 멤버 목록 렌더링
+        function renderMembers() {
+            const membersGrid = document.getElementById('members-grid');
+            const members = partyData.members || [];
+
+            if (members.length === 0) {
+                membersGrid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">
+                        <i class="fas fa-users" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>아직 참가한 멤버가 없습니다.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            membersGrid.innerHTML = members.map(member => `
+                <div class="member-card">
+                    <img src="${member.avatar || 'https://i.imgur.com/Sd8qK9c.gif'}" 
+                         alt="${member.name}" class="member-avatar">
+                    <div class="member-info">
+                        <div class="member-name">${member.name}</div>
+                        <div class="member-role ${member.isLeader ? 'leader' : ''}">
+                            ${member.isLeader ? '👑 파티장' : '👤 멤버'}
+                        </div>
+                    </div>
+                    <div class="member-actions">
+                        ${renderMemberActions(member)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 멤버 액션 버튼 렌더링
+        function renderMemberActions(member) {
+            if (!currentUser) return '';
+            
+            const isPartyLeader = currentUser.id === partyData.creatorId;
+            const isCurrentUser = currentUser.id === member.id;
+            
+            let actions = '';
+            
+            // 프로필 보기 (모든 사용자)
+            actions += `
+                <button class="member-btn" onclick="viewProfile('${member.id}')" title="프로필 보기">
+                    <i class="fas fa-eye"></i>
+                </button>
+            `;
+            
+            // 파티장만 가능한 액션
+            if (isPartyLeader && !member.isLeader) {
+                actions += `
+                    <button class="member-btn danger" onclick="kickMember('${member.id}')" title="추방">
+                        <i class="fas fa-user-times"></i>
+                    </button>
+                `;
+            }
+            
+            return actions;
+        }
+
+        // 액션 버튼 렌더링
+        function renderActionButtons() {
+            const actionButtons = document.getElementById('action-buttons');
+            
+            if (!currentUser) {
+                actionButtons.innerHTML = `
+                    <a href="/auth/discord" class="action-btn btn-primary">
+                        <i class="fab fa-discord"></i>
+                        로그인 후 참가하기
+                    </a>
+                `;
+                return;
+            }
+
+            const isPartyLeader = currentUser.id === partyData.creatorId;
+            const isMember = partyData.members && partyData.members.some(m => m.id === currentUser.id);
+            const canJoin = partyData.status === 'recruiting' && !isMember && 
+                           partyData.currentMembers < partyData.maxMembers;
+
+            let buttons = '';
+
+            if (isPartyLeader) {
+                // 파티장 액션
+                buttons += `
+                    <button class="action-btn btn-secondary" onclick="editParty()">
+                        <i class="fas fa-edit"></i>
+                        파티 수정
+                    </button>
+                    <button class="action-btn btn-danger" onclick="deleteParty()">
+                        <i class="fas fa-trash"></i>
+                        파티 삭제
+                    </button>
+                `;
+            } else if (isMember) {
+                // 멤버 액션
+                buttons += `
+                    <button class="action-btn btn-danger" onclick="leaveParty()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        파티 탈퇴
+                    </button>
+                `;
+            } else if (canJoin) {
+                // 참가 가능
+                buttons += `
+                    <button class="action-btn btn-primary" onclick="joinParty()">
+                        <i class="fas fa-plus"></i>
+                        파티 참가하기
+                    </button>
+                `;
+            } else {
+                // 참가 불가능
+                const reason = partyData.status !== 'recruiting' ? '모집이 종료되었습니다' : 
+                              partyData.currentMembers >= partyData.maxMembers ? '인원이 가득 찼습니다' : '참가할 수 없습니다';
+                buttons += `
+                    <div style="color: var(--text-secondary); text-align: center;">
+                        <i class="fas fa-lock"></i>
+                        ${reason}
+                    </div>
+                `;
+            }
+
+            actionButtons.innerHTML = buttons;
+        }
+
+        // 파티 참가
+        async function joinParty() {
+            currentAction = { type: 'join' };
+            showModal('파티 참가', '이 파티에 참가하시겠습니까?');
+        }
+
+        // 파티 탈퇴
+        async function leaveParty() {
+            currentAction = { type: 'leave' };
+            showModal('파티 탈퇴', '정말로 파티에서 탈퇴하시겠습니까?');
+        }
+
+        // 멤버 추방
+        async function kickMember(memberId) {
+            const member = partyData.members.find(m => m.id === memberId);
+            if (!member) return;
+            
+            currentAction = { type: 'kick', memberId };
+            showModal('멤버 추방', `${member.name}님을 파티에서 추방하시겠습니까?`);
+        }
+
+        // 파티 삭제
+        async function deleteParty() {
+            currentAction = { type: 'delete' };
+            showModal('파티 삭제', '정말로 파티를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
+        }
+
+        // 액션 확인
+        async function confirmAction() {
+            if (!currentAction) return;
+
+            const confirmBtn = document.getElementById('confirm-btn');
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 처리 중...';
+
+            try {
+                let response;
+                
+                switch (currentAction.type) {
+                    case 'join':
+                        response = await fetch('/party/api/join', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ partyId })
+                        });
+                        break;
+                        
+                    case 'leave':
+                        response = await fetch('/party/api/leave', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ partyId })
+                        });
+                        break;
+                        
+                    case 'kick':
+                        response = await fetch('/party/api/kick', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ partyId, memberId: currentAction.memberId })
+                        });
+                        break;
+                        
+                    case 'delete':
+                        response = await fetch('/party/api/delete', {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ partyId })
+                        });
+                        break;
+                }
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showToast(getSuccessMessage(currentAction.type), 'success');
+                    closeModal();
+                    
+                    if (currentAction.type === 'delete') {
+                        setTimeout(() => {
+                            window.location.href = '/party';
+                        }, 1500);
+                    } else {
+                        await loadPartyData();
+                    }
+                } else {
+                    throw new Error(result.error || '작업에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('액션 실행 오류:', error);
+                showToast(error.message || '서버 오류가 발생했습니다.', 'error');
+            } finally {
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = '확인';
+            }
+        }
+
+        // 성공 메시지 반환
+        function getSuccessMessage(actionType) {
+            switch (actionType) {
+                case 'join': return '파티에 참가했습니다!';
+                case 'leave': return '파티에서 탈퇴했습니다.';
+                case 'kick': return '멤버를 추방했습니다.';
+                case 'delete': return '파티가 삭제되었습니다.';
+                default: return '작업이 완료되었습니다.';
+            }
+        }
+
+        // 이벤트 리스너 설정
+        function setupEventListeners() {
+            // 모달 외부 클릭 시 닫기
+            document.getElementById('confirm-modal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    closeModal();
+                }
+            });
+            
+            // ESC 키로 모달 닫기
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        }
+
+        // 모달 표시
+        function showModal(title, body) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').textContent = body;
+            document.getElementById('confirm-modal').classList.add('show');
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('confirm-modal').classList.remove('show');
+            currentAction = null;
+        }
+
+        // 유틸리티 함수들
+        function getStatusText(status) {
+            switch (status) {
+                case 'recruiting': return '모집중';
+                case 'full': return '인원마감';
+                case 'closed': return '모집종료';
+                default: return '알 수 없음';
+            }
+        }
+
+        function getVoiceChannelText(voiceChannel) {
+            switch (voiceChannel) {
+                case 'discord': return 'Discord 음성 채널';
+                case 'game': return '게임 내 음성 채팅';
+                default: return '사용 안함';
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '알 수 없음';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR');
+        }
+
+        function formatDateTime(dateString) {
+            if (!dateString) return '미정';
+            const date = new Date(dateString);
+            return date.toLocaleString('ko-KR');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = toast.querySelector('.toast-icon');
+            const messageElement = toast.querySelector('.toast-message');
+            
+            messageElement.textContent = message;
+            
+            // 아이콘 변경
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle toast-icon';
+                icon.style.color = 'var(--discord-green)';
+            } else if (type === 'error') {
+                icon.className = 'fas fa-exclamation-triangle toast-icon';
+                icon.style.color = 'var(--discord-red)';
+            } else if (type === 'warning') {
+                icon.className = 'fas fa-exclamation-circle toast-icon';
+                icon.style.color = 'var(--discord-yellow)';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 주기적 업데이트 (30초마다)
+        setInterval(async () => {
+            try {
+                await loadPartyData();
+            } catch (error) {
+                console.error('자동 업데이트 실패:', error);
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
