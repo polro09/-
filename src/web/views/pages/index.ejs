@@ -429,3 +429,11 @@ document.querySelectorAll('a[href*="YOUR_BOT_ID"]').forEach(link => {
 </script>
 
 <!-- 페이지별 추가 스크립트 -->
+<script>
+// checkUserSession 함수가 정의되지 않은 경우를 위한 안전장치
+if (typeof checkUserSession === 'undefined') {
+    window.checkUserSession = function() {
+        console.log('checkUserSession 호출됨 - 아무 작업도 하지 않음');
+    };
+}
+</script>

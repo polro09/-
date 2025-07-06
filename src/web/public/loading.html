@@ -118,7 +118,7 @@
             background: linear-gradient(90deg, #5865F2 0%, #7289DA 100%);
             width: 0%;
             border-radius: 2px;
-            animation: progressLoad 6s ease-in-out forwards;
+            animation: progressLoad 3s ease-in-out forwards;
             box-shadow: 0 0 10px rgba(114, 137, 218, 0.5);
         }
 
@@ -127,13 +127,10 @@
                 width: 0%;
             }
             30% {
-                width: 25%;
+                width: 35%;
             }
-            50% {
-                width: 45%;
-            }
-            80% {
-                width: 80%;
+            60% {
+                width: 70%;
             }
             100% {
                 width: 100%;
@@ -151,6 +148,15 @@
                 transform: scale(0.95);
             }
         }
+
+        /* 브랜드 텍스트 스타일 개선 */
+        .brand-text {
+            font-size: 16px;
+            color: #7289DA;
+            font-weight: 300;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -159,9 +165,10 @@
             <img src="https://i.imgur.com/9MwyIGW.gif" alt="Aimdot.dev Logo" class="logo">
         </div>
         
-        <h1 class="loading-text">CONNECTING<span class="dots"></span></h1>
+        <h1 class="loading-text">AIMDOT<span class="dots"></span></h1>
         
-        <p class="loading-message" id="loading-message">Logging you in...</p>
+        <!-- "처리 중..." 메시지 제거하고 브랜드 텍스트로 교체 -->
+        <p class="brand-text">Discord Bot Platform</p>
         
         <div class="progress-bar">
             <div class="progress-fill"></div>
@@ -169,37 +176,20 @@
     </div>
 
     <script>
-        // 로딩 메시지 배열
-        const messages = [
-            "Loading resources...",
-            "Connecting to Aimdot...",
-            "Almost there...",
-            "Almost there..."
-        ];
-
-        let currentIndex = 0;
-        const messageElement = document.getElementById('loading-message');
+        // "처리 중..." 메시지 순환 기능 제거
+        // 단순한 로딩 완료 후 이동 로직만 유지
         
-        // 메시지 순환
-        function cycleMessages() {
-            currentIndex = (currentIndex + 1) % messages.length;
-            messageElement.textContent = messages[currentIndex];
-        }
-
-        // 3초마다 메시지 변경
-        setInterval(cycleMessages, 3000);
-
         // 실제 페이지 로드 완료 시 처리
         window.addEventListener('load', () => {
-            // 최소 6초 후 메인 페이지로 이동
+            // 3초 후 메인 페이지로 이동 (기존 6초에서 단축)
             setTimeout(() => {
                 document.querySelector('.loading-container').classList.add('fade-out');
                 
-                // 페이드아웃 완료 후 같은 경로로 재접속 (이제는 메인 페이지가 표시됨)
+                // 페이드아웃 완료 후 메인 페이지로 이동
                 setTimeout(() => {
                     window.location.href = '/';
                 }, 500);
-            }, 6000);
+            }, 3000); // 3초로 단축
         });
 
         // 디버그 모드 (개발 중 확인용)

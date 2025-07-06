@@ -1,368 +1,473 @@
-// src/web/webServer.js
+// src/web/webServer.js - 경로 수정 버전
+
 const express = require('express');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
 const path = require('path');
-const fs = require('fs');
-const expressLayouts = require('express-ejs-layouts');
-const { config } = require('../config/config');
-const logger = require('../utils/logger');
+
+// 선택적으로 패키지 로드 (없으면 건너뛰기)
+let helmet, rateLimit, compression, ejs, ejsLayouts, MongoStore;
+
+try {
+    helmet = require('helmet');
+} catch (error) {
+    console.log('⚠️  helmet 패키지가 설치되지 않음 - 보안 헤더 비활성화');
+}
+
+try {
+    rateLimit = require('express-rate-limit');
+} catch (error) {
+    console.log('⚠️  express-rate-limit 패키지가 설치되지 않음 - Rate limiting 비활성화');
+}
+
+try {
+    compression = require('compression');
+} catch (error) {
+    console.log('⚠️  compression 패키지가 설치되지 않음 - 압축 비활성화');
+}
+
+try {
+    ejs = require('ejs');
+    ejsLayouts = require('express-ejs-layouts');
+} catch (error) {
+    console.log('⚠️  EJS 패키지가 설치되지 않음 - EJS 템플릿 비활성화');
+}
+
+try {
+    MongoStore = require('connect-mongo');
+} catch (error) {
+    console.log('⚠️  connect-mongo 패키지가 설치되지 않음 - 메모리 세션 사용');
+}
+
+// 내부 모듈 (경로 수정)
+let logger, config;
+
+try {
+    logger = require('../utils/logger');  // 상위 디렉토리로 경로 수정
+} catch (error) {
+    console.log('⚠️  logger 모듈 없음 - 기본 콘솔 로깅 사용');
+    // 기본 로거 객체 생성
+    logger = {
+        server: (message) => console.log(`[SERVER] ${message}`),
+        error: (message) => console.error(`[ERROR] ${message}`),
+        info: (message) => console.log(`[INFO] ${message}`),
+        warn: (message) => console.warn(`[WARN] ${message}`)
+    };
+}
+
+try {
+    config = require('../config/config');  // 상위 디렉토리로 경로 수정
+} catch (error) {
+    console.log('⚠️  config 모듈 없음 - 기본 설정 사용');
+    // 기본 설정 객체 생성
+    config = {
+        websiteUrl: process.env.WEBSITE_URL || 'http://localhost:3000'
+    };
+}
 
 class WebServer {
     constructor(client) {
-        this.client = client;
         this.app = express();
-        this.port = config.web.port || 3000;
+        this.client = client;
+        this.server = null;
+        this.isEjsEnabled = !!(ejs && ejsLayouts); // EJS 활성화 플래그
         
-        this.setupViewEngine(); // EJS 설정 추가
         this.setupMiddleware();
+        if (this.isEjsEnabled) {
+            this.setupEJS();
+        }
         this.setupRoutes();
+        this.setupErrorHandling();
     }
     
-    /**
-     * EJS 뷰 엔진 설정
-     */
-    setupViewEngine() {
-        // EJS를 뷰 엔진으로 설정
-        this.app.set('view engine', 'ejs');
-        this.app.set('views', path.join(__dirname, 'views'));
-        
-        // express-ejs-layouts 사용
-        this.app.use(expressLayouts);
-        this.app.set('layout', 'layouts/main');
-        
-        // 전역 변수 설정
-        this.app.locals.siteName = 'Aimdot.dev';
-        this.app.locals.siteDescription = '디스코드 서버를 위한 강력하고 직관적인 봇';
-        
-        // Helper 함수들
-        this.app.locals.helpers = {
-            formatDate: (date) => {
-                return new Date(date).toLocaleDateString('ko-KR');
-            },
-            formatNumber: (num) => {
-                return new Intl.NumberFormat('ko-KR').format(num);
-            },
-            isActive: (currentPath, path) => {
-                return currentPath === path ? 'active' : '';
-            }
-        };
-        
-        // 봇 클라이언트를 뷰에서 사용할 수 있도록 설정
-        this.app.locals.bot = this.client;
-    }
-    
+    // 미들웨어 설정
     setupMiddleware() {
-        // 프록시 신뢰 설정 (Cloudflare 사용 시 필요)
-        this.app.set('trust proxy', 1);
+        // 압축 (선택적)
+        if (compression) {
+            this.app.use(compression());
+            logger.server('압축 미들웨어 활성화');
+        }
         
-        // CORS 설정
-        this.app.use((req, res, next) => {
-            const origin = req.headers.origin;
-            if (origin && (origin.includes('aimdot.dev') || origin.includes('localhost'))) {
-                res.header('Access-Control-Allow-Origin', origin);
-                res.header('Access-Control-Allow-Credentials', 'true');
-                res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-                res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        // 보안 헤더 (선택적)
+        if (helmet) {
+            this.app.use(helmet({
+                contentSecurityPolicy: {
+                    directives: {
+                        defaultSrc: ["'self'"],
+                        scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+                        styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+                        imgSrc: ["'self'", "data:", "https:", "http:"],
+                        fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+                        connectSrc: ["'self'"],
+                        objectSrc: ["'none'"],
+                        mediaSrc: ["'self'"],
+                        frameSrc: ["'none'"]
+                    }
+                }
+            }));
+            logger.server('보안 헤더 활성화');
+        }
+        
+        // Rate Limiting (선택적)
+        if (rateLimit) {
+            const limiter = rateLimit({
+                windowMs: 15 * 60 * 1000, // 15분
+                max: 1000, // 요청 제한
+                message: '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.',
+                standardHeaders: true,
+                legacyHeaders: false
+            });
+            this.app.use(limiter);
+            logger.server('Rate limiting 활성화');
+        }
+        
+        // Body 파싱
+        this.app.use(express.json({ limit: '10mb' }));
+        this.app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+        
+        // 세션 설정
+        this.setupSession();
+        
+        // 정적 파일 서빙
+        this.app.use(express.static(path.join(__dirname, 'public'), {
+            maxAge: '1d', // 1일 캐시
+            etag: true
+        }));
+    }
+    
+    // EJS 템플릿 엔진 설정
+    setupEJS() {
+        if (!this.isEjsEnabled) {
+            logger.server('EJS 패키지가 설치되지 않아 템플릿 엔진을 건너뜁니다.');
+            return;
+        }
+        
+        try {
+            // EJS 설정
+            this.app.set('view engine', 'ejs');
+            this.app.set('views', path.join(__dirname, 'views'));
+            
+            // 레이아웃 설정
+            this.app.use(ejsLayouts);
+            this.app.set('layout', 'layouts/main');
+            this.app.set('layout extractScripts', true);
+            this.app.set('layout extractStyles', true);
+            
+            // EJS 전역 변수 및 헬퍼 함수 설정
+            this.app.locals.siteName = 'Aimdot.dev';
+            this.app.locals.websiteUrl = config.websiteUrl;
+            
+            // package.json을 안전하게 로드
+            try {
+                this.app.locals.version = require('../../package.json').version;
+            } catch (error) {
+                this.app.locals.version = '1.0.0';
             }
-            next();
-        });
-        
-        // 기본 미들웨어
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: true }));
-        this.app.use(express.static(path.join(__dirname, 'public')));
-        
-        // 세션 설정 (MongoDB 연결 상태 확인)
-        const mongoose = require('mongoose');
-        const sessionOptions = {
-            secret: config.web.sessionSecret || 'aimdot-secret-key',
+            
+            // 헬퍼 함수들
+            this.app.locals.formatDate = (date) => {
+                return new Date(date).toLocaleDateString('ko-KR');
+            };
+            
+            this.app.locals.formatDateTime = (date) => {
+                return new Date(date).toLocaleString('ko-KR');
+            };
+            
+            this.app.locals.truncate = (text, length = 100) => {
+                if (!text) return '';
+                return text.length > length ? text.substring(0, length) + '...' : text;
+            };
+            
+            this.app.locals.escapeHtml = (text) => {
+                if (!text) return '';
+                return text.replace(/[&<>"']/g, (match) => {
+                    const escapeMap = {
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        '"': '&quot;',
+                        "'": '&#x27;'
+                    };
+                    return escapeMap[match];
+                });
+            };
+            
+            logger.server('EJS 템플릿 엔진이 설정되었습니다.');
+            
+        } catch (error) {
+            logger.error(`EJS 설정 오류: ${error.message}`);
+            this.isEjsEnabled = false;
+        }
+    }
+    
+    // 세션 설정
+    setupSession() {
+        const sessionConfig = {
+            secret: process.env.SESSION_SECRET || 'aimdot-dev-secret-key',
             resave: false,
             saveUninitialized: false,
             name: 'aimdot.sid',
             cookie: {
                 secure: process.env.NODE_ENV === 'production',
                 httpOnly: true,
-                sameSite: 'lax',
-                maxAge: 1000 * 60 * 60 * 24 * 7 // 7일
-            },
-            proxy: true
+                maxAge: 24 * 60 * 60 * 1000 // 24시간
+            }
         };
         
-        // MongoDB가 연결되어 있으면 MongoStore 사용
-        if (mongoose.connection.readyState === 1) {
-            sessionOptions.store = MongoStore.create({
-                mongoUrl: config.database.uri,
-                ttl: 14 * 24 * 60 * 60, // 14일
-                // 세션 직렬화/역직렬화 오류 처리
-                stringify: false,
-                autoRemove: 'interval',
-                autoRemoveInterval: 10, // 10분마다 만료된 세션 제거
-                touchAfter: 24 * 3600 // 24시간마다 세션 업데이트
-            });
-            logger.server('MongoDB 세션 스토어 활성화');
+        // MongoDB 세션 스토어 설정 (선택적)
+        if (MongoStore && process.env.MONGODB_URI) {
+            try {
+                sessionConfig.store = MongoStore.create({
+                    mongoUrl: process.env.MONGODB_URI,
+                    collectionName: 'sessions',
+                    ttl: 24 * 60 * 60 // 24시간
+                });
+                logger.server('MongoDB 세션 스토어가 설정되었습니다.');
+            } catch (error) {
+                logger.error(`MongoDB 세션 스토어 설정 오류: ${error.message}`);
+            }
         } else {
-            logger.server('메모리 세션 스토어 사용 (MongoDB 미연결)', 'warn');
+            logger.server('메모리 세션 스토어를 사용합니다.');
         }
         
-        this.app.use(session(sessionOptions));
+        this.app.use(session(sessionConfig));
         
-        // 세션 오류 처리 미들웨어
+        // 세션 직렬화/역직렬화 설정
         this.app.use((req, res, next) => {
-            if (req.session) {
-                // 세션이 손상된 경우 재생성
-                req.session.regenerate = req.session.regenerate || function(callback) {
-                    req.session = req.sessionStore.generate(req);
-                    callback && callback();
+            if (req.session && !req.session.serialize) {
+                req.session.serialize = function() {
+                    return JSON.stringify(this);
                 };
             }
             next();
         });
-        
-        // 클라이언트 인스턴스와 사용자 정보를 req에 추가
-        this.app.use(async (req, res, next) => {
+    }
+    
+    // 라우트 설정
+    setupRoutes() {
+        // 클라이언트 인스턴스를 req에 추가
+        this.app.use((req, res, next) => {
             req.client = this.client;
-            // 현재 경로를 locals에 추가 (네비게이션 활성화용)
-            res.locals.currentPath = req.path;
-            
-            // 세션 사용자 정보를 locals에 추가
-            if (req.session && req.session.user) {
-                try {
-                    const User = require('../models/User');
-                    const user = await User.findOne({ discordId: req.session.user.id });
-                    
-                    if (user) {
-                        res.locals.user = {
-                            id: user.discordId,
-                            username: user.username,
-                            avatar: user.avatar,
-                            nickname: user.nickname,
-                            dashboardRole: user.dashboardRole || 'member',
-                            wins: user.gameStats?.wins || 0,
-                            losses: user.gameStats?.losses || 0,
-                            avgKills: user.gameStats?.avgKills || 0,
-                            rankedGames: user.gameStats?.rankedGames || 0,
-                            practiceGames: user.gameStats?.practiceGames || 0
-                        };
-                    } else {
-                        res.locals.user = req.session.user;
-                    }
-                } catch (error) {
-                    console.error('사용자 정보 조회 오류:', error);
-                    res.locals.user = req.session.user;
-                }
-            } else {
-                res.locals.user = null;
-            }
-            
             next();
         });
+        
+        // 기본 라우트 (테스트용)
+        this.app.get('/', (req, res) => {
+            if (this.isEjsEnabled) {
+                try {
+                    res.render('pages/index', {
+                        title: 'Aimdot.dev',
+                        user: req.session.user || null,
+                        currentPath: req.path
+                    });
+                    return;
+                } catch (error) {
+                    logger.error(`메인 페이지 렌더링 오류: ${error.message}`);
+                }
+            }
+            
+            // EJS 실패 시 기본 HTML 응답
+            res.send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Aimdot.dev</title>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <style>
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            text-align: center; 
+                            margin-top: 100px;
+                            background: #0f0f23;
+                            color: #ffffff;
+                        }
+                        .container { max-width: 600px; margin: 0 auto; }
+                        h1 { color: #5865F2; font-size: 3rem; margin-bottom: 20px; }
+                        p { color: #B5BAC1; font-size: 1.2rem; }
+                        .status { 
+                            background: #1e1e2e; 
+                            padding: 20px; 
+                            border-radius: 10px; 
+                            margin-top: 30px;
+                        }
+                        .success { color: #3BA55C; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>🤖 Aimdot.dev</h1>
+                        <p>Discord 봇이 성공적으로 실행 중입니다!</p>
+                        <div class="status">
+                            <p class="success">✅ 웹서버 가동 중</p>
+                            <p>포트: ${process.env.WEB_PORT || 3000}</p>
+                            <p>상태: 정상</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+        });
+        
+        // API 라우트들 (선택적으로 로드)
+        this.setupApiRoutes();
+        
+        // 404 핸들러 (모든 라우트 마지막에)
+        this.app.use('*', (req, res) => {
+            if (this.isEjsEnabled) {
+                try {
+                    res.status(404).render('pages/404', {
+                        title: '페이지를 찾을 수 없음 - Aimdot.dev',
+                        user: req.session.user || null,
+                        currentPath: req.path
+                    });
+                    return;
+                } catch (error) {
+                    logger.error(`404 페이지 렌더링 오류: ${error.message}`);
+                }
+            }
+            
+            // EJS 실패 시 기본 404
+            res.status(404).send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>404 - 페이지를 찾을 수 없음</title>
+                    <meta charset="utf-8">
+                    <style>
+                        body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
+                        h1 { color: #e74c3c; }
+                    </style>
+                </head>
+                <body>
+                    <h1>404 - 페이지를 찾을 수 없습니다</h1>
+                    <p>요청하신 페이지가 존재하지 않습니다.</p>
+                    <a href="/">← 메인 페이지로 돌아가기</a>
+                </body>
+                </html>
+            `);
+        });
     }
     
-    setupRoutes() {
-        // 디버깅: 현재 디렉토리 구조 확인
-        logger.server(`현재 작업 디렉토리: ${__dirname}`);
-        logger.server(`views 경로: ${path.join(__dirname, 'views')}`);
-        logger.server(`routes 경로: ${path.join(__dirname, 'routes')}`);
-        
-        // 권한 미들웨어 가져오기
-        const { requirePageAccess } = require('../middleware/permissions');
-        
-        // API 라우트를 먼저 등록
-        this.app.use('/auth', require('./routes/auth'));
-        this.app.use('/api', require('./routes/api'));
-        this.app.use('/dashboard/api/permissions', require('./routes/permissions'));
-        this.app.use('/dashboard/api', require('./routes/dashboard'));
-        this.app.use('/party/api', require('./routes/party'));
-        
-        // 메인 페이지 라우트 (EJS)
+    // API 라우트 설정 (선택적)
+    setupApiRoutes() {
         try {
-            const indexRouter = require('./routes/index');
-            this.app.use('/', indexRouter);
-            logger.server('index.js 라우트 등록 완료');
-        } catch (error) {
-            logger.server('index.js 파일이 없어 기본 라우트 사용:', error.message);
+            // 기존 라우트들을 선택적으로 로드
+            const routeFiles = [
+                './routes/auth',
+                './routes/dashboard', 
+                './routes/party',
+                './routes/permissions',
+                './routes/servers',
+                './routes/db-management'
+            ];
             
-            // index.js가 없으면 직접 메인 페이지 라우트 설정
-            this.app.get('/', async (req, res) => {
+            routeFiles.forEach(routeFile => {
                 try {
-                    // 봇 클라이언트 가져오기
-                    const bot = this.client;
-                    
-                    // 세션에서 사용자 정보 가져오기
-                    let userData = res.locals.user; // 미들웨어에서 이미 설정됨
-                    
-                    // 통계 정보 수집
-                    const stats = {
-                        serverCount: bot ? bot.guilds.cache.size : 0,
-                        userCount: bot ? bot.users.cache.size : 0,
-                        commandCount: bot && bot.commands ? bot.commands.size : 0
-                    };
-                    
-                    // EJS 템플릿 렌더링
-                    res.render('pages/index', {
-                        title: 'Aimdot.dev - Discord Bot',
-                        ...stats,
-                        user: userData
-                    });
-                } catch (renderError) {
-                    console.error('EJS 렌더링 오류:', renderError);
-                    // EJS 렌더링 실패 시 기존 HTML 파일 사용
-                    res.sendFile(path.join(__dirname, 'public', 'main.html'));
+                    const router = require(routeFile);
+                    const routeName = routeFile.split('/').pop();
+                    this.app.use(`/${routeName}`, router);
+                    logger.server(`라우트 로드: /${routeName}`);
+                } catch (error) {
+                    logger.warn(`라우트 로드 실패: ${routeFile} - ${error.message}`);
                 }
             });
-        }
-        
-        // 페이지 라우트 (EJS 렌더링)
-        try {
-            const pagesRouter = require('./routes/pages');
-            this.app.use('/', pagesRouter);
-            logger.server('pages.js 라우트 등록 완료');
-        } catch (error) {
-            logger.error('pages.js 라우트 파일을 찾을 수 없습니다:', error.message);
-        }
-        
-        // 기존 HTML 페이지들 (점진적 마이그레이션)
-        // 로딩 페이지는 더 이상 메인에서 사용하지 않음
-        this.app.get('/loading', (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'loading.html'));
-        });
-        
-        // 메인 페이지 HTML 백업
-        this.app.get('/main-legacy', (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'main.html'));
-        });
-        
-        // 파티 페이지 라우트 (로그인 불필요)
-        this.app.get('/party', (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'party.html'));
-        });
-        
-        this.app.get('/party/create', (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'party-create.html'));
-        });
-        
-        this.app.get('/party/:partyId', (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'party-detail.html'));
-        });
-        
-        // DB 관리 페이지 (Sub Admin 이상)
-        this.app.get('/dashboard/db-management', requirePageAccess('db-management'), (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'db-management.html'));
-        });
-        
-        // 서버 관리 페이지 (Sub Admin 이상)
-        this.app.get('/dashboard/servers', requirePageAccess('servers'), (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'servers.html'));
-        });
-        
-        // 권한 관리 페이지 (Admin 이상)
-        this.app.get('/dashboard/permissions', requirePageAccess('permissions'), (req, res) => {
-            res.sendFile(path.join(__dirname, 'public', 'permissions.html'));
-        });
-        
-        // 404 처리
-        this.app.use((req, res) => {
-            try {
-                res.status(404).render('pages/404', {
-                    title: '페이지를 찾을 수 없습니다 - Aimdot.dev',
-                    layout: 'layouts/main'
-                });
-            } catch (error) {
-                res.status(404).send(`
-                    <!DOCTYPE html>
-                    <html lang="ko">
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>404 - 페이지를 찾을 수 없습니다</title>
-                        <style>
-                            body {
-                                background: #0a0a0a;
-                                color: #ffffff;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                height: 100vh;
-                                margin: 0;
-                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                            }
-                            .error-container {
-                                text-align: center;
-                            }
-                            .error-code {
-                                font-size: 6rem;
-                                font-weight: bold;
-                                color: #2196f3;
-                                margin: 0;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="error-container">
-                            <h1 class="error-code">404</h1>
-                            <p>페이지를 찾을 수 없습니다</p>
-                            <a href="/" style="color: #2196f3;">메인으로 돌아가기</a>
-                        </div>
-                    </body>
-                    </html>
-                `);
-            }
-        });
-        
-        // 에러 처리
-        this.app.use((err, req, res, next) => {
-            logger.error('서버 오류:', err);
             
-            // 개발 환경에서는 상세 에러 표시
-            if (process.env.NODE_ENV !== 'production') {
-                res.status(500).json({ 
-                    error: '서버 오류가 발생했습니다.',
-                    message: err.message,
-                    stack: err.stack
+        } catch (error) {
+            logger.error(`API 라우트 설정 오류: ${error.message}`);
+        }
+    }
+    
+    // 에러 핸들링 설정
+    setupErrorHandling() {
+        // 일반 에러 핸들러
+        this.app.use((error, req, res, next) => {
+            logger.error(`웹서버 오류: ${error.message}`);
+            
+            // AJAX 요청인 경우 JSON 응답
+            if (req.xhr || req.headers.accept?.includes('application/json')) {
+                return res.status(500).json({
+                    error: '서버 내부 오류가 발생했습니다.',
+                    message: process.env.NODE_ENV === 'development' ? error.message : undefined
                 });
-            } else {
-                res.status(500).json({ error: '서버 오류가 발생했습니다.' });
             }
+            
+            // 일반 페이지 요청인 경우
+            res.status(500).send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>서버 오류 - Aimdot.dev</title>
+                    <meta charset="utf-8">
+                    <style>
+                        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+                        .error-container { max-width: 600px; margin: 0 auto; }
+                        h1 { color: #e74c3c; }
+                        p { color: #666; }
+                        .back-link { color: #5865F2; text-decoration: none; }
+                    </style>
+                </head>
+                <body>
+                    <div class="error-container">
+                        <h1>🚨 서버 오류</h1>
+                        <p>죄송합니다. 서버에서 오류가 발생했습니다.</p>
+                        <p>잠시 후 다시 시도해주세요.</p>
+                        <a href="/" class="back-link">← 메인 페이지로 돌아가기</a>
+                    </div>
+                </body>
+                </html>
+            `);
         });
     }
     
+    // 서버 시작
     async start() {
-        try {
-            // 메뉴 권한 초기화
-            const MenuPermission = require('../models/MenuPermission');
-            await MenuPermission.initializeDefaults();
-            logger.server('메뉴 권한 초기화 완료');
-            
-            this.server = this.app.listen(this.port, () => {
-                logger.server(`✅ 웹 서버가 포트 ${this.port}에서 실행 중입니다.`);
-                logger.server(`📡 대시보드: http://localhost:${this.port}/dashboard`);
-                logger.server(`🌐 프로덕션: ${config.web.domain || 'https://aimdot.dev'}`);
-                logger.server(`🎨 EJS 뷰 엔진 활성화됨`);
+        const PORT = process.env.WEB_PORT || 3000;
+        
+        return new Promise((resolve, reject) => {
+            this.server = this.app.listen(PORT, '0.0.0.0', (error) => {
+                if (error) {
+                    logger.error(`웹서버 시작 실패: ${error.message}`);
+                    reject(error);
+                } else {
+                    logger.server(`웹서버가 포트 ${PORT}에서 시작되었습니다.`);
+                    logger.server(`EJS 템플릿 엔진: ${this.isEjsEnabled ? '활성화' : '비활성화'}`);
+                    logger.server(`웹사이트 URL: ${config.websiteUrl}`);
+                    resolve();
+                }
             });
             
-            // 에러 처리
+            // 서버 에러 핸들링
             this.server.on('error', (error) => {
                 if (error.code === 'EADDRINUSE') {
-                    logger.error(`포트 ${this.port}이(가) 이미 사용 중입니다.`);
-                    logger.error('다른 포트를 사용하거나 기존 프로세스를 종료하세요.');
-                    process.exit(1);
+                    logger.error(`포트 ${PORT}가 이미 사용 중입니다.`);
                 } else {
-                    logger.error('서버 시작 오류:', error);
-                    throw error;
+                    logger.error(`웹서버 오류: ${error.message}`);
                 }
+                reject(error);
             });
-        } catch (error) {
-            logger.error('웹 서버 시작 오류:', error);
-            throw error;
+        });
+    }
+    
+    // 서버 중지
+    async stop() {
+        if (this.server) {
+            return new Promise((resolve) => {
+                this.server.close(() => {
+                    logger.server('웹서버가 중지되었습니다.');
+                    resolve();
+                });
+            });
         }
     }
     
-    stop() {
-        if (this.server) {
-            this.server.close(() => {
-                logger.server('웹 서버가 종료되었습니다.');
-            });
-        }
+    // 서버 상태 확인
+    isRunning() {
+        return this.server && this.server.listening;
+    }
+    
+    // EJS 상태 확인
+    isEjsReady() {
+        return this.isEjsEnabled;
     }
 }
 

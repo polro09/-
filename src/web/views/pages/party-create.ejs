@@ -1,0 +1,830 @@
+<%- contentFor('head') %>
+<link rel="stylesheet" href="/css/party-create.css">
+
+<%- contentFor('body') %>
+<div class="content-wrapper">
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+        <h1 class="page-title">새 파티 생성</h1>
+        <p class="page-subtitle">파티 정보를 입력하고 모집을 시작하세요</p>
+        <a href="/party" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            파티 목록으로 돌아가기
+        </a>
+    </div>
+
+    <!-- 파티 생성 폼 -->
+    <form id="partyForm" class="party-form">
+        <!-- 파티 타입 선택 -->
+        <div class="form-section">
+            <h2 class="section-title">
+                <i class="fas fa-gamepad"></i>
+                파티 타입 선택
+            </h2>
+            <div class="party-types" id="partyTypes">
+                <div class="party-type-card" data-type="정규전">
+                    <span class="party-type-emoji">⚔️</span>
+                    <div class="party-type-name">정규전</div>
+                    <div class="party-type-desc">공식 랭크 매치</div>
+                </div>
+                <div class="party-type-card" data-type="모의전">
+                    <span class="party-type-emoji">🛡️</span>
+                    <div class="party-type-name">모의전</div>
+                    <div class="party-type-desc">연습 친선 경기</div>
+                </div>
+                <div class="party-type-card" data-type="훈련">
+                    <span class="party-type-emoji">🎯</span>
+                    <div class="party-type-name">훈련</div>
+                    <div class="party-type-desc">실력 향상 훈련</div>
+                </div>
+                <div class="party-type-card" data-type="PVP">
+                    <span class="party-type-emoji">🏆</span>
+                    <div class="party-type-name">PVP</div>
+                    <div class="party-type-desc">플레이어 대전</div>
+                </div>
+                <div class="party-type-card" data-type="검은발톱">
+                    <span class="party-type-emoji">🦅</span>
+                    <div class="party-type-name">검은발톱</div>
+                    <div class="party-type-desc">검은발톱 레이드</div>
+                </div>
+                <div class="party-type-card" data-type="레이드">
+                    <span class="party-type-emoji">🏜️</span>
+                    <div class="party-type-name">레이드</div>
+                    <div class="party-type-desc">사막/북부 레이드</div>
+                </div>
+            </div>
+            <input type="hidden" id="selectedType" name="type" required>
+        </div>
+
+        <!-- 기본 정보 -->
+        <div class="form-section">
+            <h2 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                기본 정보
+            </h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="title" class="form-label">파티 제목 *</label>
+                    <input type="text" id="title" name="title" class="form-input" 
+                           placeholder="파티 제목을 입력하세요" maxlength="50" required>
+                    <small class="form-help">최대 50자까지 입력 가능합니다.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="maxTeamSize" class="form-label">팀당 최대 인원 *</label>
+                    <select id="maxTeamSize" name="maxTeamSize" class="form-select" required>
+                        <option value="">팀 크기 선택</option>
+                        <option value="2">2명 (2v2)</option>
+                        <option value="3">3명 (3v3)</option>
+                        <option value="4">4명 (4v4)</option>
+                        <option value="5">5명 (5v5)</option>
+                        <option value="6">6명 (6v6)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="description" class="form-label">파티 설명</label>
+                <textarea id="description" name="description" class="form-textarea" 
+                          placeholder="파티에 대한 자세한 설명을 입력하세요 (선택사항)" 
+                          maxlength="500" rows="4"></textarea>
+                <small class="form-help">최대 500자까지 입력 가능합니다.</small>
+            </div>
+        </div>
+
+        <!-- 일정 설정 -->
+        <div class="form-section">
+            <h2 class="section-title">
+                <i class="fas fa-calendar-alt"></i>
+                일정 설정
+            </h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="scheduledDate" class="form-label">날짜 *</label>
+                    <input type="date" id="scheduledDate" name="scheduledDate" 
+                           class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="scheduledTime" class="form-label">시간 *</label>
+                    <input type="time" id="scheduledTime" name="scheduledTime" 
+                           class="form-input" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- 추가 설정 -->
+        <div class="form-section">
+            <h2 class="section-title">
+                <i class="fas fa-cog"></i>
+                추가 설정
+            </h2>
+            
+            <div class="form-group">
+                <label for="preparations" class="form-label">준비물</label>
+                <textarea id="preparations" name="preparations" class="form-textarea" 
+                          placeholder="필요한 준비물이나 주의사항을 입력하세요 (선택사항)" 
+                          maxlength="300" rows="3"></textarea>
+                <small class="form-help">장비, 소모품 등 필요한 준비물을 명시해주세요.</small>
+            </div>
+            
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="isPrivate" name="isPrivate" class="checkbox">
+                        <span class="checkmark"></span>
+                        비공개 파티
+                    </label>
+                    <small class="form-help">체크하면 초대받은 사람만 참여할 수 있습니다.</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="autoStart" name="autoStart" class="checkbox">
+                        <span class="checkmark"></span>
+                        자동 시작
+                    </label>
+                    <small class="form-help">팀이 모두 찰 때 자동으로 시작됩니다.</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- 파티 미리보기 -->
+        <div class="form-section">
+            <h2 class="section-title">
+                <i class="fas fa-eye"></i>
+                파티 미리보기
+            </h2>
+            <div class="party-preview" id="partyPreview">
+                <!-- 미리보기 내용이 여기에 표시됩니다 -->
+            </div>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                <i class="fas fa-undo"></i>
+                초기화
+            </button>
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+                <i class="fas fa-plus"></i>
+                파티 생성하기
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+// 전역 변수
+window.partyFormData = {
+    type: '',
+    title: '',
+    description: '',
+    maxTeamSize: '',
+    scheduledDate: '',
+    scheduledTime: '',
+    preparations: '',
+    isPrivate: false,
+    autoStart: false
+};
+
+// 페이지 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    initializePartyCreateForm();
+});
+
+// 파티 생성 폼 초기화
+function initializePartyCreateForm() {
+    // 최소 날짜 설정 (오늘 이후)
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    document.getElementById('scheduledDate').min = tomorrow.toISOString().split('T')[0];
+    
+    // 이벤트 리스너 등록
+    setupPartyTypeSelection();
+    setupFormInputListeners();
+    setupFormValidation();
+    
+    // 초기 미리보기 업데이트
+    updatePartyPreview();
+}
+
+// 파티 타입 선택 설정
+function setupPartyTypeSelection() {
+    const typeCards = document.querySelectorAll('.party-type-card');
+    const hiddenInput = document.getElementById('selectedType');
+    
+    typeCards.forEach(card => {
+        card.addEventListener('click', function() {
+            // 기존 선택 제거
+            typeCards.forEach(c => c.classList.remove('selected'));
+            
+            // 새 선택 추가
+            this.classList.add('selected');
+            
+            // 값 설정
+            const type = this.dataset.type;
+            hiddenInput.value = type;
+            window.partyFormData.type = type;
+            
+            // 미리보기 업데이트
+            updatePartyPreview();
+        });
+    });
+}
+
+// 폼 입력 리스너 설정
+function setupFormInputListeners() {
+    const inputs = ['title', 'description', 'maxTeamSize', 'scheduledDate', 'scheduledTime', 'preparations'];
+    const checkboxes = ['isPrivate', 'autoStart'];
+    
+    inputs.forEach(inputId => {
+        const element = document.getElementById(inputId);
+        if (element) {
+            element.addEventListener('input', function() {
+                window.partyFormData[inputId] = this.value;
+                updatePartyPreview();
+            });
+        }
+    });
+    
+    checkboxes.forEach(checkboxId => {
+        const element = document.getElementById(checkboxId);
+        if (element) {
+            element.addEventListener('change', function() {
+                window.partyFormData[checkboxId] = this.checked;
+                updatePartyPreview();
+            });
+        }
+    });
+}
+
+// 폼 유효성 검사 설정
+function setupFormValidation() {
+    const form = document.getElementById('partyForm');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (validateForm()) {
+            await submitPartyForm();
+        }
+    });
+}
+
+// 폼 유효성 검사
+function validateForm() {
+    const errors = [];
+    
+    // 파티 타입 확인
+    if (!window.partyFormData.type) {
+        errors.push('파티 타입을 선택해주세요.');
+    }
+    
+    // 제목 확인
+    if (!window.partyFormData.title.trim()) {
+        errors.push('파티 제목을 입력해주세요.');
+    }
+    
+    // 팀 크기 확인
+    if (!window.partyFormData.maxTeamSize) {
+        errors.push('팀당 최대 인원을 선택해주세요.');
+    }
+    
+    // 날짜 확인
+    if (!window.partyFormData.scheduledDate) {
+        errors.push('날짜를 선택해주세요.');
+    } else {
+        const selectedDate = new Date(window.partyFormData.scheduledDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate <= today) {
+            errors.push('내일 이후의 날짜를 선택해주세요.');
+        }
+    }
+    
+    // 시간 확인
+    if (!window.partyFormData.scheduledTime) {
+        errors.push('시간을 선택해주세요.');
+    }
+    
+    // 에러가 있으면 표시
+    if (errors.length > 0) {
+        window.toast.error(errors.join('\n'));
+        return false;
+    }
+    
+    return true;
+}
+
+// 파티 폼 제출
+async function submitPartyForm() {
+    const submitBtn = document.getElementById('submitBtn');
+    
+    try {
+        // 버튼 비활성화
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
+        
+        const response = await fetch('/party/api/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(window.partyFormData)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            window.toast.success('파티가 성공적으로 생성되었습니다!');
+            
+            // 잠시 대기 후 파티 페이지로 이동
+            setTimeout(() => {
+                window.location.href = `/party/${result.partyId}`;
+            }, 1500);
+        } else {
+            throw new Error(result.error || '파티 생성에 실패했습니다.');
+        }
+        
+    } catch (error) {
+        console.error('파티 생성 오류:', error);
+        window.toast.error(error.message);
+        
+        // 버튼 복원
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-plus"></i> 파티 생성하기';
+    }
+}
+
+// 파티 미리보기 업데이트
+function updatePartyPreview() {
+    const preview = document.getElementById('partyPreview');
+    const data = window.partyFormData;
+    
+    const typeEmojis = {
+        '정규전': '⚔️',
+        '모의전': '🛡️',
+        '훈련': '🎯',
+        'PVP': '🏆',
+        '검은발톱': '🦅',
+        '레이드': '🏜️'
+    };
+    
+    const formattedDate = data.scheduledDate ? 
+        new Date(data.scheduledDate).toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long'
+        }) : '';
+    
+    preview.innerHTML = `
+        <div class="preview-card">
+            <div class="preview-header">
+                <div class="preview-type">
+                    <span class="preview-emoji">${typeEmojis[data.type] || '🎮'}</span>
+                    <span class="preview-type-name">${data.type || '타입 미선택'}</span>
+                </div>
+                <span class="preview-status">모집 예정</span>
+            </div>
+            
+            <div class="preview-body">
+                <h3 class="preview-title">${data.title || '제목을 입력하세요'}</h3>
+                ${data.description ? `<p class="preview-description">${data.description}</p>` : ''}
+                
+                <div class="preview-info">
+                    <div class="preview-info-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>${formattedDate || '날짜 미선택'}</span>
+                    </div>
+                    <div class="preview-info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${data.scheduledTime || '시간 미선택'}</span>
+                    </div>
+                    <div class="preview-info-item">
+                        <i class="fas fa-users"></i>
+                        <span>${data.maxTeamSize ? `${data.maxTeamSize}v${data.maxTeamSize}` : '팀 크기 미선택'}</span>
+                    </div>
+                </div>
+                
+                ${data.preparations ? `
+                    <div class="preview-preparations">
+                        <strong>📌 준비물:</strong>
+                        <p>${data.preparations}</p>
+                    </div>
+                ` : ''}
+                
+                <div class="preview-options">
+                    ${data.isPrivate ? '<span class="preview-option">🔒 비공개</span>' : ''}
+                    ${data.autoStart ? '<span class="preview-option">⚡ 자동시작</span>' : ''}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// 폼 초기화
+function resetForm() {
+    if (confirm('입력한 내용이 모두 삭제됩니다. 계속하시겠습니까?')) {
+        // 폼 리셋
+        document.getElementById('partyForm').reset();
+        
+        // 파티 타입 선택 해제
+        document.querySelectorAll('.party-type-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        // 데이터 초기화
+        window.partyFormData = {
+            type: '',
+            title: '',
+            description: '',
+            maxTeamSize: '',
+            scheduledDate: '',
+            scheduledTime: '',
+            preparations: '',
+            isPrivate: false,
+            autoStart: false
+        };
+        
+        // 미리보기 업데이트
+        updatePartyPreview();
+        
+        window.toast.info('폼이 초기화되었습니다.');
+    }
+}
+</script>
+
+<style>
+/* 파티 생성 페이지 스타일 */
+.content-wrapper {
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #7289DA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+}
+
+/* 폼 스타일 */
+.party-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.form-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.section-title i {
+    color: var(--accent-primary);
+}
+
+/* 파티 타입 선택 */
+.party-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.party-type-card {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.party-type-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+.party-type-card.selected {
+    border-color: var(--accent-primary);
+    background: rgba(88, 101, 242, 0.1);
+}
+
+.party-type-emoji {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.party-type-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.party-type-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* 폼 그리드 */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* 폼 그룹 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-help {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* 체크박스 */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent-primary);
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.checkbox:checked + .checkmark {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+.checkbox:checked + .checkmark::after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 미리보기 */
+.party-preview {
+    min-height: 200px;
+}
+
+.preview-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.preview-type {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-emoji {
+    font-size: 20px;
+}
+
+.preview-type-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.preview-status {
+    padding: 4px 12px;
+    background: rgba(250, 166, 26, 0.2);
+    color: var(--warning);
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.preview-body {
+    padding: 20px;
+}
+
+.preview-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+.preview-description {
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.preview-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.preview-info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.preview-info-item i {
+    color: var(--accent-primary);
+    width: 16px;
+}
+
+.preview-preparations {
+    background: var(--bg-primary);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.preview-preparations strong {
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.preview-preparations p {
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.preview-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.preview-option {
+    padding: 4px 8px;
+    background: rgba(88, 101, 242, 0.1);
+    color: var(--accent-primary);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* 폼 액션 */
+.form-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-actions .btn {
+    min-width: 160px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 16px;
+    }
+    
+    .party-types {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .preview-info {
+        gap: 12px;
+    }
+    
+    .preview-info-item {
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .preview-info-item:last-child {
+        border-bottom: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .party-types {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+}
+</style>
