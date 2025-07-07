@@ -14,19 +14,19 @@
         </h3>
         <ul class="discord-menu-list">
             <li class="discord-menu-item">
-                <a href="/dashboard" class="discord-menu-item <%= isActive(currentPath, '/dashboard') %>">
+                <a href="/dashboard" class="discord-menu-link <%= (typeof currentPath !== 'undefined' && currentPath === '/dashboard') ? 'active' : '' %>">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>대시보드</span>
                 </a>
             </li>
             <li class="discord-menu-item">
-                <a href="/party" class="discord-menu-item <%= isActive(currentPath, '/party') %>">
+                <a href="/party" class="discord-menu-link <%= (typeof currentPath !== 'undefined' && currentPath === '/party') ? 'active' : '' %>">
                     <i class="fas fa-users"></i>
                     <span>파티 찾기</span>
                 </a>
             </li>
             <li class="discord-menu-item">
-                <a href="/party/create" class="discord-menu-item">
+                <a href="/party/create" class="discord-menu-link">
                     <i class="fas fa-plus-circle"></i>
                     <span>파티 생성</span>
                 </a>
@@ -42,19 +42,19 @@
         </h3>
         <ul class="discord-menu-list">
             <li class="discord-menu-item">
-                <a href="#" onclick="showToast('준비 중인 기능입니다.', 'info'); return false;" class="discord-menu-item">
+                <a href="#" onclick="showToast('준비 중인 기능입니다.', 'info'); return false;" class="discord-menu-link">
                     <i class="fas fa-book"></i>
                     <span>가이드</span>
                 </a>
             </li>
             <li class="discord-menu-item">
-                <a href="#" onclick="showToast('준비 중인 기능입니다.', 'info'); return false;" class="discord-menu-item">
+                <a href="#" onclick="showToast('준비 중인 기능입니다.', 'info'); return false;" class="discord-menu-link">
                     <i class="fas fa-terminal"></i>
                     <span>명령어</span>
                 </a>
             </li>
             <li class="discord-menu-item">
-                <a href="#" onclick="showToast('준비 중인 기능입니다.', 'info'); return false;" class="discord-menu-item">
+                <a href="#" onclick="showToast('도움말을 준비 중입니다.', 'info'); return false;" class="discord-menu-link">
                     <i class="fas fa-question-circle"></i>
                     <span>도움말</span>
                 </a>
@@ -62,29 +62,33 @@
         </ul>
     </div>
 
-    <!-- 관리자 섹션 (권한이 있는 경우에만 표시) -->
-    <% if (typeof user !== 'undefined' && user && (user.dashboardRole === 'admin' || user.dashboardRole === 'owner')) { %>
+    <!-- 관리자 섹션 (권한 있는 사용자만) -->
+    <% if (typeof user !== 'undefined' && user && ['subadmin', 'admin', 'owner'].includes(user.dashboardRole)) { %>
     <div class="discord-menu-section">
         <h3 class="discord-menu-title">
             <i class="fas fa-shield-alt"></i>
             관리자
         </h3>
         <ul class="discord-menu-list">
+            <% if (['admin', 'owner'].includes(user.dashboardRole)) { %>
             <li class="discord-menu-item">
-                <a href="/permissions" class="discord-menu-item <%= isActive(currentPath, '/permissions') %>">
+                <a href="/dashboard/permissions" class="discord-menu-link">
                     <i class="fas fa-user-shield"></i>
                     <span>권한 관리</span>
                 </a>
             </li>
+            <% } %>
+            
             <li class="discord-menu-item">
-                <a href="/servers" class="discord-menu-item <%= isActive(currentPath, '/servers') %>">
+                <a href="/dashboard/servers" class="discord-menu-link">
                     <i class="fas fa-server"></i>
                     <span>서버 관리</span>
                 </a>
             </li>
+            
             <% if (user.dashboardRole === 'owner') { %>
             <li class="discord-menu-item">
-                <a href="/db-management" class="discord-menu-item <%= isActive(currentPath, '/db-management') %>">
+                <a href="/dashboard/db-management" class="discord-menu-link">
                     <i class="fas fa-database"></i>
                     <span>DB 관리</span>
                 </a>
@@ -92,3 +96,168 @@
             <% } %>
         </ul>
     </div>
+    <% } %>
+
+    <!-- 계정 섹션 -->
+    <div class="discord-menu-section">
+        <h3 class="discord-menu-title">
+            <i class="fas fa-user"></i>
+            계정
+        </h3>
+        <ul class="discord-menu-list">
+            <% if (typeof user !== 'undefined' && user) { %>
+            <li class="discord-menu-item">
+                <a href="#" onclick="showToast('설정 기능을 준비 중입니다.', 'info'); return false;" class="discord-menu-link">
+                    <i class="fas fa-cog"></i>
+                    <span>설정</span>
+                </a>
+            </li>
+            <li class="discord-menu-item">
+                <a href="/auth/logout" class="discord-menu-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>로그아웃</span>
+                </a>
+            </li>
+            <% } else { %>
+            <li class="discord-menu-item">
+                <a href="/auth/discord" class="discord-menu-link">
+                    <i class="fab fa-discord"></i>
+                    <span>로그인</span>
+                </a>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+
+    <!-- 온라인 상태 -->
+    <div class="discord-menu-section">
+        <h3 class="discord-menu-title">
+            <i class="fas fa-circle" style="color: #3BA55D;"></i>
+            상태
+        </h3>
+        <div class="discord-status-info">
+            <div class="discord-status-item">
+                <span class="discord-status-label">봇 상태</span>
+                <span class="discord-status-value" id="bot-status">온라인</span>
+            </div>
+            <div class="discord-status-item">
+                <span class="discord-status-label">서버 시간</span>
+                <span class="discord-status-value" id="server-time">로딩중...</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- 사이드바 JavaScript -->
+<script>
+// 서버 시간 업데이트
+function updateServerTime() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('ko-KR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    
+    const timeElement = document.getElementById('server-time');
+    if (timeElement) {
+        timeElement.textContent = timeString;
+    }
+}
+
+// 봇 상태 확인
+async function checkBotStatus() {
+    try {
+        const response = await fetch('/api/bot/status');
+        if (response.ok) {
+            const data = await response.json();
+            const statusElement = document.getElementById('bot-status');
+            if (statusElement) {
+                statusElement.textContent = data.online ? '온라인' : '오프라인';
+                statusElement.style.color = data.online ? '#3BA55D' : '#ED4245';
+            }
+        }
+    } catch (error) {
+        console.error('봇 상태 확인 오류:', error);
+        const statusElement = document.getElementById('bot-status');
+        if (statusElement) {
+            statusElement.textContent = '알 수 없음';
+            statusElement.style.color = '#949BA4';
+        }
+    }
+}
+
+// 토스트 알림 함수 (전역 함수가 없을 경우 대비)
+if (typeof showToast === 'undefined') {
+    window.showToast = function(message, type = 'info') {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+        
+        // 기존 토스트 제거
+        const existingToast = document.querySelector('.sidebar-toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        // 새 토스트 생성
+        const toast = document.createElement('div');
+        toast.className = 'sidebar-toast';
+        toast.innerHTML = `
+            <i class="fas fa-info-circle"></i>
+            <span>${message}</span>
+        `;
+        
+        // 토스트 스타일
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--discord-blurple);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        `;
+        
+        if (type === 'error') {
+            toast.style.background = '#ED4245';
+        } else if (type === 'success') {
+            toast.style.background = '#3BA55D';
+        }
+        
+        document.body.appendChild(toast);
+
+        // 애니메이션으로 표시
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)';
+        }, 100);
+
+        // 3초 후 자동 제거
+        setTimeout(() => {
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
+    };
+}
+
+// 초기화
+document.addEventListener('DOMContentLoaded', function() {
+    // 1초마다 서버 시간 업데이트
+    updateServerTime();
+    setInterval(updateServerTime, 1000);
+    
+    // 봇 상태 확인 (초기 + 30초마다)
+    checkBotStatus();
+    setInterval(checkBotStatus, 30000);
+});
+</script>
